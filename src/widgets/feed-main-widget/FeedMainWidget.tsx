@@ -1,9 +1,9 @@
 import React from "react";
 import './styles.css';
-import StorySlider from "../../components/StorySlider/StorySlider";
-import {mockPost, mockStories} from "./mock";
-import PostList from "../../components/PostList/PostList";
-import FeedSidebar from "../../components/FeedSidebar/FeedSidebar";
+import StorySlider from "../../components/feed/StorySlider/StorySlider";
+import {mockPost, mockStories} from "./__tests__/mock";
+import PostList from "../../components/feed/PostList/PostList";
+import FeedSidebar from "../../components/feed/FeedSidebar/FeedSidebar";
 const FeedMainWidget: React.FC = () => {
    return (
        <div className="widget-main">
