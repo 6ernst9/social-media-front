@@ -4,7 +4,7 @@ export interface StoryType {
 }
 
 export type AuthState = {
-    isLogged: boolean;
-    error?: string;
-    token: string;
+    logged: boolean;
+    error: string | null;
+    token: string | null;
 }

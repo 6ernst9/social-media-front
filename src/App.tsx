@@ -10,6 +10,7 @@ import AuthLoginWidget from "./widgets/auth-login-widget/AuthLoginWidget";
 import FeedMainWidget from "./widgets/feed-main-widget/FeedMainWidget";
 import MessagingOverviewWidget from "./widgets/messaging-overview-widget/MessagingOverviewWidget";
 import Sidebar from "./components/core/Sidebar/Sidebar";
+import AuthRegistrationWidget from "./widgets/auth-registration-widget/AuthRegistrationWidget";
 
 function App() {
   return (
@@ -30,7 +31,7 @@ function App() {
               <Route path="/settings" Component={SettingsOverviewWidget} />
 
               <Route path="/login" Component={AuthLoginWidget} />
-              <Route path="/settings" Component={SettingsOverviewWidget} />
+              <Route path="/register" Component={AuthRegistrationWidget} />
             </Routes>
           </div>
         </div>

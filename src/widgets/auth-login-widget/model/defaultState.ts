@@ -1,6 +1,7 @@
 import {AuthState} from "../../../types/auth";
 
 export const defaultAuth: AuthState = {
-    isLogged: false,
-    token: ''
+    logged: false,
+    error: null,
+    token: null
 }

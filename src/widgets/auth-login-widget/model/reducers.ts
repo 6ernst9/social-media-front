@@ -6,19 +6,18 @@ const authSlice = createSlice({
     initialState: defaultAuth,
     reducers: {
         loginSuccess: (state, action: PayloadAction<string>) => {
-           state.isLogged = true;
+           state.logged = true;
            state.token = action.payload;
-           state.error = '';
+           state.error = 'NO-ERROR';
         },
         loginFailure: (state, action: PayloadAction<string>) => {
-            state.isLogged = false;
-            state.token = '';
+            state.logged = false;
             state.error = action.payload;
         },
         logout: (state) => {
-            state.isLogged = false;
-            state.token = '';
-            state.error = '';
+            state.logged = false;
+            state.token = null;
+            state.error = null;
         }
     }
 });

@@ -1,10 +1,12 @@
 .auth-back {
     width: 100vw;
     height: 100vh;
-    background-color: purple;
+    background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #F56040, #F77737, #FCAF45, #FFDC80);
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 20px;
 }
 
 .auth-container {
@@ -28,6 +30,8 @@
 
 .auth-logo {
     font-size: 36px;
+    margin-top: 20px;
+    margin-bottom: 20px;
     font-weight: bold;
     color: black;
 }
@@ -42,15 +46,6 @@
 
 .auth-form:focus {
     border: 1px solid #616161;
-}
-
-.auth-btn {
-    background-color: #f71b62;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    width: 100%;
-    border-radius: 10px;
 }
 
 .auth-under {

@@ -1,27 +1,39 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import LText from "../../components/core/LText/LText";
-import {PRIMARY_LIGHT} from "../../utils/constants";
+import {BACKGROUND_LIGHT, PRIMARY_LIGHT} from "../../utils/constants";
 import Line from "../../components/core/Line/Line";
 import BText from "../../components/core/BText/BText";
 import './styles.css';
+import {login} from "./model/effects";
+import {useDispatch, useSelector} from "react-redux";
+import {select} from "./model/selectors";
+import {Link, useNavigate} from "react-router-dom";
+import Credits from "../../components/core/Credits/Credits";
+import Button from "../../components/core/Button/Button";
 
 const AuthLoginWidget: React.FC = () => {
-    const [email, setEmail] = useState<string>('');
-    const [pass, setPass] = useState<string>('');
+    const errorMessage = useSelector(select.authError);
+    const [username, setUsername] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
 
-    const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setEmail(event.target.value);
-    }
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-    const handlePassChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPass(event.target.value);
-    }
+    useEffect(() => {
+        if (errorMessage === 'NO-ERROR') {
+            navigate('/home');
+        }
+    }, [errorMessage]);
 
-    const handleSubmit = (event: React.FormEvent) => {
-        event.preventDefault();
+    const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => setUsername(event.target.value)
+    const handlePassChange = (event: React.ChangeEvent<HTMLInputElement>) => setPassword(event.target.value)
 
-        setEmail('');
-        setPass('');
+    const handleSubmit = async () => {
+        console.log('entered')
+        await login({username, password, dispatch});
+
+        setUsername('');
+        setPassword('');
     };
 
     return (
@@ -29,30 +41,32 @@ const AuthLoginWidget: React.FC = () => {
             <div className="auth-container">
                 <p className="auth-logo">yolo</p>
                 <div className="auth-forms">
-                    <div>
-                        <input
+                     <input
                             className="auth-form"
                             placeholder="Phone number, username or email"
+                            type='email'
                             onChange={handleEmailChange}/>
-                        <LText text="Invalid email" color={'#ff0000'}/>
-                    </div>
-                    <div>
-                        <input
+                     <input
                             className="auth-form"
                             placeholder="Password"
+                            type='password'
                             onChange={handlePassChange}/>
-                        <LText text="Invalid password" color={'#ff0000'}/>
-                    </div>
                 </div>
 
-                <BText text="Forgot password?" color={PRIMARY_LIGHT}/>
-                <p className="auth-btn" onClick={handleSubmit}>Log in</p>
+                <Link to='resetpass' className='link-btn'>
+                    <BText text="Forgot password?" color={PRIMARY_LIGHT}/>
+                </Link>
+                <Button content='Log in' onClick={handleSubmit}/>
+                {errorMessage && errorMessage !== 'NO-ERROR' && <LText text={errorMessage} color={'#ff0000'}/>}
                 <Line/>
                 <div className="auth-under">
                     <LText text="Don't have an account?"/>
-                    <BText text="Sign Up" color={PRIMARY_LIGHT} />
+                    <Link to='/register' className='link-btn'>
+                        <BText text="Sign Up" color={PRIMARY_LIGHT} />
+                    </Link>
                 </div>
             </div>
+            <Credits color={BACKGROUND_LIGHT}/>
         </div>
     )
 }
