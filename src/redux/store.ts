@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import authReducer from '../widgets/auth-login-widget/model/reducers';
 
 const rootReducer = {
-    auth: authReducer
+    auth: authReducer,
 };
 
 const store = configureStore({

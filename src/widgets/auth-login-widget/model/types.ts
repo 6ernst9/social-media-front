@@ -6,4 +6,15 @@ export type LoginProps = {
     dispatch: Dispatch;
 }
 
-export typ
+export type AuthPayload = {
+    token: string | null;
+    userId: number | null;
+    error: string | null;
+}
+
+export type AuthState = {
+    logged: boolean;
+    error: string | null;
+    token: string | null;
+    userId: number | null;
+}
