@@ -5,3 +5,5 @@ export type LoginProps = {
     password: string;
     dispatch: Dispatch;
 }
+
+export typ

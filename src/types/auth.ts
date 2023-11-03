@@ -7,4 +7,5 @@ export type AuthState = {
     logged: boolean;
     error: string | null;
     token: string | null;
+    userId: number | null;
 }
