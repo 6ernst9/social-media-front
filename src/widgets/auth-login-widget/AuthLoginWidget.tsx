@@ -10,6 +10,7 @@ import {select} from "./model/selectors";
 import {Link, useNavigate} from "react-router-dom";
 import Credits from "../../components/core/Credits/Credits";
 import Button from "../../components/core/Button/Button";
+import {showSidebar} from "../../redux/core/layout/reducers";
 
 const AuthLoginWidget: React.FC = () => {
     const errorMessage = useSelector(select.authError);
@@ -22,14 +23,14 @@ const AuthLoginWidget: React.FC = () => {
     useEffect(() => {
         if (errorMessage === 'NO-ERROR') {
             navigate('/home');
+            dispatch(showSidebar);
         }
-    }, [errorMessage]);
+    }, [dispatch, errorMessage, navigate]);
 
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => setUsername(event.target.value)
     const handlePassChange = (event: React.ChangeEvent<HTMLInputElement>) => setPassword(event.target.value)
 
     const handleSubmit = async () => {
-        console.log('entered')
         await login({username, password, dispatch});
 
         setUsername('');

@@ -11,12 +11,16 @@ import FeedMainWidget from "./widgets/feed-main-widget/FeedMainWidget";
 import MessagingOverviewWidget from "./widgets/messaging-overview-widget/MessagingOverviewWidget";
 import Sidebar from "./components/core/Sidebar/Sidebar";
 import AuthRegistrationWidget from "./widgets/auth-registration-widget/AuthRegistrationWidget";
+import {useSelector} from "react-redux";
+import {select} from "./redux/core/layout/selectors";
 
 function App() {
+  const shouldShowSidebar = useSelector(select.showSidebar);
+
   return (
       <Router>
         <div className="app">
-          <Sidebar />
+          {shouldShowSidebar && <Sidebar/>}
 
           <div className="main-content">
             <Routes>

@@ -11,7 +11,6 @@ export const login = async ({username, password, dispatch}: LoginProps) => {
     }).then((response) => {
         dispatch(loginSuccess(response.data.token));
     }).catch((error) => {
-        console.log(error);
         dispatch(loginFailure(error.message));
     })
 }
