@@ -1,7 +1,7 @@
 import {request} from "../../../components/core/Request/request";
 import {USER_BASE_URL} from "../../../utils/constants";
 import {RegisterProps} from "./types";
-import {registrationFailure, registrationSuccess} from "../../auth-login-widget/model/reducers";
+import {registrationFailure, registrationSuccess} from "./reducers";
 
 export const register = async ({email,
                                 username,
@@ -14,7 +14,7 @@ export const register = async ({email,
         method: 'POST',
         data: {email, fullName, phoneNumber, username, password}
     }).then((response) => {
-        dispatch(registrationSuccess(response.data.token));
+        dispatch(registrationSuccess());
     }).catch((error) => {
         dispatch(registrationFailure(error.message));
     })

@@ -9,7 +9,7 @@ export const login = async ({username, password, dispatch}: LoginProps) => {
         method: 'POST',
         data: {username, password}
     }).then((response) => {
-        dispatch(loginSuccess(response.data.token));
+        dispatch(loginSuccess());
     }).catch((error) => {
         dispatch(loginFailure(error.message));
     })

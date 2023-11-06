@@ -48,6 +48,10 @@ const AuthRegistrationWidget: React.FC = () => {
 
     return (
         <div className="auth-back">
+            <div className="auth-page-container">
+                <p className="auth-title">Create your Account</p>
+                <Credits color={BACKGROUND_LIGHT}/>
+            </div>
             <div className="auth-container">
                 <p className="auth-logo">yolo</p>
                 <div className="auth-forms">
@@ -87,7 +91,6 @@ const AuthRegistrationWidget: React.FC = () => {
                     </Link>
                 </div>
             </div>
-            <Credits color={BACKGROUND_LIGHT}/>
         </div>
     )
 }

@@ -5,8 +5,8 @@ import {mockPost, mockStories} from "./__tests__/mock";
 import PostList from "../../components/feed/PostList/PostList";
 import FeedSidebar from "../../components/feed/FeedSidebar/FeedSidebar";
 import {useSelector} from "react-redux";
-import {select} from "../auth-login-widget/model/selectors";
 import {useNavigate} from "react-router-dom";
+import {select} from "../../redux/core/session/selectors";
 const FeedMainWidget: React.FC = () => {
     const userId = useSelector(select.userId);
     const navigate = useNavigate();
