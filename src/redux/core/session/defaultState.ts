@@ -1,11 +1,11 @@
 import {UserSession} from "./types";
 
 export const defaultSession: UserSession = {
-    token: null,
-    fullName: null,
-    username: null,
-    email: null,
-    userId: null,
-    phoneNumber: null,
-    language: null
+    token: '',
+    fullName: '',
+    username: '',
+    email: '',
+    userId: '',
+    phoneNumber: 0,
+    language: ''
 }

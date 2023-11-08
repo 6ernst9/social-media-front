@@ -2,6 +2,7 @@ import {request} from "../../../components/core/Request/request";
 import {USER_BASE_URL} from "../../../utils/constants";
 import {RegisterProps} from "./types";
 import {registrationFailure, registrationSuccess} from "./reducers";
+import {startSession} from "../../../redux/core/session/reducers";
 
 export const register = async ({email,
                                 username,
@@ -15,6 +16,7 @@ export const register = async ({email,
         data: {email, fullName, phoneNumber, username, password}
     }).then((response) => {
         dispatch(registrationSuccess());
+        dispatch(startSession(response.data));
     }).catch((error) => {
         dispatch(registrationFailure(error.message));
     })
