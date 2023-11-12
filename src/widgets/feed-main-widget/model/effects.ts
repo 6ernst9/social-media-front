@@ -1,5 +1,5 @@
 import {request} from "../../../components/core/Request/request";
-import {CONTENT_BASE_URL} from "../../../utils/constants";
+import {CONNECTIONS_BASE_URL, CONTENT_BASE_URL} from "../../../utils/constants";
 import {
     feedPostsSuccess,
     feedStoriesSuccess,
@@ -13,8 +13,7 @@ export const dataRequested = async ({ userId, jwtToken, dispatch}: EffectsPayloa
         url: CONTENT_BASE_URL + '/getFeedPosts/' + userId,
         method: 'GET',
         headers: {
-            'Authorization' : "Bearer " + jwtToken,
-            'Access-Control-Allow-Origin': "*"
+            'Authorization' : "Bearer " + jwtToken
         }
     }).then((response) => {
         dispatch(feedPostsSuccess(response.data));
@@ -45,7 +44,7 @@ export const dataRequested = async ({ userId, jwtToken, dispatch}: EffectsPayloa
     })
 
     await request({
-        url: CONTENT_BASE_URL + '/getSuggestedFriends/' + userId,
+        url: CONNECTIONS_BASE_URL + '/getSuggestedFriends/' + userId,
         method: 'GET',
         headers: {
             Authorization : "Bearer " + jwtToken

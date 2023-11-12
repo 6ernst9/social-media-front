@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {defaultFeed} from "./defaultState";
 import {Post} from "../../../types/content";
-import {User} from "../../../types/user";
+import {SuggestedFriend} from "../../../types/user";
 import {StoryType} from "../../../types/auth";
 
 const feedSlice = createSlice({
@@ -14,7 +14,7 @@ const feedSlice = createSlice({
         suggestedPostsSuccess: (state, action: PayloadAction<Post[]>) => {
             state.suggestedPosts = action.payload;
         },
-        suggestedFriendsSuccess: (state, action: PayloadAction<User[]>) => {
+        suggestedFriendsSuccess: (state, action: PayloadAction<SuggestedFriend[]>) => {
             state.suggestedFriends = action.payload;
         },
         feedStoriesSuccess: (state, action: PayloadAction<StoryType[]>) => {

@@ -2,7 +2,7 @@ import React from "react";
 import BText from "../../core/BText/BText";
 import LText from "../../core/LText/LText";
 import './styles.css';
-import {DARK_GREY, PRIMARY_LIGHT} from "../../../utils/constants";
+import {PRIMARY_LIGHT} from "../../../utils/constants";
 
 interface SuggestedFriendProps {
     name: string;

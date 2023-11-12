@@ -1,11 +1,11 @@
-import {User} from "../../../types/user";
+import {SuggestedFriend, User} from "../../../types/user";
 import {Post} from "../../../types/content";
 import {StoryType} from "../../../types/auth";
 import {Dispatch} from "redux";
 
 export type FeedState = {
     feedStories: StoryType[];
-    suggestedFriends: User[];
+    suggestedFriends: SuggestedFriend[];
     suggestedPosts: Post[];
     feedPosts: Post[];
 }

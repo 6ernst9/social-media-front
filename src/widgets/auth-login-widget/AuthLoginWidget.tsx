@@ -32,7 +32,6 @@ const AuthLoginWidget: React.FC = () => {
             dispatch(showSidebar);
         }
         if(userId !== '') {
-            console.log('entered');
             getSession({userId, dispatch});
         }
     }, [dispatch, errorMessage, isLogged, userId]);

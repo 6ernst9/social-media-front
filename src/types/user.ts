@@ -1,5 +1,5 @@
 export type User = {
-    id: number,
+    userId: string,
     firstName: string,
     lastName: string,
     username: string,
@@ -9,4 +9,18 @@ export type User = {
     gender: string,
     joinDate: string,
     profilePicture: string
+}
+
+export type SuggestedFriend = {
+    userId: string,
+    firstName: string,
+    lastName: string,
+    username: string,
+    password: string,
+    dateOfBirth: string,
+    description?: string,
+    gender: string,
+    joinDate: string,
+    profilePicture: string
+    commonFriend: User
 }

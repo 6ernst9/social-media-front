@@ -1,6 +1,5 @@
 import React from "react";
 import SuggestedFriend from "../SuggestedFriend/SuggestedFriend";
-import {mockUsers} from "../../../widgets/feed-main-widget/__tests__/mock";
 import './styles.css';
 import BText from "../../core/BText/BText";
 import UserCard from "../UserCard/UserCard";
@@ -31,7 +30,8 @@ const FeedSidebar: React.FC = () => {
                     <SuggestedFriend
                     name={user.username}
                     profilePicture={user.profilePicture}
-                    commonFollower={user.username} />
+                    commonFollower={user.commonFriend.username}
+                    key={user.userId}/>
                     )
                 )}
             </div>

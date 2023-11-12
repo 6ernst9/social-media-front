@@ -17,7 +17,7 @@ const StorySlider: React.FC<StorySliderProps> = ({ stories }) => {
             padding: 10}}>
             {stories.map(story => {
                 return (
-                    <Story {...story}/>
+                    <Story {...story} key={story.storyId}/>
                 )
             })}
         </div>
