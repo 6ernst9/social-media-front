@@ -1,13 +1,12 @@
-export type User ={
-    userId: number,
-    name: string,
+export type User = {
+    id: number,
+    firstName: string,
+    lastName: string,
     username: string,
     password: string,
-    birthdate: string,
-    phoneNumber: string,
-    status: boolean,
-    bio?: string,
-    language: string,
-    profilePhoto: string,
-    isPrivate: boolean
+    dateOfBirth: string,
+    description?: string,
+    gender: string,
+    joinDate: string,
+    profilePicture: string
 }

@@ -4,34 +4,30 @@ import LText from "../LText/LText";
 import BText from "../BText/BText";
 import Heart from '../../../assets/icons/heart.svg';
 import Chat from '../../../assets/icons/chat.svg';
-import Send from '../../../assets/icons/sendFill.svg';
+import Send from '../../../assets/icons/send.svg';
 import Bookmark from '../../../assets/icons/bookmark.svg';
-import Clock from '../../../assets/icons/clock.svg';
 import Dots from '../../../assets/icons/dots-vertical.svg';
-import {MEDIUM_GREY, PRIMARY_LIGHT} from "../../../utils/constants";
 import Line from "../Line/Line";
 import "./styles.css";
+import {MEDIUM_GREY} from "../../../utils/constants";
 
 const PhotoPost: React.FC<Post> = ({user,
-                              photos,
-                              location,
-                              description,
-                              likes,
-                              comments}) => {
+                              photo,
+                              description,}) => {
     return (
         <div className="post-container">
             <div className="post-topbar">
                 <div className="post-topbar-left">
-                    <img className="post-profile-photo" src={user.profilePhoto}/>
+                    <img className="post-profile-photo" src={user.profilePicture}/>
                     <div>
-                        <BText text={user.name}/>
-                        {location && <p>{location}</p>}
+                        <BText text={user.firstName + " " + user.lastName}/>
+                        <p>{user.username}</p>
                     </div>
                 </div>
                 <img className="post-icon" src={Dots}/>
             </div>
             <div className="post-image-container">
-                <img className="post-image" src={photos[0]}/>
+                <img className="post-image" src={photo}/>
             </div>
             <div className="post-under-img-container">
                 <div className="post-actions">
@@ -44,37 +40,19 @@ const PhotoPost: React.FC<Post> = ({user,
                 </div>
                 <div className="post-actions">
                     <div className="post-likes">
-                        {likes.slice(0, 4).map((user) => {
-                            return(
-                                <img key={user.id} className="post-like-image" src={user.profilePhoto}/>
-                            )
-                        })}
                     </div>
                     <div className="post-liked-text">
                         <LText text={'liked'}/>
-                        <BText text={likes[0].username}/>
+                        <BText text={"popa1"}/>
                         <LText text={' and '}/>
-                        <BText text={likes.length-1 + ' more'}/>
+                        <BText text={70 + ' more'}/>
                     </div>
                 </div>
                 {description && <div className="post-description">
                     <BText text={user.username}/>
                     <LText text={description}/>
                 </div>}
-                {comments.length > 0 && <Line padding={10}/>}
-                {comments.length > 0 &&
-                    <div className="post-bottom-container">
-                        <div className="post-description">
-                            <LText text={'div all comments'} color={MEDIUM_GREY}/>
-                            <BText text={'(' + comments.length.toString() + ')'} color={PRIMARY_LIGHT}/>
-                        </div>
-                        <div className="post-description">
-                            <img src={Clock} className="post-small-icon"/>
-                            <LText text={'3h ago'} color={MEDIUM_GREY}/>
-                        </div>
-                    </div>
-                }
-                <LText text="Add a comment..."/>
+                <BText text="View comments" color={MEDIUM_GREY}/>
                 <Line />
             </div>
         </div>

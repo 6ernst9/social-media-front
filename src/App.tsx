@@ -12,10 +12,10 @@ import MessagingOverviewWidget from "./widgets/messaging-overview-widget/Messagi
 import Sidebar from "./components/core/Sidebar/Sidebar";
 import AuthRegistrationWidget from "./widgets/auth-registration-widget/AuthRegistrationWidget";
 import {useSelector} from "react-redux";
-import {select} from "./redux/core/layout/selectors";
+import {layoutSelect} from "./redux/core/layout/selectors";
 
 function App() {
-  const shouldShowSidebar = useSelector(select.showSidebar);
+  const shouldShowSidebar = useSelector(layoutSelect.showSidebar);
 
   return (
       <Router>

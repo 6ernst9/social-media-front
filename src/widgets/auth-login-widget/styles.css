@@ -69,3 +69,21 @@
     flex-direction: row;
     gap: 5px;
 }
+
+@media (max-width: 850px) and (min-width: 600px) {
+    .auth-page-container {
+        width: 50%;
+    }
+    .auth-container {
+        width: 50%;
+    }
+}
+
+@media (max-width: 600px) {
+    .auth-page-container {
+        display: none;
+    }
+    .auth-container {
+        width: 100%;
+    }
+}

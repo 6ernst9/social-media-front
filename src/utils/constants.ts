@@ -14,4 +14,5 @@ export const POST = 'POST';
 export const PUT = 'PUT';
 export const GET = 'GET';
 export const DELETE = 'DELETE';
-export const USER_BASE_URL = 'http://192.168.100.155:8080/api';
+export const USER_BASE_URL = 'http://192.168.100.149:8080/api';
+export const CONTENT_BASE_URL = 'http://192.168.100.149:8084/api/content';

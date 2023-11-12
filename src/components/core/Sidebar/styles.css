@@ -71,3 +71,9 @@
 .sidebar-active {
     background-color: #a9a9a9;
 }
+
+@media (max-width: 970px) {
+    .sidebar {
+        width: 30vw;
+    }
+}

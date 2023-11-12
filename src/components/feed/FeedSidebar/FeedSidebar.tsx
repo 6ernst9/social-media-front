@@ -8,19 +8,20 @@ import {DARK_GREY} from "../../../utils/constants";
 import LText from "../../core/LText/LText";
 import {useSelector} from "react-redux";
 import {feedSelect} from "../../../widgets/feed-main-widget/model/selectors";
-import {select} from "../../../redux/core/session/selectors";
+import {sessionSelect} from "../../../redux/core/session/selectors";
 
 const FeedSidebar: React.FC = () => {
     const suggestedFriends = useSelector(feedSelect.suggestedFriends);
-    const fullName = useSelector(select.fullName);
-    const username = useSelector(select.username);
+    const fullName = useSelector(sessionSelect.fullName);
+    const profilePicture = useSelector(sessionSelect.profilePicture);
+    const username = useSelector(sessionSelect.username);
 
     return (
         <div className="feed-sidebar-card">
             <UserCard
                 name={fullName}
                 username={username}
-                profilePhoto={mockUsers[0].profilePhoto}/>
+                profilePhoto={profilePicture}/>
             <div className="suggested-card">
                 <div className="suggested-text">
                     <BText text="Suggested for you" color={DARK_GREY}/>
@@ -29,7 +30,7 @@ const FeedSidebar: React.FC = () => {
                 {suggestedFriends.map((user) => (
                     <SuggestedFriend
                     name={user.username}
-                    profilePicture={user.profilePhoto}
+                    profilePicture={user.profilePicture}
                     commonFollower={user.username} />
                     )
                 )}

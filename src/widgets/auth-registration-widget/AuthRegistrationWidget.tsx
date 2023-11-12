@@ -7,12 +7,18 @@ import Button from "../../components/core/Button/Button";
 import LText from "../../components/core/LText/LText";
 import Line from "../../components/core/Line/Line";
 import Credits from "../../components/core/Credits/Credits";
-import {select} from "../auth-login-widget/model/selectors";
 import {register} from "./model/effects";
 import {showSidebar} from "../../redux/core/layout/reducers";
+import {getSession} from "../auth-login-widget/model/effects";
+import {sessionSelect} from "../../redux/core/session/selectors";
+import {registrationSuccess} from "../auth-login-widget/model/reducers";
+import {authSelect} from "../auth-login-widget/model/selectors";
 
 const AuthRegistrationWidget: React.FC = () => {
-    const errorMessage = useSelector(select.authError);
+    const errorMessage = useSelector(authSelect.authError);
+    const isLogged = useSelector(authSelect.isLogged);
+    const userId = useSelector(sessionSelect.userId);
+
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [email, setEmail] = useState<string>('');
@@ -23,9 +29,13 @@ const AuthRegistrationWidget: React.FC = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (errorMessage === 'NO-ERROR') {
+        if (isLogged || errorMessage === 'NO-ERROR') {
+            dispatch(registrationSuccess());
             navigate('/home');
             dispatch(showSidebar);
+        }
+        if(userId !== '') {
+            getSession({userId, dispatch});
         }
     }, [dispatch, errorMessage, navigate]);
 

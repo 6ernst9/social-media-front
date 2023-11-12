@@ -1,25 +1,28 @@
 import React, {useEffect} from "react";
 import './styles.css';
 import StorySlider from "../../components/feed/StorySlider/StorySlider";
-import {mockPost, mockStories} from "./__tests__/mock";
 import PostList from "../../components/feed/PostList/PostList";
 import FeedSidebar from "../../components/feed/FeedSidebar/FeedSidebar";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
-import {select} from "../../redux/core/session/selectors";
+import {sessionSelect} from "../../redux/core/session/selectors";
 import {feedSelect} from "./model/selectors";
 import {dataRequested} from "./model/effects";
+import {authSelect} from "../auth-login-widget/model/selectors";
 const FeedMainWidget: React.FC = () => {
-    const userId = useSelector(select.userId);
-    const jwtToken = useSelector(select.jwtToken);
+    const userId = useSelector(sessionSelect.userId);
+    const jwtToken = useSelector(sessionSelect.jwtToken);
     const feedPosts = useSelector(feedSelect.feedPosts);
     const feedStories = useSelector(feedSelect.feedStories);
+    const isLogged = useSelector(authSelect.isLogged);
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     useEffect(() => {
         dataRequested({userId, jwtToken, dispatch})
-        if(userId == null) {
+
+        if(!isLogged) {
             navigate('/login');
         }
     }, [dispatch, jwtToken, navigate, userId])

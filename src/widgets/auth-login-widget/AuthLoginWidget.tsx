@@ -4,16 +4,21 @@ import {BACKGROUND_LIGHT, PRIMARY_LIGHT} from "../../utils/constants";
 import Line from "../../components/core/Line/Line";
 import BText from "../../components/core/BText/BText";
 import './styles.css';
-import {login} from "./model/effects";
+import {getSession, login} from "./model/effects";
 import {useDispatch, useSelector} from "react-redux";
-import {select} from "./model/selectors";
+import {authSelect} from "./model/selectors";
 import {Link, useNavigate} from "react-router-dom";
 import Credits from "../../components/core/Credits/Credits";
 import Button from "../../components/core/Button/Button";
 import {showSidebar} from "../../redux/core/layout/reducers";
+import {sessionSelect} from "../../redux/core/session/selectors";
+import {loginSuccess} from "./model/reducers";
 
 const AuthLoginWidget: React.FC = () => {
-    const errorMessage = useSelector(select.authError);
+    const errorMessage = useSelector(authSelect.authError);
+    const isLogged = useSelector(authSelect.isLogged);
+    const userId = useSelector(sessionSelect.userId);
+
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
 
@@ -21,11 +26,16 @@ const AuthLoginWidget: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (errorMessage === 'NO-ERROR') {
+        if (isLogged || errorMessage === 'NO-ERROR') {
+            dispatch(loginSuccess());
             navigate('/home');
             dispatch(showSidebar);
         }
-    }, [dispatch, errorMessage, navigate]);
+        if(userId !== '') {
+            console.log('entered');
+            getSession({userId, dispatch});
+        }
+    }, [dispatch, errorMessage, isLogged, userId]);
 
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => setUsername(event.target.value)
     const handlePassChange = (event: React.ChangeEvent<HTMLInputElement>) => setPassword(event.target.value)

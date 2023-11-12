@@ -1,24 +1,11 @@
-export type User ={
-    id: number,
-    name: string,
-    username: string,
-    password: string,
-    dateOfBirth: string,
-    description?: string,
-    gender: string,
-    joinDate: string,
-    profilePhoto: string
-}
+import {User} from "./user";
 
 export type Post = {
+    contentId: string;
     user: User;
-    photos: string[];
-    postTime: string;
-    location?: string;
+    photo: string;
+    datePosted: string;
     description?: string;
-    views: number;
-    likes: User[];
-    comments: Comment[];
 }
 
 export type Comment = {

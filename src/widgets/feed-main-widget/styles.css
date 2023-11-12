@@ -4,3 +4,9 @@
     flex-direction: column;
     align-items: center;
 }
+
+@media (max-width: 970px) {
+    .feed-central {
+        width: 70vw;
+    }
+}

@@ -1,8 +1,8 @@
 import {request} from "../../../components/core/Request/request";
 import {USER_BASE_URL} from "../../../utils/constants";
 import {RegisterProps} from "./types";
-import {registrationFailure, registrationSuccess} from "./reducers";
 import {startSession} from "../../../redux/core/session/reducers";
+import {registrationFailure, registrationSuccess} from "../../auth-login-widget/model/reducers";
 
 export const register = async ({email,
                                 username,

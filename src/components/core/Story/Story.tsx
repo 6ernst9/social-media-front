@@ -4,14 +4,14 @@ import "./styles.css";
 import LText from "../LText/LText";
 import {PRIMARY_LIGHT} from "../../../utils/constants";
 
-const Story: React.FC<StoryType> = ({ src, user  }) => {
+const Story: React.FC<StoryType> = ({  user  }) => {
     return (
         <div className="outer-story">
             <div className="inner-story"
                  style={{ border: '3px solid ' + PRIMARY_LIGHT}}>
-                <img src={src}/>
+                <img src={user.profilePicture}/>
             </div>
-            <LText text={user} />
+            <LText text={user.username} />
         </div>
     )
 }

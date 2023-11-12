@@ -1,5 +1,5 @@
 import {request} from "../../../components/core/Request/request";
-import {USER_BASE_URL} from "../../../utils/constants";
+import {CONTENT_BASE_URL} from "../../../utils/constants";
 import {
     feedPostsSuccess,
     feedStoriesSuccess,
@@ -10,36 +10,46 @@ import {EffectsPayload} from "./types";
 
 export const dataRequested = async ({ userId, jwtToken, dispatch}: EffectsPayload) => {
     await request({
-        url: USER_BASE_URL + '/feedPosts',
+        url: CONTENT_BASE_URL + '/getFeedPosts/' + userId,
         method: 'GET',
-        data: { userId, jwtToken}
+        headers: {
+            'Authorization' : "Bearer " + jwtToken,
+            'Access-Control-Allow-Origin': "*"
+        }
     }).then((response) => {
         dispatch(feedPostsSuccess(response.data));
     }).catch((error) => {
+        console.log(error);
     })
 
     await request({
-        url: USER_BASE_URL + '/feedStories',
+        url: CONTENT_BASE_URL + '/getFeedStories/' + userId,
         method: 'GET',
-        data: { userId, jwtToken}
+        headers: {
+            Authorization : "Bearer " + jwtToken
+        }
     }).then((response) => {
         dispatch(feedStoriesSuccess(response.data));
     }).catch((error) => {
     })
 
     await request({
-        url: USER_BASE_URL + '/suggestedPosts',
+        url: CONTENT_BASE_URL + '/getSuggestedPosts/' + userId,
         method: 'GET',
-        data: { userId, jwtToken}
+        headers: {
+            Authorization : "Bearer " + jwtToken
+        }
     }).then((response) => {
         dispatch(suggestedPostsSuccess(response.data));
     }).catch((error) => {
     })
 
     await request({
-        url: USER_BASE_URL + '/suggestedFriends',
+        url: CONTENT_BASE_URL + '/getSuggestedFriends/' + userId,
         method: 'GET',
-        data: { userId, jwtToken}
+        headers: {
+            Authorization : "Bearer " + jwtToken
+        }
     }).then((response) => {
         dispatch(suggestedFriendsSuccess(response.data));
     }).catch((error) => {

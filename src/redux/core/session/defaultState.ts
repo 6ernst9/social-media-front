@@ -1,11 +1,12 @@
 import {UserSession} from "./types";
 
 export const defaultSession: UserSession = {
-    token: '',
+    token: localStorage.getItem('token') || '',
     fullName: '',
     username: '',
     email: '',
-    userId: '',
+    userId: localStorage.getItem( 'userId') || '',
+    profilePicture: '',
     phoneNumber: 0,
     language: ''
 }

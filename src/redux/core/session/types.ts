@@ -4,12 +4,17 @@ export type UserSession = {
     fullName: string;
     email: string;
     phoneNumber: number;
+    profilePicture: string;
     username: string;
     language: string;
 }
 
 export type UserResponse = {
     token: string;
+    user: UserType;
+}
+
+export type UserType = {
     userId: string;
     firstName: string;
     lastName: string;

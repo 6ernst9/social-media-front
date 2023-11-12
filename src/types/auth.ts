@@ -1,4 +1,9 @@
+import {User} from "./user";
+
+
 export interface StoryType {
-    src: string;
-    user: string;
+    storyId: string;
+    user: User;
+    photo: string;
+    datePosted: string;
 }
