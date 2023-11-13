@@ -23,6 +23,7 @@ const AuthRegistrationWidget: React.FC = () => {
     const [password, setPassword] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [fullName, setFullName] = useState<string>('');
+    const [birthdate, setBirthdate] = useState<string>('');
     const [phoneNumber, setPhoneNumber] = useState<number>(0);
 
     const navigate = useNavigate();
@@ -39,21 +40,16 @@ const AuthRegistrationWidget: React.FC = () => {
         }
     }, [dispatch, errorMessage, navigate]);
 
-    const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => setUsername(event.target.value);
+    const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => setEmail(event.target.value);
     const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => setPassword(event.target.value);
+    const handleBirthdateChange = (event: React.ChangeEvent<HTMLInputElement>) => setBirthdate(event.target.value);
     const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => setUsername(event.target.value);
     const handleFullNameChange = (event: React.ChangeEvent<HTMLInputElement>) => setFullName(event.target.value);
     const handlePhoneNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => setPhoneNumber(event.target.valueAsNumber);
     const handleSubmit = async() => {
         await register({
-            email, username, password, fullName, phoneNumber, dispatch
+            email, username, password, fullName, phoneNumber, birthdate, dispatch
         });
-
-        setUsername('');
-        setPassword('');
-        setEmail('');
-        setFullName('');
-        setPhoneNumber(0);
     }
 
     return (
@@ -75,6 +71,11 @@ const AuthRegistrationWidget: React.FC = () => {
                         placeholder="Email"
                         type='email'
                         onChange={handleEmailChange}/>
+                    <input
+                        className="auth-form"
+                        placeholder="Birthdate"
+                        type='date'
+                        onChange={handleBirthdateChange}/>
                     <input
                         className="auth-form"
                         placeholder="Phone number"

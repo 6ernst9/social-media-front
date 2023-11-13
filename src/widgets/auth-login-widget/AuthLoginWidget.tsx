@@ -41,9 +41,6 @@ const AuthLoginWidget: React.FC = () => {
 
     const handleSubmit = async () => {
         await login({username, password, dispatch});
-
-        setUsername('');
-        setPassword('');
     };
 
     return (
