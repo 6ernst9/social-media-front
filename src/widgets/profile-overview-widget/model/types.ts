@@ -14,3 +14,8 @@ export type ProfileState = {
     highlights: StoryType[];
     posts: Post[];
 }
+
+export type Streak = {
+    following: number;
+    followers: number;
+}

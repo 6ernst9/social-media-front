@@ -1,12 +1,9 @@
 import {request} from "../../../components/core/Request/request";
 import {CONNECTIONS_BASE_URL, CONTENT_BASE_URL, USER_BASE_URL} from "../../../utils/constants";
-import {
-    feedPostsSuccess,
-    feedStoriesSuccess,
-    suggestedPostsSuccess
-} from "../../feed-main-widget/model/reducers";
+import {addBio, addHighlights, addPosts, addStreak} from "./reducers";
+import {EffectsPayload} from "../../feed-main-widget/model/types";
 
-export const dataRequested = async({userId, jwtToken, dispatch}) => {
+export const dataRequested = async({userId, jwtToken, dispatch}: EffectsPayload) => {
     await request({
         url: CONTENT_BASE_URL + '/getUserPosts/' + userId,
         method: 'GET',
@@ -14,7 +11,7 @@ export const dataRequested = async({userId, jwtToken, dispatch}) => {
             'Authorization' : "Bearer " + jwtToken
         }
     }).then((response) => {
-        dispatch(feedPostsSuccess(response.data));
+        dispatch(addPosts(response.data));
     }).catch((error) => {
         console.log(error);
     })
@@ -26,18 +23,18 @@ export const dataRequested = async({userId, jwtToken, dispatch}) => {
             Authorization : "Bearer " + jwtToken
         }
     }).then((response) => {
-        dispatch(feedStoriesSuccess(response.data));
+        dispatch(addHighlights(response.data));
     }).catch((error) => {
     })
 
     await request({
-        url: USER_BASE_URL + '/getUserDetails/' + userId,
+        url: USER_BASE_URL + '/getUserBio/' + userId,
         method: 'GET',
         headers: {
             Authorization : "Bearer " + jwtToken
         }
     }).then((response) => {
-        dispatch(feedStoriesSuccess(response.data));
+        dispatch(addBio(response.data));
     }).catch((error) => {
     })
 
@@ -48,7 +45,7 @@ export const dataRequested = async({userId, jwtToken, dispatch}) => {
             Authorization : "Bearer " + jwtToken
         }
     }).then((response) => {
-        dispatch(suggestedPostsSuccess(response.data));
+        dispatch(addStreak(response.data));
     }).catch((error) => {
     })
 }

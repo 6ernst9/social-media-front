@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {defaultProfile} from "./defaultState";
-import {ProfileState} from "./types";
+import {ProfileState, Streak} from "./types";
 import {Post} from "../../../types/content";
 import {StoryType} from "../../../types/auth";
 
@@ -17,11 +17,18 @@ const profileSlice = createSlice({
         addHighlights: (state, action: PayloadAction<StoryType[]>) => {
             state.highlights = action.payload;
         },
+        addBio: (state, action: PayloadAction<string>) => {
+            state.description = action.payload
+        },
+        addStreak: (state, action: PayloadAction<Streak>) =>{
+            state.followers = action.payload.followers;
+            state.following = action.payload.following;
+        },
         closeProfile: (state) => {
             state = defaultProfile
         }
     }
 });
 
-export const { refreshProfile, closeProfile } = profileSlice.actions;
+export const { addPosts, addHighlights, addBio, addStreak, refreshProfile, closeProfile } = profileSlice.actions;
 export default profileSlice.reducer;

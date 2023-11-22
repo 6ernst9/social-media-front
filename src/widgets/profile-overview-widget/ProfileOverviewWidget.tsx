@@ -9,10 +9,12 @@ import {profileSelect} from "./model/selectors";
 import BText from "../../components/core/BText/BText";
 import StorySlider from "../../components/feed/StorySlider/StorySlider";
 import Credits from "../../components/core/Credits/Credits";
+import {dataRequested} from "./model/effects";
 
 const ProfileOverviewWidget: React.FC = () => {
     const dispatch = useDispatch();
     const userId = useSelector(sessionSelect.userId);
+    const jwtToken = useSelector(sessionSelect.jwtToken);
 
     const profilePhoto = useSelector(profileSelect.profilePicture);
     const username = useSelector(profileSelect.profileUsername);
@@ -30,7 +32,8 @@ const ProfileOverviewWidget: React.FC = () => {
 
     useEffect(() => {
         dispatch(showSidebar());
-    })
+        dataRequested({userId: profileUserId, jwtToken, dispatch});
+    }, [dispatch, jwtToken, profileUserId])
     return (
         <div className='profile-container'>
             <div className='profile-header-container'>
