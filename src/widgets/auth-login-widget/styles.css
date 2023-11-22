@@ -1,3 +1,8 @@
+@font-face {
+    font-family: logoFont;
+    src: url('../../assets/fonts/ChickenPie.ttf');
+}
+
 .auth-back {
     width: 100vw;
     height: 100vh;
@@ -41,6 +46,7 @@
     margin-top: 10px;
     margin-bottom: 10px;
     font-weight: bold;
+    font-family: logoFont;
     color: black;
 }
 

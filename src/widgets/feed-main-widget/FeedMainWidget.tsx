@@ -9,6 +9,7 @@ import {sessionSelect} from "../../redux/core/session/selectors";
 import {feedSelect} from "./model/selectors";
 import {dataRequested} from "./model/effects";
 import {authSelect} from "../auth-login-widget/model/selectors";
+import {closeSidebar} from "../../redux/core/layout/reducers";
 const FeedMainWidget: React.FC = () => {
     const userId = useSelector(sessionSelect.userId);
     const jwtToken = useSelector(sessionSelect.jwtToken);
@@ -24,6 +25,7 @@ const FeedMainWidget: React.FC = () => {
 
         if(!isLogged) {
             navigate('/login');
+            dispatch(closeSidebar());
         }
     }, [dispatch, jwtToken, navigate, userId])
 
