@@ -9,9 +9,10 @@ export type Post = {
 }
 
 export type Comment = {
-    user: User;
+    userProfilePhoto: string;
+    userUsername: string;
     text: string;
-    likes: User[];
+    likes: number;
     replies: Comment[];
     commTime: string;
 }
