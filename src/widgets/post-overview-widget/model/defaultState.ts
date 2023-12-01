@@ -5,6 +5,7 @@ export const defaultPost: CurrentPost = {
     user: {},
     photo: '',
     datePosted: '',
+    description: '',
     likes: [],
     comments: []
 }

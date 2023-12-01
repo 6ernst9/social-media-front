@@ -8,7 +8,7 @@ export type CurrentPost = {
     photo: string;
     datePosted: string;
     description?: string;
-    likes: string[];
+    likes: User[];
     comments: Comment[];
 }
 

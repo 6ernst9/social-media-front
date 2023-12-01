@@ -27,7 +27,7 @@ const FeedMainWidget: React.FC = () => {
             navigate('/login');
             dispatch(closeSidebar());
         }
-    }, [dispatch, jwtToken, navigate, userId])
+    }, [jwtToken, userId])
 
    return (
        <div className="widget-main">

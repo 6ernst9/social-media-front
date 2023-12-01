@@ -7,4 +7,5 @@ export const postSelect = ({
     datePosted: (state: RootState) => state.post.datePosted,
     likes: (state: RootState) => state.post.likes,
     comments: (state: RootState) => state.post.comments,
+    description: (state: RootState) => state.post.description
 })
