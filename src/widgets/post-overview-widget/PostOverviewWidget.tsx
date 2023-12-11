@@ -83,3 +83,5 @@ const PostOverviewWidget: React.FC = () => {
         </div>
     )
 }
+
+export default PostOverviewWidget;

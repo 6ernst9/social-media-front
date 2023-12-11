@@ -13,6 +13,7 @@ import Sidebar from "./components/core/Sidebar/Sidebar";
 import AuthRegistrationWidget from "./widgets/auth-registration-widget/AuthRegistrationWidget";
 import {useSelector} from "react-redux";
 import {layoutSelect} from "./redux/core/layout/selectors";
+import PostOverviewWidget from "./widgets/post-overview-widget/PostOverviewWidget";
 
 function App() {
   const shouldShowSidebar = useSelector(layoutSelect.showSidebar);
@@ -32,6 +33,7 @@ function App() {
               <Route path="/create" Component={PostCreateWidget} />
 
               <Route path="/profile" Component={ProfileOverviewWidget} />
+              <Route path='/post' Component={PostOverviewWidget} />
               <Route path="/settings" Component={SettingsOverviewWidget} />
 
               <Route path="/login" Component={AuthLoginWidget} />
