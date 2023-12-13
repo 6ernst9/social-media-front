@@ -16,4 +16,5 @@ export const GET = 'GET';
 export const DELETE = 'DELETE';
 export const USER_BASE_URL = 'http://172.20.10.2:8080/api';
 export const CONTENT_BASE_URL = 'http://172.20.10.2:8084/api/content';
+export const MESSAGES_BASE_URL = 'http://172.20.10.2:8084/api/messaging';
 export const CONNECTIONS_BASE_URL = 'http://172.20.10.2:8085/api/connections';

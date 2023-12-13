@@ -5,6 +5,7 @@ import sessionReducer from './core/session/reducers';
 import feedReducer from '../widgets/feed-main-widget/model/reducers';
 import profileReducer from '../widgets/profile-overview-widget/model/reducers';
 import postReducer from '../widgets/post-overview-widget/model/reducers';
+import messageReducer from '../widgets/messaging-overview-widget/model/reducers';
 
 const rootReducer = {
     auth: authReducer,
@@ -12,7 +13,8 @@ const rootReducer = {
     layout: layoutReducer,
     session: sessionReducer,
     profile: profileReducer,
-    post: postReducer
+    post: postReducer,
+    message: messageReducer
 };
 
 const store = configureStore({

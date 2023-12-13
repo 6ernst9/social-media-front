@@ -5,10 +5,10 @@ interface TextProps {
     color?: string;
 }
 
-const BText: React.FC<TextProps> = ({text, color}) =>{
+const LText: React.FC<TextProps> = ({text, color}) =>{
     return(
         <p style={{ fontSize: 18, color: color}}>{text}</p>
     )
 }
 
-export default BText;
+export default LText;
