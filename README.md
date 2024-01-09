@@ -64,9 +64,9 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 'types.ts' contains all the types included in the page
 
-'reducers' contains all the dispatch functions for the page's state
+'reducers.ts' contains all the dispatch functions for the page's state
 
-'selectors' contains all the select functions for the page's state
+'selectors.ts' contains all the select functions for the page's state
 
 'defaultState.ts' contains all the default state for the page's state
 
