@@ -10,6 +10,5 @@ export const defaultProfile: ProfileState = {
     description: "",
     followers: 0,
     following: 0,
-    highlights: [],
     posts: []
 }

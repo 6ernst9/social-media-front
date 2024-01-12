@@ -18,7 +18,7 @@ export const dataRequested = async ({ userId, jwtToken, dispatch}: EffectsPayloa
     }).then((response) => {
         dispatch(feedPostsSuccess(response.data));
     }).catch((error) => {
-        console.log(error);
+        console.error(error);
     })
 
     await request({
@@ -30,6 +30,7 @@ export const dataRequested = async ({ userId, jwtToken, dispatch}: EffectsPayloa
     }).then((response) => {
         dispatch(feedStoriesSuccess(response.data));
     }).catch((error) => {
+        console.error(error);
     })
 
     await request({
@@ -41,6 +42,7 @@ export const dataRequested = async ({ userId, jwtToken, dispatch}: EffectsPayloa
     }).then((response) => {
         dispatch(suggestedPostsSuccess(response.data));
     }).catch((error) => {
+        console.error(error);
     })
 
     await request({
@@ -52,5 +54,6 @@ export const dataRequested = async ({ userId, jwtToken, dispatch}: EffectsPayloa
     }).then((response) => {
         dispatch(suggestedFriendsSuccess(response.data));
     }).catch((error) => {
+        console.error(error);
     })
 }

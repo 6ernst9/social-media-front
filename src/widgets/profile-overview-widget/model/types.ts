@@ -1,5 +1,4 @@
 import {Post} from "../../../types/content";
-import {StoryType} from "../../../types/auth";
 
 export type ProfileState = {
     connection: string;
@@ -11,8 +10,15 @@ export type ProfileState = {
     followers: number;
     following: number;
     description: string;
-    highlights: StoryType[];
     posts: Post[];
+}
+
+export type ProfileAccount = {
+    userId: string;
+    profilePicture: string;
+    fullName: string;
+    username: string;
+    isPrivate: boolean;
 }
 
 export type Streak = {

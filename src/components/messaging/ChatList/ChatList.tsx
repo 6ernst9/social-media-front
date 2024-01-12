@@ -3,6 +3,8 @@ import Plus from '../../../assets/icons/plus.svg';
 import BText from "../../core/BText/BText";
 import {Message} from "../../../widgets/messaging-overview-widget/model/types";
 import MessageCard from "../MessageCard/MessageCard";
+import {useDispatch} from "react-redux";
+import {changeConversation} from "../../../widgets/messaging-overview-widget/model/reducers";
 
 interface ChatListProps {
     username: string;
@@ -10,6 +12,7 @@ interface ChatListProps {
 }
 
 const ChatList: React.FC<ChatListProps> = ({username, conversations}) => {
+    const dispatch = useDispatch();
     return (
         <div className='chat-list-widget'>
             <div className='chat-list-header'>
@@ -22,7 +25,8 @@ const ChatList: React.FC<ChatListProps> = ({username, conversations}) => {
                     photo={conv.receiver.profilePicture}
                     fullName={conv.receiver.firstName + conv.receiver.lastName}
                     message={conv.message}
-                    date={conv.date}/>
+                    date={conv.date}
+                    onClick={() => dispatch(changeConversation(conv.receiver))}/>
             )}
         </div>
     );

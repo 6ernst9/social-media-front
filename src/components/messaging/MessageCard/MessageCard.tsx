@@ -6,15 +6,17 @@ interface MessageCardProps {
     fullName: string;
     message: string;
     date: string;
+    onClick: () => void;
 }
 
 const MessageCard: React.FC<MessageCardProps> =
     ({ photo,
          fullName,
          message,
-         date}) => {
+         date,
+         onClick}) => {
     return (
-        <div className='message-card'>
+        <div className='message-card' onClick={onClick}>
             <img src={photo} className='message-card-img'/>
             <div className='message-card-text'>
                 <LText text={fullName}/>

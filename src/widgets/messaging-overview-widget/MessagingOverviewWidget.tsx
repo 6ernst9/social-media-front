@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {sessionSelect} from "../../redux/core/session/selectors";
 import {dataRequested} from "./model/effects";
 import {messageSelect} from "./model/selectors";
+import {showSidebar} from "../../redux/core/layout/reducers";
 
 const MessagingOverviewWidget: React.FC = () => {
     const username = useSelector(sessionSelect.username);
@@ -15,6 +16,7 @@ const MessagingOverviewWidget: React.FC = () => {
 
     useEffect(() => {
         dataRequested({userId, jwtToken, dispatch});
+        dispatch(showSidebar());
     }, [dispatch, jwtToken, userId])
 
     return (

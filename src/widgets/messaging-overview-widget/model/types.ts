@@ -10,6 +10,7 @@ export type Message = {
 }
 
 export type MessageState = {
+    currentConversation: User;
     chats: Message[];
     conversations: Message[];
 }

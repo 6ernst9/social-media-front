@@ -13,6 +13,6 @@ export const dataRequested = async({ postId, jwtToken, dispatch }: EffectsPayloa
     }).then((response) => {
         dispatch(addComments(response.data));
     }).catch((error) => {
-        console.log(error);
+        console.error(error);
     })
 }

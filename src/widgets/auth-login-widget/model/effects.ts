@@ -27,6 +27,6 @@ export const getSession = async ({ userId, dispatch }: getSessionState) => {
         dispatch(loginSuccess());
         dispatch(showSidebar());
     }).catch((err) => {
-        console.log(err);
+        console.error(err);
     })
 }

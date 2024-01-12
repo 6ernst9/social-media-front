@@ -14,7 +14,7 @@ export const dataRequested = async ({ userId, jwtToken, dispatch}: EffectsPayloa
     }).then((response) => {
         dispatch(conversationsSuccess(response.data));
     }).catch((error) => {
-        console.log(error);
+        console.error(error);
     })
 }
 
@@ -29,6 +29,6 @@ export const getPersonChats = async ({ userId, jwtToken, dispatch, receiverId}: 
     }).then((response) => {
         dispatch(personChatsSuccess(response.data));
     }).catch((error) => {
-        console.log(error);
+        console.error(error);
     })
 }

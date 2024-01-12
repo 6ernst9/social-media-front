@@ -10,6 +10,5 @@ export const profileSelect = ({
     profileDescription: (state: RootState) => state.profile.description,
     followersNumber: (state: RootState) => state.profile.followers,
     followingNumber: (state: RootState) => state.profile.following,
-    profilePosts: (state: RootState) => state.profile.posts,
-    profileHighlights: (state: RootState) => state.profile.highlights,
+    profilePosts: (state: RootState) => state.profile.posts
 });
