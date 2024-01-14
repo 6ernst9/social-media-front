@@ -3,8 +3,10 @@ import Plus from '../../../assets/icons/plus.svg';
 import BText from "../../core/BText/BText";
 import {Message} from "../../../widgets/messaging-overview-widget/model/types";
 import MessageCard from "../MessageCard/MessageCard";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {changeConversation} from "../../../widgets/messaging-overview-widget/model/reducers";
+import {getPersonChats} from "../../../widgets/messaging-overview-widget/model/effects";
+import {sessionSelect} from "../../../redux/core/session/selectors";
 
 interface ChatListProps {
     username: string;
@@ -13,6 +15,7 @@ interface ChatListProps {
 
 const ChatList: React.FC<ChatListProps> = ({username, conversations}) => {
     const dispatch = useDispatch();
+    const jwtToken = useSelector(sessionSelect.jwtToken);
     return (
         <div className='chat-list-widget'>
             <div className='chat-list-header'>
@@ -20,13 +23,23 @@ const ChatList: React.FC<ChatListProps> = ({username, conversations}) => {
                 <img src={Plus} className='chat-list-header-text'/>
             </div>
             <BText text='Messages'/>
-            {conversations.map((conv) =>
+            {conversations.map((conv, index) =>
                 <MessageCard
-                    photo={conv.receiver.profilePicture}
-                    fullName={conv.receiver.firstName + conv.receiver.lastName}
-                    message={conv.message}
-                    date={conv.date}
-                    onClick={() => dispatch(changeConversation(conv.receiver))}/>
+                    key={index}
+                    photo={conv.senderId.profilePicture}
+                    fullName={conv.senderId.firstName + ' ' + conv.senderId.lastName}
+                    message={conv.content}
+                    date={conv.timestamp}
+                    isRead={conv.isRead}
+                    onClick={() => {
+                        dispatch(changeConversation(conv.senderId));
+                        getPersonChats(
+                            {
+                                userId: conv.receiverId.userId,
+                                jwtToken,
+                                dispatch,
+                                receiverId: conv.senderId.userId})
+                    }}/>
             )}
         </div>
     );

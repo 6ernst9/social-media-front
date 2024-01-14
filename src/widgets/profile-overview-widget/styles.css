@@ -60,3 +60,9 @@
     background-size: cover;
     background-position: center;
 }
+
+.profile-info-identity {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}

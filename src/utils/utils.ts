@@ -1,7 +1,7 @@
-import {Message} from "../widgets/messaging-overview-widget/model/types";
+import {Chat} from "../widgets/messaging-overview-widget/model/types";
 
 interface UtilParameters {
-    messages: Message[];
+    messages: Chat[];
     index: number;
 }
 
@@ -11,13 +11,32 @@ export const getMessageShape = ({messages, index}: UtilParameters) => {
     if(index === 0) {
         firstCorner = true;
     }
-    else if(index === messages.length - 1) {
+    if(index === messages.length - 1) {
         secondCorner = true;
-    } else {
-        if(messages[index-1].sender.userId !== messages[index].sender.userId)
-            firstCorner = true;
-        if(messages[index + 1].sender.userId !== messages[index].sender.userId)
-            secondCorner = true;
     }
+    if(index > 0 && messages[index-1].senderId !== messages[index].senderId)
+        firstCorner = true;
+    if(index < messages.length -1 && messages[index + 1].senderId !== messages[index].senderId)
+        secondCorner = true;
     return [firstCorner, secondCorner];
+}
+
+export const getTime = (timestamp: string) => {
+    const currentTime = new Date();
+    const timeDifference = currentTime.getTime() - new Date(timestamp).getTime();
+
+    const seconds = Math.floor(timeDifference / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (seconds < 60) {
+        return 'now';
+    } else if (minutes < 60) {
+        return `${minutes}m ago`;
+    } else if (hours < 24) {
+        return `${hours}h ago`;
+    } else {
+        return `${days}d ago`;
+    }
 }

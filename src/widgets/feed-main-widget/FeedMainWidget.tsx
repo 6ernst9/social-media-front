@@ -10,6 +10,7 @@ import {feedSelect} from "./model/selectors";
 import {dataRequested} from "./model/effects";
 import {authSelect} from "../auth-login-widget/model/selectors";
 import {closeSidebar} from "../../redux/core/layout/reducers";
+import {closeProfile} from "../profile-overview-widget/model/reducers";
 const FeedMainWidget: React.FC = () => {
     const userId = useSelector(sessionSelect.userId);
     const jwtToken = useSelector(sessionSelect.jwtToken);
@@ -21,6 +22,7 @@ const FeedMainWidget: React.FC = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        dispatch(closeProfile());
         dataRequested({userId, jwtToken, dispatch})
 
         if(!isLogged) {

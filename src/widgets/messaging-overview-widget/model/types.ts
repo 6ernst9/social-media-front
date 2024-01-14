@@ -2,16 +2,26 @@ import {User} from "../../../types/user";
 import {Dispatch} from "redux";
 
 export type Message = {
-    sender: User;
-    receiver: User;
-    message: string;
-    date: string;
-    isSeen: boolean;
+    senderId: User;
+    receiverId: User;
+    content: string;
+    timestamp: string;
+    isRead: boolean;
+    isEdited: boolean;
+}
+
+export type Chat = {
+    senderId: string;
+    receiverId: string;
+    content: string;
+    timestamp: string;
+    isRead: boolean;
+    isEdited: boolean;
 }
 
 export type MessageState = {
     currentConversation: User;
-    chats: Message[];
+    chats: Chat[];
     conversations: Message[];
 }
 

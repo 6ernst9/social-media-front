@@ -22,6 +22,9 @@ export const getSession = async ({ userId, dispatch }: getSessionState) => {
     await request({
         url: USER_BASE_URL + '/user/getSession/' + userId,
         method: 'GET',
+        headers: {
+            'Access-Control-Allow-Origin': '*'
+        }
     }).then((response) => {
         dispatch(continueSession(response.data))
         dispatch(loginSuccess());

@@ -6,7 +6,7 @@ import {ChatEffectsPayload} from "./types";
 
 export const dataRequested = async ({ userId, jwtToken, dispatch}: EffectsPayload) => {
     await request({
-        url: MESSAGES_BASE_URL + '/getConversations/' + userId,
+        url: MESSAGES_BASE_URL + 'getPersonConversations/' + userId,
         method: 'GET',
         headers: {
             'Authorization' : "Bearer " + jwtToken
@@ -20,7 +20,7 @@ export const dataRequested = async ({ userId, jwtToken, dispatch}: EffectsPayloa
 
 export const getPersonChats = async ({ userId, jwtToken, dispatch, receiverId}: ChatEffectsPayload) => {
     await request({
-        url: MESSAGES_BASE_URL + '/getPersonChats',
+        url: MESSAGES_BASE_URL + 'getPersonChat/' + userId + '/' + receiverId,
         method: 'GET',
         data: {userId, receiverId},
         headers: {

@@ -22,13 +22,13 @@ const ChatOverview: React.FC = () => {
     const messages = useSelector(messageSelect.currentChat);
     const myUserId = useSelector(sessionSelect.userId);
     const [message, setMessage] = useState<string>('');
-    const [isFirst, setIsFirst] = useState<boolean>(true);
+    const [isFirst, setIsFirst] = useState<boolean>(false);
 
     const onMessageChange = (event: React.FormEvent<HTMLInputElement>) => setMessage(event.currentTarget.value);
     return (
         <div>
             {isFirst && (
-                <div className='chat-overview'>
+                <div className='chat-overview-opening'>
                     <div className='chat-overview-opening-container'>
                         <div className='chat-overview-opening-icon-back'>
                             <img src={Chat} className='chat-overview-opening-icon'/>
@@ -42,34 +42,40 @@ const ChatOverview: React.FC = () => {
             {!isFirst && (
                 <div className='chat-overview'>
                     <div className='chat-overview-header'>
-                        <img src={currentConversation.profilePicture}/>
-                        <BText text={currentConversation.firstName + ' ' + currentConversation.lastName}/>
-                        <img src={Phone} className='chat-overview-header-icon'/>
-                        <img src={Video} className='chat-overview-header-icon'/>
-                        <img src={Dots} className='chat-overview-header-icon'/>
+                        <div className='chat-overview-header-info'>
+                            <img src={currentConversation.profilePicture} className='chat-overview-header-picture'/>
+                            <BText text={currentConversation.firstName + ' ' + currentConversation.lastName}/>
+                        </div>
+                        <div className='chat-overview-header-actions'>
+                            <img src={Phone} className='chat-overview-icon'/>
+                            <img src={Video} className='chat-overview-icon'/>
+                            <img src={Dots} className='chat-overview-icon'/>
+                        </div>
                     </div>
                     <div className='chat-overview-messages-container'>
                         {messages.map((msj, index) =>
                             <MessageBubble
-                                content={msj.message}
-                                isMine={msj.sender.userId === myUserId}
+                                content={msj.content}
+                                isMine={msj.senderId === myUserId}
                                 firstCorner={getMessageShape({messages, index})[0]}
                                 secondCorner={getMessageShape({messages, index})[1]}/>
                         )}
                     </div>
                     <div className='chat-overview-bottom'>
-                        <input className='chat-overview-chat' placeholder='Message...' onChange={onMessageChange}/>
-                        {message.length === 0 && (
-                            <div className='chat-overview-bottom-icons'>
-                                <img src={Image} className='chat-overview-bottom-icon'/>
-                                <img src={Heart} className='chat-overview-bottom-icon'/>
-                            </div>
-                        )}
-                        {message.length > 0 && (
-                            <div className='chat-overview-bottom-icons'>
-                                <img src={Send} className='chat-overview-bottom-icon'/>
-                            </div>
-                        )}
+                        <div className='chat-overview-form'>
+                            <input className='chat-overview-chat' placeholder='Message...' onChange={onMessageChange}/>
+                            {message.length === 0 && (
+                                <div className='chat-overview-bottom-icons'>
+                                    <img src={Image} className='chat-overview-icon'/>
+                                    <img src={Heart} className='chat-overview-icon'/>
+                                </div>
+                            )}
+                            {message.length > 0 && (
+                                <div className='chat-overview-bottom-icons'>
+                                    <img src={Send} className='chat-overview-icon'/>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             )}

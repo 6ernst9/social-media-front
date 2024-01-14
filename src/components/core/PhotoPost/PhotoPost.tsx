@@ -10,18 +10,32 @@ import Dots from '../../../assets/icons/dots-vertical.svg';
 import Line from "../Line/Line";
 import "./styles.css";
 import {MEDIUM_GREY} from "../../../utils/constants";
+import {useDispatch} from "react-redux";
+import {setCurrentProfile} from "../../../widgets/profile-overview-widget/model/reducers";
+import {useNavigate} from "react-router-dom";
 
 const PhotoPost: React.FC<Post> = ({user,
                               photo,
                               description,}) => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     return (
         <div className="post-container">
             <div className="post-topbar">
                 <div className="post-topbar-left">
-                    <img className="post-profile-photo" src={user.profilePicture}/>
+                    <img className="post-profile-photo" src={user.profilePicture} onClick={() => {
+                        dispatch(setCurrentProfile(user.userId));
+                        navigate('/profile');
+                    }}/>
                     <div>
-                        <BText text={user.firstName + " " + user.lastName}/>
-                        <p>{user.username}</p>
+                        <BText text={user.firstName + " " + user.lastName} onClick={() => {
+                            dispatch(setCurrentProfile(user.userId));
+                            navigate('/profile');
+                        }}/>
+                        <p onClick={() => {
+                            dispatch(setCurrentProfile(user.userId));
+                            navigate('/profile');
+                        }}>{user.username}</p>
                     </div>
                 </div>
                 <img className="post-icon" src={Dots}/>

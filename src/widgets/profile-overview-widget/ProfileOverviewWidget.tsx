@@ -12,22 +12,17 @@ import {dataRequested} from "./model/effects";
 import {authSelect} from "../auth-login-widget/model/selectors";
 import {useNavigate} from "react-router-dom";
 import './styles.css';
-import {refreshProfile} from "./model/reducers";
-import {ProfileAccount} from "./model/types";
+import {setCurrentProfile} from "./model/reducers";
+import Line from "../../components/core/Line/Line";
 
 const ProfileOverviewWidget: React.FC = () => {
     const userId = useSelector(sessionSelect.userId);
-    const fullName = useSelector(sessionSelect.fullName);
-    const username = useSelector(sessionSelect.username);
     const jwtToken = useSelector(sessionSelect.jwtToken);
-    const profilePicture = useSelector(sessionSelect.profilePicture);
-    const myUser: ProfileAccount = { userId, profilePicture, fullName, username, isPrivate: false};
 
     const profilePhoto = useSelector(profileSelect.profilePicture);
-    const profileUsername = useSelector(profileSelect.profileUsername);
+    const username = useSelector(profileSelect.profileUsername);
     const name = useSelector(profileSelect.profileFullName);
     const profileUserId = useSelector(profileSelect.profileUserId);
-    const profileIsPrivate = useSelector(profileSelect.profilePrivate);
     const followersNumber = useSelector(profileSelect.followersNumber);
     const followingNumber = useSelector(profileSelect.followingNumber);
     const description = useSelector(profileSelect.profileDescription);
@@ -35,22 +30,22 @@ const ProfileOverviewWidget: React.FC = () => {
     const connection = useSelector(profileSelect.profileConnection);
     const isPrivate = useSelector(profileSelect.profilePrivate);
 
-    const myProfile = userId === profileUserId;
+    const isMyProfile = userId === profileUserId;
     const isLogged = useSelector(authSelect.isLogged);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    if(profileUserId === '') dispatch(setCurrentProfile(userId));
     useEffect(() => {
         dispatch(showSidebar());
-        dispatch(refreshProfile(myUser));
 
         if(!isLogged) {
             navigate('/login');
             dispatch(closeSidebar());
         }
-        dataRequested({userId: profileUserId, jwtToken, dispatch});
-    }, [dispatch, jwtToken, profileUserId])
+        dataRequested({userId: profileUserId, myUserId: userId, jwtToken, dispatch});
+    }, [jwtToken, profileUserId])
     return (
         <div className='profile-container'>
             <div className='profile-header-container'>
@@ -58,8 +53,8 @@ const ProfileOverviewWidget: React.FC = () => {
                 <div className='profile-info'>
                     <div className='profile-info-head'>
                         <BText text={username}/>
-                        <Button content={myProfile ? 'Edit Profile' : connection}/>
-                        <Button content={myProfile ? 'View Archive' : 'Message'}/>
+                        <Button content={isMyProfile ? 'Edit Profile' : connection}/>
+                        <Button content={isMyProfile ? 'View Archive' : 'Message'}/>
                         <img src={Dots}/>
                     </div>
                     <div className='profile-info-number'>
@@ -76,17 +71,21 @@ const ProfileOverviewWidget: React.FC = () => {
                             <LText text={' following'}/>
                         </div>
                     </div>
-                    <BText text={name}/>
-                    <LText text={description}/>
+                    <div className='profile-info-identity'>
+                        <BText text={name}/>
+                        <LText text={description}/>
+                    </div>
                 </div>
             </div>
-            {((isPrivate && connection === "Following") || !isPrivate ) &&
+            <Line/>
+            {(isMyProfile || (isPrivate && connection === "Following") || !isPrivate ) &&
                 <div className='profile-posts-grid'>
                     {posts.map((post) => {
                         return <img src={post.photo} key={post.contentId} className='profile-post-image'/>
                     })}
                 </div>}
             <Credits/>
+            <Line/>
         </div>
     );
 };

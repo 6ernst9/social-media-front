@@ -16,5 +16,5 @@ export const GET = 'GET';
 export const DELETE = 'DELETE';
 export const USER_BASE_URL = 'http://192.168.100.149:8080/api';
 export const CONTENT_BASE_URL = 'http://192.168.100.149:8084/api/content';
-export const MESSAGES_BASE_URL = 'http://192.168.100.149:8084/api/messaging';
+export const MESSAGES_BASE_URL = 'http://192.168.100.149:8083/';
 export const CONNECTIONS_BASE_URL = 'http://192.168.100.149:8085/api/connections';

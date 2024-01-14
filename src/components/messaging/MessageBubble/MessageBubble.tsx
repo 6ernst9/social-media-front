@@ -15,11 +15,14 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
     let cornersStyle = '';
     if(firstCorner && secondCorner)
         cornersStyle = 'both-corners';
-    else if(firstCorner)
-        cornersStyle = 'first-corner';
-    else if(secondCorner)
+    else if(firstCorner && isMine)
+        cornersStyle = 'third-corner';
+    else if(secondCorner && isMine)
         cornersStyle = 'second-corner';
-
+    else if(firstCorner && !isMine)
+        cornersStyle = 'first-corner';
+    else if(secondCorner && !isMine)
+        cornersStyle = 'forth-corner';
     const positionStyle = isMine ? 'my-message' : 'your-message';
     return <div className={'message-bubble ' + cornersStyle + ' ' + positionStyle }>
         <p>{content}</p>

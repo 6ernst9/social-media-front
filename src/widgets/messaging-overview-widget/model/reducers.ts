@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {defaultConv} from "./defaultState";
-import {Message} from "./types";
+import {Chat, Message} from "./types";
 import {User} from "../../../types/user";
 
 const messageSlice = createSlice({
@@ -10,7 +10,7 @@ const messageSlice = createSlice({
         conversationsSuccess: (state, action: PayloadAction<Message[]>) => {
             state.conversations = action.payload;
         },
-        personChatsSuccess: (state,action: PayloadAction<Message[]>) => {
+        personChatsSuccess: (state,action: PayloadAction<Chat[]>) => {
             state.chats = action.payload;
         },
         changeConversation: (state, action: PayloadAction<User>) => {

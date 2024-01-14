@@ -8,6 +8,8 @@ import {messageSelect} from "./model/selectors";
 import {closeSidebar, showSidebar} from "../../redux/core/layout/reducers";
 import {useNavigate} from "react-router-dom";
 import {authSelect} from "../auth-login-widget/model/selectors";
+import {closeProfile} from "../profile-overview-widget/model/reducers";
+import './styles.css';
 
 const MessagingOverviewWidget: React.FC = () => {
     const username = useSelector(sessionSelect.username);
@@ -21,6 +23,7 @@ const MessagingOverviewWidget: React.FC = () => {
 
     useEffect(() => {
         dispatch(showSidebar());
+        dispatch(closeProfile());
         if(!isLogged) {
             navigate('/login');
             dispatch(closeSidebar());
@@ -29,7 +32,7 @@ const MessagingOverviewWidget: React.FC = () => {
     }, [dispatch, jwtToken, userId])
 
     return (
-        <div>
+        <div className='messaging-overview'>
             <ChatList username={username} conversations={conversations}/>
             <ChatOverview/>
         </div>
