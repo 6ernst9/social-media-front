@@ -31,3 +31,10 @@ export type ChatEffectsPayload = {
     jwtToken: string;
     dispatch: Dispatch;
 }
+
+export type ReadChatEffectsPayload = {
+    messageId: string;
+    userId: string;
+    jwtToken: string;
+    dispatch: Dispatch;
+}

@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {messageSelect} from "../../../widgets/messaging-overview-widget/model/selectors";
 import {CompatClient, Stomp} from '@stomp/stompjs';
-import SockJS from 'sockjs-client';
 
 import Phone from '../../../assets/icons/phone.svg';
 import Video from '../../../assets/icons/video.svg';
@@ -18,20 +17,23 @@ import Button from "../../core/Button/Button";
 import MessageBubble from "../MessageBubble/MessageBubble";
 import {sessionSelect} from "../../../redux/core/session/selectors";
 import {getMessageShape} from "../../../utils/utils";
-import {getPersonChats} from "../../../widgets/messaging-overview-widget/model/effects";
+import {dataRequested, getPersonChats} from "../../../widgets/messaging-overview-widget/model/effects";
+import {useNavigate} from "react-router-dom";
+import {setCurrentProfile} from "../../../widgets/profile-overview-widget/model/reducers";
+
+let socket: WebSocket;
+let stompClient: CompatClient;
 
 const ChatOverview: React.FC = () => {
     const currentConversation = useSelector(messageSelect.currentConversation);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const jwtToken = useSelector(sessionSelect.jwtToken);
     const messages = useSelector(messageSelect.currentChat);
     const myUserId = useSelector(sessionSelect.userId);
     const [message, setMessage] = useState<string>('');
     const [connected, setConnected] = useState<boolean>(false);
     const isFirst = currentConversation.userId === '';
-
-   let stompClient: CompatClient;
-   let socket: WebSocket;
 
    const updateMessages = () => {
        getPersonChats(
@@ -40,11 +42,11 @@ const ChatOverview: React.FC = () => {
                jwtToken,
                dispatch,
                receiverId: currentConversation.userId});
+       dataRequested({userId: myUserId, jwtToken, dispatch});
    }
 
     const connect = () => {
-        disconnect();
-        socket = new WebSocket('ws://192.168.100.149:8083/chat/websocket');
+        socket = new WebSocket('ws://172.20.10.2:8083/chat/websocket');
         stompClient = Stomp.over(socket);
         // @ts-ignore
         stompClient.connect({}, frame => {
@@ -56,7 +58,9 @@ const ChatOverview: React.FC = () => {
             stompClient.subscribe('/user/queue/readStatus', message => {
                 updateMessages();
             });
-            stompClient.subscribe('/user/queue/readStatus', update => {});
+            stompClient.subscribe('/user/queue/contentUpdate', update => {
+                updateMessages();
+            });
             stompClient.subscribe('/user/queue/deleteMessage', update => {});
         });
     }
@@ -83,8 +87,8 @@ const ChatOverview: React.FC = () => {
 
     const onMessageChange = (event: React.FormEvent<HTMLInputElement>) => setMessage(event.currentTarget.value);
 
-    if(!connected) connect();
     useEffect(() => {
+        connect();
         return () => {
             if(stompClient) disconnect();
         }
@@ -107,13 +111,22 @@ const ChatOverview: React.FC = () => {
                 <div className='chat-overview'>
                     <div className='chat-overview-header'>
                         <div className='chat-overview-header-info'>
-                            <img src={currentConversation.profilePicture} className='chat-overview-header-picture'/>
-                            <BText text={currentConversation.firstName + ' ' + currentConversation.lastName}/>
+                            <img src={currentConversation.profilePicture} className='chat-overview-header-picture' onClick={() => {
+                                dispatch(setCurrentProfile(currentConversation.userId));
+                                navigate('/profile');
+                            }}/>
+                            <BText text={currentConversation.firstName + ' ' + currentConversation.lastName} onClick={() => {
+                                dispatch(setCurrentProfile(currentConversation.userId));
+                                navigate('/profile');
+                            }}/>
                         </div>
                         <div className='chat-overview-header-actions'>
                             <img src={Phone} className='chat-overview-icon'/>
                             <img src={Video} className='chat-overview-icon'/>
-                            <img src={Dots} className='chat-overview-icon'/>
+                            <img src={Dots} className='chat-overview-icon' onClick={() => {
+                                dispatch(setCurrentProfile(currentConversation.userId));
+                                navigate('/profile');
+                            }}/>
                         </div>
                     </div>
                     <div className='chat-overview-messages-container'>

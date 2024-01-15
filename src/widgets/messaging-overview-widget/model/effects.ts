@@ -2,7 +2,7 @@ import {request} from "../../../components/core/Request/request";
 import { MESSAGES_BASE_URL } from "../../../utils/constants";
 import {conversationsSuccess, personChatsSuccess} from "./reducers";
 import {EffectsPayload} from "../../feed-main-widget/model/types";
-import {ChatEffectsPayload} from "./types";
+import {ChatEffectsPayload, ReadChatEffectsPayload} from "./types";
 
 export const dataRequested = async ({ userId, jwtToken, dispatch}: EffectsPayload) => {
     await request({
@@ -28,6 +28,21 @@ export const getPersonChats = async ({ userId, jwtToken, dispatch, receiverId}: 
         }
     }).then((response) => {
         dispatch(personChatsSuccess(response.data));
+    }).catch((error) => {
+        console.error(error);
+    })
+}
+
+export const readPersonChat = async ({userId, messageId, jwtToken, dispatch}: ReadChatEffectsPayload) => {
+    await request({
+        url: MESSAGES_BASE_URL + 'updateReadStatus',
+        method: 'POST',
+        data: {messageId, isRead: false},
+        headers: {
+            Authorization : "Bearer " + jwtToken
+        }
+    }).then((response) => {
+        dataRequested({userId, jwtToken, dispatch});
     }).catch((error) => {
         console.error(error);
     })

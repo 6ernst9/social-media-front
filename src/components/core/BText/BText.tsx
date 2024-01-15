@@ -9,7 +9,7 @@ interface TextProps {
 
 const BText: React.FC<TextProps> = ({text, color, onClick, margin}) =>{
     return(
-        <p style={{ fontSize: 18, fontWeight: 'bold', color: color, margin: margin}} onClick={onClick}>{text}</p>
+        <p style={{ fontSize: 18, fontWeight: 'bold', color: color, margin: margin, cursor: "pointer"}} onClick={onClick}>{text}</p>
     )
 }
 

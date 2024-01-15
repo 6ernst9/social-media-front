@@ -14,7 +14,8 @@ import {useNavigate} from "react-router-dom";
 import './styles.css';
 import {setCurrentProfile} from "./model/reducers";
 import Line from "../../components/core/Line/Line";
-import {changeConversation} from "../messaging-overview-widget/model/reducers";
+import Camera from '../../assets/icons/camera.svg';
+import Lock from '../../assets/icons/lock.svg';
 
 const ProfileOverviewWidget: React.FC = () => {
     const userId = useSelector(sessionSelect.userId);
@@ -87,12 +88,28 @@ const ProfileOverviewWidget: React.FC = () => {
                 </div>
             </div>
             <Line/>
-            {(isMyProfile || (isPrivate && connection === "Following") || !isPrivate ) &&
+            {!isMyProfile && (isPrivate && connection !== 'Following') &&
+                <div className='profile-no-posts'>
+                    <div className='profile-no-posts-icon'>
+                        <img src={Lock} className='profile-no-posts-icon-img'/>
+                    </div>
+                    <h1>This Account is Private</h1>
+                </div>
+            }
+            {posts.length > 0 && (isMyProfile || (isPrivate && connection === "Following") || !isPrivate ) &&
                 <div className='profile-posts-grid'>
                     {posts.map((post) => {
                         return <img src={post.photo} key={post.contentId} className='profile-post-image'/>
                     })}
                 </div>}
+            {posts.length === 0 && (isMyProfile || (isPrivate && connection === "Following") || !isPrivate) &&
+                <div className='profile-no-posts'>
+                    <div className='profile-no-posts-icon'>
+                        <img src={Camera} className='profile-no-posts-icon-img'/>
+                    </div>
+                    <h1>No Posts Yet</h1>
+                </div>
+            }
             <Credits/>
             <Line/>
         </div>

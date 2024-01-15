@@ -150,6 +150,7 @@
     width: 60px;
     height: 60px;
     border-radius: 60px;
+    cursor: pointer;
 }
 
 .chat-overview-chat {
@@ -209,7 +210,6 @@
 .forth-corner {
     border-radius: 20px 20px 20px 5px;
 }
-
 
 
 
