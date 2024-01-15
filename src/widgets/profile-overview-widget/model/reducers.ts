@@ -34,5 +34,5 @@ const profileSlice = createSlice({
     }
 });
 
-export const { addPosts, addStreak, refreshProfile, setCurrentProfile, closeProfile } = profileSlice.actions;
+export const { addPosts, addStreak, addConnection, refreshProfile, setCurrentProfile, closeProfile } = profileSlice.actions;
 export default profileSlice.reducer;

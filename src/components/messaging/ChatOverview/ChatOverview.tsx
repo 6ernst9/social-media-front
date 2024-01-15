@@ -1,6 +1,8 @@
-import React, {useState} from "react";
-import {useSelector} from "react-redux";
+import React, {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
 import {messageSelect} from "../../../widgets/messaging-overview-widget/model/selectors";
+import {CompatClient, Stomp} from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
 
 import Phone from '../../../assets/icons/phone.svg';
 import Video from '../../../assets/icons/video.svg';
@@ -16,15 +18,77 @@ import Button from "../../core/Button/Button";
 import MessageBubble from "../MessageBubble/MessageBubble";
 import {sessionSelect} from "../../../redux/core/session/selectors";
 import {getMessageShape} from "../../../utils/utils";
+import {getPersonChats} from "../../../widgets/messaging-overview-widget/model/effects";
 
 const ChatOverview: React.FC = () => {
     const currentConversation = useSelector(messageSelect.currentConversation);
+    const dispatch = useDispatch();
+    const jwtToken = useSelector(sessionSelect.jwtToken);
     const messages = useSelector(messageSelect.currentChat);
     const myUserId = useSelector(sessionSelect.userId);
     const [message, setMessage] = useState<string>('');
-    const [isFirst, setIsFirst] = useState<boolean>(false);
+    const [connected, setConnected] = useState<boolean>(false);
+    const isFirst = currentConversation.userId === '';
+
+   let stompClient: CompatClient;
+   let socket: WebSocket;
+
+   const updateMessages = () => {
+       getPersonChats(
+           {
+               userId: myUserId,
+               jwtToken,
+               dispatch,
+               receiverId: currentConversation.userId});
+   }
+
+    const connect = () => {
+        disconnect();
+        socket = new WebSocket('ws://192.168.100.149:8083/chat/websocket');
+        stompClient = Stomp.over(socket);
+        // @ts-ignore
+        stompClient.connect({}, frame => {
+            setConnected(true);
+
+            stompClient.subscribe('/user/queue/reply', message => {
+                updateMessages();
+            });
+            stompClient.subscribe('/user/queue/readStatus', message => {
+                updateMessages();
+            });
+            stompClient.subscribe('/user/queue/readStatus', update => {});
+            stompClient.subscribe('/user/queue/deleteMessage', update => {});
+        });
+    }
+
+    const disconnect = () => {
+        if(connected && socket){
+            socket.close();
+            setConnected(false);
+        }
+    }
+
+    const sendMessage = () => {
+        if (socket && socket.readyState === WebSocket.OPEN) {
+            stompClient.send("/app/sendMessage", {}, JSON.stringify({
+                senderId: parseInt(myUserId),
+                receiverId: parseInt(currentConversation.userId),
+                content: message,
+                timestamp: new Date().toISOString()
+            }));
+            setMessage('');
+            updateMessages();
+        }
+    };
 
     const onMessageChange = (event: React.FormEvent<HTMLInputElement>) => setMessage(event.currentTarget.value);
+
+    if(!connected) connect();
+    useEffect(() => {
+        return () => {
+            if(stompClient) disconnect();
+        }
+    }, [])
     return (
         <div>
             {isFirst && (
@@ -63,7 +127,11 @@ const ChatOverview: React.FC = () => {
                     </div>
                     <div className='chat-overview-bottom'>
                         <div className='chat-overview-form'>
-                            <input className='chat-overview-chat' placeholder='Message...' onChange={onMessageChange}/>
+                            <input
+                                className='chat-overview-chat'
+                                placeholder='Message...'
+                                value={message}
+                                onChange={onMessageChange}/>
                             {message.length === 0 && (
                                 <div className='chat-overview-bottom-icons'>
                                     <img src={Image} className='chat-overview-icon'/>
@@ -72,7 +140,7 @@ const ChatOverview: React.FC = () => {
                             )}
                             {message.length > 0 && (
                                 <div className='chat-overview-bottom-icons'>
-                                    <img src={Send} className='chat-overview-icon'/>
+                                    <img src={Send} className='chat-overview-icon' onClick={() => sendMessage()}/>
                                 </div>
                             )}
                         </div>

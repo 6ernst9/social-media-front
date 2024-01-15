@@ -20,9 +20,9 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
     else if(secondCorner && isMine)
         cornersStyle = 'second-corner';
     else if(firstCorner && !isMine)
-        cornersStyle = 'first-corner';
-    else if(secondCorner && !isMine)
         cornersStyle = 'forth-corner';
+    else if(secondCorner && !isMine)
+        cornersStyle = 'first-corner';
     const positionStyle = isMine ? 'my-message' : 'your-message';
     return <div className={'message-bubble ' + cornersStyle + ' ' + positionStyle }>
         <p>{content}</p>

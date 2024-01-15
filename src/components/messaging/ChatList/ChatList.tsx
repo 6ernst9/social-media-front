@@ -22,7 +22,7 @@ const ChatList: React.FC<ChatListProps> = ({username, conversations}) => {
                 <BText text={username}/>
                 <img src={Plus} className='chat-list-header-text'/>
             </div>
-            <BText text='Messages'/>
+            <BText text='Messages' margin={20}/>
             {conversations.map((conv, index) =>
                 <MessageCard
                     key={index}

@@ -8,12 +8,13 @@ import Dots from '../../assets/icons/dots-vertical.svg';
 import {profileSelect} from "./model/selectors";
 import BText from "../../components/core/BText/BText";
 import Credits from "../../components/core/Credits/Credits";
-import {dataRequested} from "./model/effects";
+import {dataRequested, followUnfollow} from "./model/effects";
 import {authSelect} from "../auth-login-widget/model/selectors";
 import {useNavigate} from "react-router-dom";
 import './styles.css';
 import {setCurrentProfile} from "./model/reducers";
 import Line from "../../components/core/Line/Line";
+import {changeConversation} from "../messaging-overview-widget/model/reducers";
 
 const ProfileOverviewWidget: React.FC = () => {
     const userId = useSelector(sessionSelect.userId);
@@ -53,8 +54,16 @@ const ProfileOverviewWidget: React.FC = () => {
                 <div className='profile-info'>
                     <div className='profile-info-head'>
                         <BText text={username}/>
-                        <Button content={isMyProfile ? 'Edit Profile' : connection}/>
-                        <Button content={isMyProfile ? 'View Archive' : 'Message'}/>
+                        <Button content={isMyProfile ? 'Edit Profile' : connection} onClick={() => {
+                            if(!isMyProfile) {
+                                followUnfollow({userId: profileUserId, myUserId: userId, jwtToken, dispatch})
+                            }
+                        }}/>
+                        <Button content={isMyProfile ? 'View Archive' : 'Message'} onClick={() => {
+                            if(!isMyProfile) {
+                                navigate('/messages');
+                            }
+                        }}/>
                         <img src={Dots}/>
                     </div>
                     <div className='profile-info-number'>

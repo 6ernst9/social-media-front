@@ -1,9 +1,6 @@
 import {request} from "../../../components/core/Request/request";
 import {CONNECTIONS_BASE_URL, CONTENT_BASE_URL, USER_BASE_URL} from "../../../utils/constants";
-import {addPosts, addStreak, refreshProfile} from "./reducers";
-import {EffectsPayload} from "../../feed-main-widget/model/types";
-import {useSelector} from "react-redux";
-import {sessionSelect} from "../../../redux/core/session/selectors";
+import {addConnection, addPosts, addStreak, refreshProfile} from "./reducers";
 import {ProfileEffectsPayload} from "./types";
 
 export const dataRequested = async({userId, myUserId, jwtToken, dispatch}: ProfileEffectsPayload) => {
@@ -14,7 +11,6 @@ export const dataRequested = async({userId, myUserId, jwtToken, dispatch}: Profi
             'Access-Control-Allow-Origin': '*'
         }
     }).then((response) => {
-        console.log(response.data);
         dispatch(refreshProfile({
             userId: response.data.userId,
             profilePicture: response.data.profilePicture,
@@ -34,7 +30,7 @@ export const dataRequested = async({userId, myUserId, jwtToken, dispatch}: Profi
     }).then((response) => {
         dispatch(addPosts(response.data));
     }).catch((error) => {
-        console.log(error);
+        console.error(error);
     })
 
     await request({
@@ -50,13 +46,27 @@ export const dataRequested = async({userId, myUserId, jwtToken, dispatch}: Profi
     })
 
     await request({
-        url: CONNECTIONS_BASE_URL + '/getConnection/' + myUserId + '/' + userId,
+        url: CONNECTIONS_BASE_URL + '/getConnectionType/' + myUserId + '/' + userId,
         method: 'GET',
         headers: {
             Authorization : "Bearer " + jwtToken
         }
     }).then((response) => {
-        dispatch(addStreak(response.data));
+        dispatch(addConnection(response.data));
+    }).catch((error) => {
+        console.error(error);
+    })
+}
+
+export const followUnfollow = async({userId, myUserId, jwtToken, dispatch}: ProfileEffectsPayload) => {
+    await request({
+        url: CONNECTIONS_BASE_URL + '/getConnectionTypeAndUpdateConnection/' + myUserId + '/' + userId,
+        method: 'POST',
+        headers: {
+            'Authorization' : "Bearer " + jwtToken
+        }
+    }).then(() => {
+        dataRequested({userId, myUserId, jwtToken, dispatch});
     }).catch((error) => {
         console.error(error);
     })
