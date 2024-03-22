@@ -36,7 +36,7 @@ const Credits: React.FC<CreditProps> = ({ color }) => {
                     <LText text="Contact" color={color || MEDIUM_GREY}/>
                 </Link>
             </div>
-            <LText text="©2023 YOLO from ROBERT ERNST" color={color || MEDIUM_GREY}/>
+            <LText text="©2023 YOLO from Popa Alexandru" color={color || MEDIUM_GREY}/>
         </div>
 
     )

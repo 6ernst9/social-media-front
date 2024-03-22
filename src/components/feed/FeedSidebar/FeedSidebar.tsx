@@ -37,7 +37,7 @@ const FeedSidebar: React.FC = () => {
             </div>
             <div className="suggested-card">
                 <LText text="About • Help • Privacy • Terms • Language" color={DARK_GREY}/>
-                <LText text="©2023 YOLO FROM ROBERT ERNST" color={DARK_GREY}/>
+                <LText text="©2023 YOLO FROM POPA" color={DARK_GREY}/>
             </div>
 
         </div>

@@ -68,7 +68,7 @@ const AuthLoginWidget: React.FC = () => {
                     <BText text="Forgot password?" color={PRIMARY_LIGHT}/>
                 </Link>
                 <Button content='Log in' onClick={handleSubmit}/>
-                {errorMessage && errorMessage !== 'NO-ERROR' && <LText text={errorMessage} color={'#ff0000'}/>}
+                {errorMessage && errorMessage !== 'NO-ERROR' && <LText text={"Incorrect password"} color={'#ff0000'}/>}
                 <Line/>
                 <div className="auth-under">
                     <LText text="Don't have an account?"/>
