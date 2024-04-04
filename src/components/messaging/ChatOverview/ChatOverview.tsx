@@ -47,7 +47,7 @@ const ChatOverview: React.FC = () => {
    }
 
     const connect = () => {
-        socket = new WebSocket('ws://172.20.10.2:8083/chat/websocket');
+        socket = new WebSocket('ws://localhost:8083/chat/websocket');
         stompClient = Stomp.over(socket);
         // @ts-ignore
         stompClient.connect({}, frame => {
