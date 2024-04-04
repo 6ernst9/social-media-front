@@ -1,7 +1,7 @@
 .button-container {
-    background-color: #f71b62;
-    padding: 15px;
-    border-radius: 10px;
+    background-color: #00b4d8;
+    padding: 15px 25px 15px 25px;
+    border-radius: 32px;
     display: flex;
     justify-content: center;
     align-items: center

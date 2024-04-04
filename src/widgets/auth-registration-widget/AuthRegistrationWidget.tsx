@@ -2,8 +2,9 @@ import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Link, useNavigate} from "react-router-dom";
 import BText from "../../components/core/BText/BText";
-import {BACKGROUND_LIGHT, PRIMARY_LIGHT} from "../../utils/constants";
+import {BACKGROUND_DARK, PRIMARY_LIGHT} from "../../utils/constants";
 import Button from "../../components/core/Button/Button";
+import Logo from "./../../assets/icons/logo.png";
 import LText from "../../components/core/LText/LText";
 import Line from "../../components/core/Line/Line";
 import Credits from "../../components/core/Credits/Credits";
@@ -11,7 +12,7 @@ import {register} from "./model/effects";
 import {showSidebar} from "../../redux/core/layout/reducers";
 import {getSession} from "../auth-login-widget/model/effects";
 import {sessionSelect} from "../../redux/core/session/selectors";
-import {registrationSuccess} from "../auth-login-widget/model/reducers";
+import {changePage, registrationSuccess} from "../auth-login-widget/model/reducers";
 import {authSelect} from "../auth-login-widget/model/selectors";
 
 const AuthRegistrationWidget: React.FC = () => {
@@ -23,7 +24,6 @@ const AuthRegistrationWidget: React.FC = () => {
     const [password, setPassword] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [fullName, setFullName] = useState<string>('');
-    const [birthdate, setBirthdate] = useState<string>('');
     const [phoneNumber, setPhoneNumber] = useState<number>(0);
 
     const navigate = useNavigate();
@@ -35,31 +35,35 @@ const AuthRegistrationWidget: React.FC = () => {
             navigate('/home');
             dispatch(showSidebar);
         }
+
         if(userId !== '') {
             getSession({userId, dispatch});
         }
     }, [dispatch, errorMessage, navigate]);
+    
+    useEffect(() => {
+        dispatch(changePage());
+    }, [dispatch])
 
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => setEmail(event.target.value);
     const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => setPassword(event.target.value);
-    const handleBirthdateChange = (event: React.ChangeEvent<HTMLInputElement>) => setBirthdate(event.target.value);
     const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => setUsername(event.target.value);
     const handleFullNameChange = (event: React.ChangeEvent<HTMLInputElement>) => setFullName(event.target.value);
     const handlePhoneNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => setPhoneNumber(event.target.valueAsNumber);
     const handleSubmit = async() => {
         await register({
-            email, username, password, fullName, phoneNumber, birthdate, dispatch
+            email, username, password, fullName, phoneNumber, dispatch
         });
     }
 
     return (
-        <div className="auth-back">
-            <div className="auth-page-container">
-                <p className="auth-title">Create your Account</p>
-                <Credits color={BACKGROUND_LIGHT}/>
-            </div>
+        <div className="auth-registration-back">
             <div className="auth-container">
-                <p className="auth-logo">yolo</p>
+                <div className="auth-container-header">
+                    <img src={Logo} className="auth-logo"/>
+                    <p className="auth-title">Sign up to Socially</p>
+                </div>
+
                 <div className="auth-forms">
                     <input
                         className="auth-form"
@@ -73,13 +77,8 @@ const AuthRegistrationWidget: React.FC = () => {
                         onChange={handleEmailChange}/>
                     <input
                         className="auth-form"
-                        placeholder="Birthdate"
-                        type='date'
-                        onChange={handleBirthdateChange}/>
-                    <input
-                        className="auth-form"
                         placeholder="Phone number"
-                        type='number'
+                        type='text'
                         onChange={handlePhoneNumberChange}/>
                     <input
                         className="auth-form"
@@ -102,6 +101,7 @@ const AuthRegistrationWidget: React.FC = () => {
                     </Link>
                 </div>
             </div>
+            <Credits color={BACKGROUND_DARK}/>
         </div>
     )
 }

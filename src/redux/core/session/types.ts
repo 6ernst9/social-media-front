@@ -6,7 +6,6 @@ export type UserSession = {
     phoneNumber: number;
     profilePicture: string;
     username: string;
-    language: string;
 }
 
 export type UserResponse = {
@@ -16,15 +15,11 @@ export type UserResponse = {
 
 export type UserType = {
     userId: string;
-    firstName: string;
-    lastName: string;
-    bio?: string;
+    fullName: string;
     birthdate: string;
     isPrivate: boolean;
-    status: boolean;
-    profilePicture: string;
     email: string;
     phoneNumber: number;
+    profilePicture: string;
     username: string;
-    language: string;
 }

@@ -12,6 +12,6 @@ export type AuthState = {
 }
 
 export type getSessionState = {
-    userId: string;
+    token: string;
     dispatch: Dispatch;
 }

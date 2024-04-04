@@ -5,11 +5,12 @@ import {CompatClient, Stomp} from '@stomp/stompjs';
 
 import Phone from '../../../assets/icons/phone.svg';
 import Video from '../../../assets/icons/video.svg';
-import Dots from '../../../assets/icons/dots-vertical.svg';
+import Info from '../../../assets/icons/info.svg';
 import Chat from '../../../assets/icons/chat.svg';
 import Image from '../../../assets/icons/image.svg';
 import Heart from '../../../assets/icons/heart.svg';
 import Send from '../../../assets/icons/send.svg';
+import Microphone from '../../../assets/icons/microphone.svg';
 
 import BText from "../../core/BText/BText";
 import LText from "../../core/LText/LText";
@@ -123,7 +124,7 @@ const ChatOverview: React.FC = () => {
                         <div className='chat-overview-header-actions'>
                             <img src={Phone} className='chat-overview-icon'/>
                             <img src={Video} className='chat-overview-icon'/>
-                            <img src={Dots} className='chat-overview-icon' onClick={() => {
+                            <img src={Info} className='chat-overview-icon' onClick={() => {
                                 dispatch(setCurrentProfile(currentConversation.userId));
                                 navigate('/profile');
                             }}/>
@@ -147,6 +148,7 @@ const ChatOverview: React.FC = () => {
                                 onChange={onMessageChange}/>
                             {message.length === 0 && (
                                 <div className='chat-overview-bottom-icons'>
+                                    <img src={Microphone} className='chat-overview-icon'/>
                                     <img src={Image} className='chat-overview-icon'/>
                                     <img src={Heart} className='chat-overview-icon'/>
                                 </div>

@@ -1,4 +1,4 @@
-import {USER_BASE_URL} from "../../../utils/constants";
+import {BASE_URL} from "../../../utils/constants";
 import {loginFailure, loginSuccess} from "./reducers";
 import {getSessionState, LoginProps} from "./types";
 import {request} from "../../../components/core/Request/request";
@@ -7,9 +7,12 @@ import {showSidebar} from "../../../redux/core/layout/reducers";
 
 export const login = async ({username, password, dispatch}: LoginProps) => {
     await request({
-        url: USER_BASE_URL + '/login',
+        url: BASE_URL,
         method: 'POST',
-        data: {username, password}
+        data: {
+            path: 'account.login',
+            body: {username, password}
+        }
     }).then((response) => {
         dispatch(loginSuccess());
         dispatch(startSession(response.data));
@@ -18,10 +21,13 @@ export const login = async ({username, password, dispatch}: LoginProps) => {
     })
 }
 
-export const getSession = async ({ userId, dispatch }: getSessionState) => {
+export const getSession = async ({ token, dispatch }: getSessionState) => {
     await request({
-        url: USER_BASE_URL + '/user/getSession/' + userId,
+        url: BASE_URL,
         method: 'GET',
+        data: {
+          path: 'account.getSession', body: {token}
+        },
         headers: {
             'Access-Control-Allow-Origin': '*'
         }

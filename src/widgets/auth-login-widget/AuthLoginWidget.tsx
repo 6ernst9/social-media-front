@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import LText from "../../components/core/LText/LText";
-import {BACKGROUND_LIGHT, PRIMARY_LIGHT} from "../../utils/constants";
+import {BACKGROUND_DARK, BACKGROUND_LIGHT, PRIMARY_LIGHT} from "../../utils/constants";
 import Line from "../../components/core/Line/Line";
 import BText from "../../components/core/BText/BText";
 import './styles.css';
@@ -12,12 +12,13 @@ import Credits from "../../components/core/Credits/Credits";
 import Button from "../../components/core/Button/Button";
 import {showSidebar} from "../../redux/core/layout/reducers";
 import {sessionSelect} from "../../redux/core/session/selectors";
-import {loginSuccess} from "./model/reducers";
+import {changePage, loginSuccess} from "./model/reducers";
+import Logo from "../../assets/icons/logo.png";
 
 const AuthLoginWidget: React.FC = () => {
     const errorMessage = useSelector(authSelect.authError);
     const isLogged = useSelector(authSelect.isLogged);
-    const userId = useSelector(sessionSelect.userId);
+    const token = useSelector(sessionSelect.jwtToken);
 
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -31,10 +32,15 @@ const AuthLoginWidget: React.FC = () => {
             navigate('/home');
             dispatch(showSidebar);
         }
-        if(userId !== '') {
-            getSession({userId, dispatch});
+        
+        if(token !== '') {
+            getSession({token, dispatch});
         }
-    }, [dispatch, errorMessage, isLogged, userId]);
+    }, [dispatch, errorMessage, isLogged, token]);
+    
+    useEffect(() => {
+        dispatch(changePage());
+    }, [dispatch])
 
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => setUsername(event.target.value)
     const handlePassChange = (event: React.ChangeEvent<HTMLInputElement>) => setPassword(event.target.value)
@@ -44,13 +50,12 @@ const AuthLoginWidget: React.FC = () => {
     };
 
     return (
-        <div className="auth-back">
-            <div className="auth-page-container">
-                <p className="auth-title">Log In to your Account</p>
-                <Credits color={BACKGROUND_LIGHT}/>
-            </div>
+        <div className="auth-login-back">
             <div className="auth-container">
-                <p className="auth-logo">yolo</p>
+                <div className="auth-container-header">
+                    <img src={Logo} className="auth-logo"/>
+                    <p className="auth-title">Log in to Socially</p>
+                </div>
                 <div className="auth-forms">
                      <input
                             className="auth-form"
@@ -77,6 +82,7 @@ const AuthLoginWidget: React.FC = () => {
                     </Link>
                 </div>
             </div>
+            <Credits color={BACKGROUND_DARK}/>
         </div>
     )
 }

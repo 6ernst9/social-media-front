@@ -13,6 +13,9 @@ const loginSlice = createSlice({
             state.logged = false;
             state.error = action.payload;
         },
+        changePage: (state) => {
+            state.error = null;
+        },
         registrationSuccess: (state) => {
             state.logged = true;
             state.error = 'NO-ERROR';
@@ -23,12 +26,11 @@ const loginSlice = createSlice({
         },
         logout: (state) => {
             localStorage.removeItem('token');
-            localStorage.removeItem('userId');
             state.logged = false;
             state.error = null;
         }
     }
 });
 
-export const { loginSuccess, registrationSuccess, registrationFailure, loginFailure, logout } = loginSlice.actions;
+export const { loginSuccess, registrationSuccess, registrationFailure, loginFailure, changePage, logout } = loginSlice.actions;
 export default loginSlice.reducer;
