@@ -33,7 +33,6 @@ const AuthRegistrationWidget: React.FC = () => {
         if (isLogged || errorMessage === 'NO-ERROR') {
             dispatch(registrationSuccess());
             navigate('/home');
-            dispatch(showSidebar);
         }
 
         if(userId !== '') {

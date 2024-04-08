@@ -1,16 +1,15 @@
 import React, {useEffect, useState} from "react";
 import LText from "../../components/core/LText/LText";
-import {BACKGROUND_DARK, BACKGROUND_LIGHT, PRIMARY_LIGHT} from "../../utils/constants";
+import {BACKGROUND_DARK, PRIMARY_LIGHT} from "../../utils/constants";
 import Line from "../../components/core/Line/Line";
 import BText from "../../components/core/BText/BText";
 import './styles.css';
-import {getSession, login} from "./model/effects";
+import {login} from "./model/effects";
 import {useDispatch, useSelector} from "react-redux";
 import {authSelect} from "./model/selectors";
 import {Link, useNavigate} from "react-router-dom";
 import Credits from "../../components/core/Credits/Credits";
 import Button from "../../components/core/Button/Button";
-import {showSidebar} from "../../redux/core/layout/reducers";
 import {sessionSelect} from "../../redux/core/session/selectors";
 import {changePage, loginSuccess} from "./model/reducers";
 import Logo from "../../assets/icons/logo.png";
@@ -30,11 +29,6 @@ const AuthLoginWidget: React.FC = () => {
         if (isLogged || errorMessage === 'NO-ERROR') {
             dispatch(loginSuccess());
             navigate('/home');
-            dispatch(showSidebar);
-        }
-        
-        if(token !== '') {
-            getSession({token, dispatch});
         }
     }, [dispatch, errorMessage, isLogged, token]);
     

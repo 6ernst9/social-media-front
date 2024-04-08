@@ -34,7 +34,7 @@ const ChatOverview: React.FC = () => {
     const myUserId = useSelector(sessionSelect.userId);
     const [message, setMessage] = useState<string>('');
     const [connected, setConnected] = useState<boolean>(false);
-    const isFirst = currentConversation.userId === '';
+    const convSelected = currentConversation.userId === '';
 
    const updateMessages = () => {
        getPersonChats(
@@ -89,14 +89,14 @@ const ChatOverview: React.FC = () => {
     const onMessageChange = (event: React.FormEvent<HTMLInputElement>) => setMessage(event.currentTarget.value);
 
     useEffect(() => {
-        connect();
+        //connect();
         return () => {
             if(stompClient) disconnect();
         }
     }, [])
     return (
         <div>
-            {isFirst && (
+            {convSelected && (
                 <div className='chat-overview-opening'>
                     <div className='chat-overview-opening-container'>
                         <div className='chat-overview-opening-icon-back'>
@@ -108,7 +108,7 @@ const ChatOverview: React.FC = () => {
                     </div>
                 </div>
             )}
-            {!isFirst && (
+            {!convSelected && (
                 <div className='chat-overview'>
                     <div className='chat-overview-header'>
                         <div className='chat-overview-header-info'>
@@ -116,7 +116,7 @@ const ChatOverview: React.FC = () => {
                                 dispatch(setCurrentProfile(currentConversation.userId));
                                 navigate('/profile');
                             }}/>
-                            <BText text={currentConversation.firstName + ' ' + currentConversation.lastName} onClick={() => {
+                            <BText text={currentConversation.fullName} onClick={() => {
                                 dispatch(setCurrentProfile(currentConversation.userId));
                                 navigate('/profile');
                             }}/>

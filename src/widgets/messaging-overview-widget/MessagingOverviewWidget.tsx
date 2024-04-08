@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import ChatOverview from "../../components/messaging/ChatOverview/ChatOverview";
-import ChatList from "../../components/messaging/ChatList/ChatList";
+import ChatSidebar from "../../components/messaging/ChatSidebar/ChatSidebar";
 import {useDispatch, useSelector} from "react-redux";
 import {sessionSelect} from "../../redux/core/session/selectors";
 import {dataRequested} from "./model/effects";
@@ -12,11 +12,12 @@ import {closeProfile} from "../profile-overview-widget/model/reducers";
 import './styles.css';
 
 const MessagingOverviewWidget: React.FC = () => {
-    const username = useSelector(sessionSelect.username);
+    const profilePicture = useSelector(sessionSelect.profilePicture);
     const userId = useSelector(sessionSelect.userId);
     const isLogged = useSelector(authSelect.isLogged);
     const jwtToken = useSelector(sessionSelect.jwtToken);
     const conversations = useSelector(messageSelect.conversations);
+    const stories = useSelector(messageSelect.stories);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -33,7 +34,12 @@ const MessagingOverviewWidget: React.FC = () => {
 
     return (
         <div className='messaging-overview'>
-            <ChatList username={username} conversations={conversations}/>
+            <ChatSidebar
+                stories={stories}
+                jwtToken={jwtToken}
+                userId={userId}
+                profilePicture={profilePicture}
+                conversations={conversations}/>
             <ChatOverview/>
         </div>
     );

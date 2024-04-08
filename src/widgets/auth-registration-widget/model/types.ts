@@ -8,3 +8,8 @@ export type RegisterProps = {
     phoneNumber: number;
     dispatch: Dispatch;
 }
+
+export type getAccountByUsername = {
+    username: string;
+    dispatch: Dispatch;
+}

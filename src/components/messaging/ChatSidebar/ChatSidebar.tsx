@@ -1,41 +1,47 @@
 import React from "react";
 import Plus from '../../../assets/icons/plus.svg';
-import BText from "../../core/BText/BText";
 import {Message} from "../../../widgets/messaging-overview-widget/model/types";
 import MessageCard from "../MessageCard/MessageCard";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {changeConversation} from "../../../widgets/messaging-overview-widget/model/reducers";
-import {getPersonChats, readPersonChat} from "../../../widgets/messaging-overview-widget/model/effects";
-import {sessionSelect} from "../../../redux/core/session/selectors";
+import {getPersonChats} from "../../../widgets/messaging-overview-widget/model/effects";
+import SearchBar from "../SearchBar/SearchBar";
+import StorySlider from "../StorySlider/StorySlider";
+import {StoryType} from "../../../types/auth";
 
 interface ChatListProps {
-    username: string;
+    profilePicture: string;
+    jwtToken: string;
+    userId: string;
     conversations: Message[];
+    stories: StoryType[];
 }
 
-const ChatList: React.FC<ChatListProps> = ({username, conversations}) => {
+const ChatSidebar: React.FC<ChatListProps> = ({profilePicture, jwtToken, userId, stories, conversations}) => {
     const dispatch = useDispatch();
-    const jwtToken = useSelector(sessionSelect.jwtToken);
-    const profilePicture = useSelector(sessionSelect.profilePicture);
-    const userId = useSelector(sessionSelect.userId);
-    const fullName = useSelector(sessionSelect.fullName);
+
     return (
         <div className='chat-list-widget'>
             <div className='chat-list-header'>
-                <BText text={username}/>
-                <img src={Plus} className='chat-list-header-text'/>
+                <img src={profilePicture} className='chat-list-header-profile'/>
+                <img src={Plus} className='chat-list-header-logo'/>
+                <div className='chat-list-header-icons'>
+                    <img src={Plus} className='chat-list-header-icon'/>
+                    <img src={Plus} className='chat-list-header-icon message'/>
+                </div>
             </div>
-            <BText text='Messages' margin={20}/>
+            <StorySlider stories={stories}/>
+            <SearchBar/>
             {conversations.map((conv, index) =>
                 <MessageCard
                     key={index}
                     photo={conv.senderId.userId === userId ? conv.receiverId.profilePicture : conv.senderId.profilePicture}
                     fullName={ conv.senderId.userId === userId
-                        ? conv.receiverId.firstName + ' ' + conv.receiverId.lastName
-                        : conv.senderId.firstName + ' ' + conv.senderId.lastName}
+                        ? conv.receiverId.fullName
+                        : conv.senderId.fullName}
                     message={conv.content}
                     date={conv.timestamp}
-                    isRead={conv.isRead}
+                    isSeen={conv.isSeen}
                     onClick={() => {
                         dispatch(changeConversation(conv.senderId.userId === userId ? conv.receiverId : conv.senderId));
 
@@ -51,4 +57,4 @@ const ChatList: React.FC<ChatListProps> = ({username, conversations}) => {
     );
 }
 
-export default ChatList;
+export default ChatSidebar;

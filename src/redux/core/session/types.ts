@@ -16,8 +16,6 @@ export type UserResponse = {
 export type UserType = {
     userId: string;
     fullName: string;
-    birthdate: string;
-    isPrivate: boolean;
     email: string;
     phoneNumber: number;
     profilePicture: string;

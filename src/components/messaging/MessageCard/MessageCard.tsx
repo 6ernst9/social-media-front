@@ -8,7 +8,7 @@ interface MessageCardProps {
     fullName: string;
     message: string;
     date: string;
-    isRead: boolean;
+    isSeen: boolean;
     onClick: () => void;
 }
 
@@ -17,17 +17,17 @@ const MessageCard: React.FC<MessageCardProps> =
          fullName,
          message,
          date,
-        isRead,
+        isSeen,
          onClick}) => {
     return (
         <div className='message-card' onClick={onClick}>
             <img src={photo} className='message-card-img'/>
             <div className='message-card-text'>
                 <BText text={fullName}/>
-                {isRead && (
+                {isSeen && (
                     <LText text={message + ' • ' + getTime(date)}/>
                 )}
-                {!isRead && (
+                {!isSeen && (
                     <BText text={message + ' • ' + getTime(date)}/>
                 )}
             </div>

@@ -2,6 +2,7 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {defaultConv} from "./defaultState";
 import {Chat, Message} from "./types";
 import {User} from "../../../types/user";
+import {StoryType} from "../../../types/auth";
 
 const messageSlice = createSlice({
     name: 'messageState',
@@ -15,9 +16,15 @@ const messageSlice = createSlice({
         },
         changeConversation: (state, action: PayloadAction<User>) => {
             state.currentConversation = action.payload;
+        },
+        searchTerm: (state, action: PayloadAction<User[]>) => {
+            state.searchResults = action.payload;
+        },
+        storiesSuccess: (state, action: PayloadAction<StoryType[]>) => {
+            state.stories = action.payload;
         }
     }
 });
 
-export const { conversationsSuccess, personChatsSuccess, changeConversation } = messageSlice.actions;
+export const { conversationsSuccess, personChatsSuccess, changeConversation, storiesSuccess, searchTerm } = messageSlice.actions;
 export default messageSlice.reducer;

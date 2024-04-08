@@ -25,7 +25,7 @@ const loginSlice = createSlice({
             state.error = action.payload;
         },
         logout: (state) => {
-            localStorage.removeItem('token');
+            localStorage.removeItem('userId');
             state.logged = false;
             state.error = null;
         }

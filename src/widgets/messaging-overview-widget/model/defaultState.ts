@@ -3,16 +3,13 @@ import {MessageState} from "./types";
 export const defaultConv: MessageState = {
     currentConversation: {
         userId: "",
-        firstName: "",
-        lastName: "",
+        fullName: "",
         profilePicture: "",
         username: "",
-        description: "",
         password: "",
-        gender: "",
-        dateOfBirth: "",
-        joinDate: ""
     },
     chats: [],
-    conversations: []
+    conversations: [],
+    searchResults: [],
+    stories: []
 }
