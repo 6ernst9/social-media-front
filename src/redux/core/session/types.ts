@@ -1,10 +1,10 @@
 export type UserSession = {
     token: string;
-    userId: string;
+    id: string;
     fullName: string;
     email: string;
     phoneNumber: number;
-    profilePicture: string;
+    profilePhoto: string;
     username: string;
 }
 
@@ -14,10 +14,10 @@ export type UserResponse = {
 }
 
 export type UserType = {
-    userId: string;
+    id: string;
     fullName: string;
     email: string;
     phoneNumber: number;
-    profilePicture: string;
+    profilePhoto: string;
     username: string;
 }

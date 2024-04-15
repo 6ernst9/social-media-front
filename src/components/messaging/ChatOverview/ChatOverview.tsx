@@ -31,7 +31,7 @@ const ChatOverview: React.FC = () => {
     const navigate = useNavigate();
     const jwtToken = useSelector(sessionSelect.jwtToken);
     const messages = useSelector(messageSelect.currentChat);
-    const myUserId = useSelector(sessionSelect.userId);
+    const id = useSelector(sessionSelect.id);
     const [message, setMessage] = useState<string>('');
     const [connected, setConnected] = useState<boolean>(false);
     const convSelected = currentConversation.userId === '';
@@ -39,11 +39,11 @@ const ChatOverview: React.FC = () => {
    const updateMessages = () => {
        getPersonChats(
            {
-               userId: myUserId,
+               id,
                jwtToken,
                dispatch,
                receiverId: currentConversation.userId});
-       dataRequested({userId: myUserId, jwtToken, dispatch});
+       dataRequested({id, jwtToken, dispatch});
    }
 
     const connect = () => {
@@ -76,7 +76,7 @@ const ChatOverview: React.FC = () => {
     const sendMessage = () => {
         if (socket && socket.readyState === WebSocket.OPEN) {
             stompClient.send("/app/sendMessage", {}, JSON.stringify({
-                senderId: parseInt(myUserId),
+                senderId: parseInt(id),
                 receiverId: parseInt(currentConversation.userId),
                 content: message,
                 timestamp: new Date().toISOString()
@@ -134,7 +134,7 @@ const ChatOverview: React.FC = () => {
                         {messages.map((msj, index) =>
                             <MessageBubble
                                 content={msj.content}
-                                isMine={msj.senderId === myUserId}
+                                isMine={msj.senderId === id}
                                 firstCorner={getMessageShape({messages, index})[0]}
                                 secondCorner={getMessageShape({messages, index})[1]}/>
                         )}

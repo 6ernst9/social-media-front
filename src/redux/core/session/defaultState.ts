@@ -5,8 +5,7 @@ export const defaultSession: UserSession = {
     fullName: '',
     username: '',
     email: '',
-    userId: localStorage.getItem( 'userId') || '',
-    profilePicture: '',
-    phoneNumber: 0,
-    language: ''
+    id: localStorage.getItem( 'id') || '',
+    profilePhoto: '',
+    phoneNumber: 0
 }

@@ -5,50 +5,55 @@ import {
     Chat,
     ChatEffectsPayload,
     EffectsPayload,
-    GetAccountPayload, Message,
+    GetAccountPayload,
     SearchPayload
 } from "./types";
 import {User} from "../../../types/user";
+import {Content} from "../../../types/content";
 
-export const dataRequested = async ({ userId, jwtToken, dispatch}: EffectsPayload) => {
-    let conversations: Message[] = [];
-    await request({
+export const dataRequested = async ({ id, jwtToken, dispatch}: EffectsPayload) => {
+    const response = await request({
         url: BASE_URL,
         method: 'GET',
-        data: {
-            path: 'messaging.get-conversations/' + userId
+        params: {
+            path: encodeURIComponent('messaging.get-conversations/' + id)
         },
         headers: {
-            'Authorization' : "Bearer " + jwtToken
+            'Authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaGSh23zOl21k4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ",
+            'X-FI-SY-IP': '127.0.0',
+            'X-FI-SY-SITE-ID': 'COM',
+            'X-FI-SY-DEVICE': 'DESKTOP'
         }
-    }).then((response) => {
-        response.data.map((msg: Chat) => {
-            getAccount({userId: msg.senderId, jwtToken})
-                .then((sender) => {
-                    getAccount({userId: msg.receiverId, jwtToken})
-                        .then((receiver) => {
-                            conversations.push({
-                                senderId: sender,
-                                receiverId: receiver,
-                                content: msg.content,
-                                timestamp: msg.content,
-                                isSeen: msg.isSeen })
-                    })
-                })
-        })
-        dispatch(conversationsSuccess(conversations));
-    }).catch((error) => {
-        console.error(error);
+    });
+    const messages: Chat[] = response.data;
+
+    const convs = messages.map(async msg => {
+        const sender = await getAccount({id: msg.senderId, jwtToken});
+        const receiver = await getAccount({id: msg.receiverId, jwtToken});
+
+        return {
+            senderId: sender,
+            receiverId: receiver,
+            content: msg.content,
+            timestamp: msg.timestamp,
+            isSeen: msg.isSeen
+        }
     });
 
+    const conversations = await Promise.all(convs);
+    dispatch(conversationsSuccess(conversations));
+
     await request({
         url: BASE_URL,
         method: 'GET',
-        data: {
-            path: 'content.get-stories/' + userId
+        params: {
+            path: encodeURIComponent('content.get-stories/' + id)
         },
         headers: {
-            Authorization: "Bearer " + jwtToken
+            'Authorization' : "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaGSh23zOl21k4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ",
+            'X-FI-SY-IP' : '127.0.0',
+            'X-FI-SY-SITE-ID': 'COM',
+            'X-FI-SY-DEVICE': 'DESKTOP'
         }
     }).then((response) => {
         dispatch(storiesSuccess(response.data));
@@ -57,19 +62,61 @@ export const dataRequested = async ({ userId, jwtToken, dispatch}: EffectsPayloa
     });
 }
 
-export const getPersonChats = async ({ userId, jwtToken, dispatch, receiverId}: ChatEffectsPayload) => {
-    await request({
+export const getPersonChats = async ({ id, jwtToken, dispatch, receiverId}: ChatEffectsPayload) => {
+    const response = await request({
         url: BASE_URL,
         method: 'GET',
-        data: {path: 'messaging.get-chats/' + userId + '/' + receiverId},
+        params: {
+            path: encodeURIComponent('messaging.get-chats/' + id + '/' + receiverId)
+        },
         headers: {
-            Authorization : "Bearer " + jwtToken
+            'Authorization' : "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaGSh23zOl21k4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ",
+            'X-FI-SY-IP' : '127.0.0',
+            'X-FI-SY-SITE-ID': 'COM',
+            'X-FI-SY-DEVICE': 'DESKTOP'
         }
-    }).then((response) => {
-        dispatch(personChatsSuccess(response.data));
-    }).catch((error) => {
-        console.error(error);
+    });
+
+    let chat: Chat[] = response.data;
+
+    const res = await request({
+        url: BASE_URL,
+        method: 'GET',
+        params: {
+            path: encodeURIComponent('content.get-snaps-with/' + id + '/' + receiverId)
+        },
+        headers: {
+            'Authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaGSh23zOl21k4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ",
+            'X-FI-SY-IP': '127.0.0',
+            'X-FI-SY-SITE-ID': 'COM',
+            'X-FI-SY-DEVICE': 'DESKTOP'
+        }
+    });
+    const snaps: Content[] = res.data;
+    snaps.map((snap) => {
+        let seen: boolean = false;
+        const posterId = snap.posterId;
+        const receiver = snap.posterId === id ? receiverId : id;
+
+        snap.seen.map((id) => {
+            if(id.toString() === receiver) {
+                seen = true;
+            }
+        });
+
+        const snapMessage: Chat = {
+            senderId: posterId,
+            receiverId: receiver,
+            content: snap.url,
+            timestamp: snap.timestamp,
+            type: snap.type,
+            isSeen: seen
+        };
+
+        chat = [...chat, snapMessage]
     })
+
+    dispatch(personChatsSuccess(chat));
 }
 
 // export const readPersonChat = async ({userId, messageId, jwtToken, dispatch}: ReadChatEffectsPayload) => {
@@ -87,15 +134,18 @@ export const getPersonChats = async ({ userId, jwtToken, dispatch, receiverId}: 
 //     })
 // }
 
-export const getAccount = async({userId, jwtToken}: GetAccountPayload): Promise<User> => {
+export const getAccount = async({id, jwtToken}: GetAccountPayload): Promise<User> => {
     return await request({
         url: BASE_URL,
         method: 'GET',
-        data: {
-            path: 'account.get-account/' + userId
+        params: {
+            path: encodeURIComponent('account.get-account/' + id)
         },
         headers: {
-            Authorization: "Bearer " + jwtToken
+            'Authorization' : "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaGSh23zOl21k4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ",
+            'X-FI-SY-IP' : '127.0.0',
+            'X-FI-SY-SITE-ID': 'COM',
+            'X-FI-SY-DEVICE': 'DESKTOP'
         }
     }).then((response) => response.data);
 }
@@ -104,8 +154,8 @@ export const searchByTerm = async({term, dispatch}: SearchPayload) => {
     await request({
         url: BASE_URL,
         method: 'GET',
-        data: {
-            path: 'account.search-by-term' + term
+        params: {
+            path: encodeURIComponent('account.search-by-term' + term)
         }
     }).then((response) => {
         dispatch(searchTerm(response.data));

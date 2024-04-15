@@ -1,11 +1,11 @@
-import {User} from "./user";
-
-export type Post = {
-    contentId: string;
-    user: User;
-    photo: string;
-    datePosted: string;
-    description?: string;
+export type Content = {
+    id: string;
+    posterId: string;
+    url: string;
+    type: string;
+    timestamp: string;
+    seen: number[];
+    receivers: number[]
 }
 
 export type Comment = {

@@ -7,12 +7,20 @@ const sessionSlice = createSlice({
     initialState: defaultSession,
     reducers: {
         startSession: (state, action: PayloadAction<UserType>) => {
-            localStorage.setItem('userId', action.payload.userId);
+            localStorage.setItem('id', action.payload.id);
             state.fullName = action.payload.fullName;
-            state.profilePicture = action.payload.profilePicture;
+            state.profilePhoto = action.payload.profilePhoto;
             state.username = action.payload.username;
             state.email = action.payload.email;
-            state.userId = action.payload.userId;
+            state.id = action.payload.id;
+            state.phoneNumber = action.payload.phoneNumber;
+        },
+        continueSession: (state, action: PayloadAction<UserType>) => {
+            state.fullName = action.payload.fullName;
+            state.profilePhoto = action.payload.profilePhoto;
+            state.username = action.payload.username;
+            state.email = action.payload.email;
+            state.id = action.payload.id;
             state.phoneNumber = action.payload.phoneNumber;
         },
         endSession: (state) => {
@@ -21,5 +29,5 @@ const sessionSlice = createSlice({
     }
 });
 
-export const { startSession, endSession } = sessionSlice.actions;
+export const { startSession, continueSession, endSession } = sessionSlice.actions;
 export default sessionSlice.reducer;

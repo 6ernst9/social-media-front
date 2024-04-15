@@ -3,11 +3,6 @@ body {
     background-color: #fce205;
 }
 
-@font-face {
-    font-family: logoFont;
-    src: url('../../assets/fonts/ChickenPie.ttf');
-}
-
 .auth-login-back {
     width: 100vw;
     height: 100vh;
@@ -21,8 +16,8 @@ body {
 .auth-registration-back {
     width: 100vw;
     height: 100vh;
-    margin-top: 50px;
-    margin-bottom: 50px;
+    padding-top: 50px;
+    padding-bottom: 50px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -50,7 +45,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 15px;
 }
 
 .auth-forms {
@@ -69,12 +64,12 @@ body {
 }
 
 .auth-form {
-    width: 100%;
     padding: 15px;
     border-radius: 7px;
     font-size: 16px;
     background-color: #e0e0e0;
     border: 1px solid #e0e0e0;
+    outline: none;
 }
 
 .auth-form::placeholder{

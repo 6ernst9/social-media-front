@@ -3,7 +3,7 @@ export type User = {
     fullName:string;
     username: string,
     password: string,
-    profilePicture: string
+    profilePhoto: string
 }
 
 export type SuggestedFriend = {
@@ -16,6 +16,6 @@ export type SuggestedFriend = {
     description?: string,
     gender: string,
     joinDate: string,
-    profilePicture: string
+    profilePhoto: string
     commonFriend: User
 }

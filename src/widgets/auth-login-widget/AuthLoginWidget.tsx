@@ -4,7 +4,7 @@ import {BACKGROUND_DARK, PRIMARY_LIGHT} from "../../utils/constants";
 import Line from "../../components/core/Line/Line";
 import BText from "../../components/core/BText/BText";
 import './styles.css';
-import {login} from "./model/effects";
+import {getSession, login} from "./model/effects";
 import {useDispatch, useSelector} from "react-redux";
 import {authSelect} from "./model/selectors";
 import {Link, useNavigate} from "react-router-dom";
@@ -18,6 +18,7 @@ const AuthLoginWidget: React.FC = () => {
     const errorMessage = useSelector(authSelect.authError);
     const isLogged = useSelector(authSelect.isLogged);
     const token = useSelector(sessionSelect.jwtToken);
+    const id = useSelector(sessionSelect.id);
 
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -29,6 +30,10 @@ const AuthLoginWidget: React.FC = () => {
         if (isLogged || errorMessage === 'NO-ERROR') {
             dispatch(loginSuccess());
             navigate('/home');
+        }
+
+        if(id !== '') {
+            getSession({id, dispatch});
         }
     }, [dispatch, errorMessage, isLogged, token]);
     

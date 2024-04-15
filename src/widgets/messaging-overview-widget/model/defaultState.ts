@@ -4,7 +4,7 @@ export const defaultConv: MessageState = {
     currentConversation: {
         userId: "",
         fullName: "",
-        profilePicture: "",
+        profilePhoto: "",
         username: "",
         password: "",
     },

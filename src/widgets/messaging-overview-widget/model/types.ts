@@ -16,6 +16,7 @@ export type Chat = {
     content: string;
     timestamp: string;
     isSeen: boolean;
+    type: string;
 }
 
 export type MessageState = {
@@ -27,7 +28,7 @@ export type MessageState = {
 }
 
 export type ChatEffectsPayload = {
-    userId: string;
+    id: string;
     receiverId: string;
     jwtToken: string;
     dispatch: Dispatch;
@@ -41,13 +42,13 @@ export type ReadChatEffectsPayload = {
 }
 
 export type EffectsPayload = {
-    userId: string;
+    id: string;
     jwtToken: string;
     dispatch: Dispatch;
 }
 
 export type GetAccountPayload = {
-    userId: string;
+    id: string;
     jwtToken: string;
 }
 

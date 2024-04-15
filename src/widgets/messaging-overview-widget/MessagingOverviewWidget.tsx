@@ -5,15 +5,14 @@ import {useDispatch, useSelector} from "react-redux";
 import {sessionSelect} from "../../redux/core/session/selectors";
 import {dataRequested} from "./model/effects";
 import {messageSelect} from "./model/selectors";
-import {closeSidebar, showSidebar} from "../../redux/core/layout/reducers";
 import {useNavigate} from "react-router-dom";
 import {authSelect} from "../auth-login-widget/model/selectors";
 import {closeProfile} from "../profile-overview-widget/model/reducers";
 import './styles.css';
 
 const MessagingOverviewWidget: React.FC = () => {
-    const profilePicture = useSelector(sessionSelect.profilePicture);
-    const userId = useSelector(sessionSelect.userId);
+    const profilePhoto = useSelector(sessionSelect.profilePhoto);
+    const id = useSelector(sessionSelect.id);
     const isLogged = useSelector(authSelect.isLogged);
     const jwtToken = useSelector(sessionSelect.jwtToken);
     const conversations = useSelector(messageSelect.conversations);
@@ -23,22 +22,20 @@ const MessagingOverviewWidget: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        dispatch(showSidebar());
         dispatch(closeProfile());
         if(!isLogged) {
             navigate('/login');
-            dispatch(closeSidebar());
         }
-        dataRequested({userId, jwtToken, dispatch});
-    }, [dispatch, jwtToken, userId])
+        dataRequested({id, jwtToken, dispatch});
+    }, [dispatch, jwtToken, id])
 
     return (
         <div className='messaging-overview'>
             <ChatSidebar
                 stories={stories}
                 jwtToken={jwtToken}
-                userId={userId}
-                profilePicture={profilePicture}
+                userId={id}
+                profilePhoto={profilePhoto}
                 conversations={conversations}/>
             <ChatOverview/>
         </div>
