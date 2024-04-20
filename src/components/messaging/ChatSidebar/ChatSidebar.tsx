@@ -9,7 +9,7 @@ import {changeConversation} from "../../../widgets/messaging-overview-widget/mod
 import {getPersonChats} from "../../../widgets/messaging-overview-widget/model/effects";
 import SearchBar from "../SearchBar/SearchBar";
 import StorySlider from "../StorySlider/StorySlider";
-import {StoryType} from "../../../types/auth";
+import {StoryType} from "../../../types/content";
 
 interface ChatListProps {
     profilePhoto: string;

@@ -7,7 +7,6 @@ import {dataRequested} from "./model/effects";
 import {messageSelect} from "./model/selectors";
 import {useNavigate} from "react-router-dom";
 import {authSelect} from "../auth-login-widget/model/selectors";
-import {closeProfile} from "../profile-overview-widget/model/reducers";
 import './styles.css';
 
 const MessagingOverviewWidget: React.FC = () => {
@@ -22,7 +21,6 @@ const MessagingOverviewWidget: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        dispatch(closeProfile());
         if(!isLogged) {
             navigate('/login');
         }

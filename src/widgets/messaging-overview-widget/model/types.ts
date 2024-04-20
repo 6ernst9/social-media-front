@@ -1,6 +1,6 @@
 import {User} from "../../../types/user";
 import {Dispatch} from "redux";
-import {StoryType} from "../../../types/auth";
+import {StoryType} from "../../../types/content";
 
 export type Message = {
     senderId: User;

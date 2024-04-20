@@ -1,21 +1,8 @@
 export type User = {
-    userId: string,
+    id: string,
     fullName:string;
+    email: string;
     username: string,
-    password: string,
+    phoneNumber: string,
     profilePhoto: string
-}
-
-export type SuggestedFriend = {
-    userId: string,
-    firstName: string,
-    lastName: string,
-    username: string,
-    password: string,
-    dateOfBirth: string,
-    description?: string,
-    gender: string,
-    joinDate: string,
-    profilePhoto: string
-    commonFriend: User
 }

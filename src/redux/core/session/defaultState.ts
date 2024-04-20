@@ -7,5 +7,5 @@ export const defaultSession: UserSession = {
     email: '',
     id: localStorage.getItem( 'id') || '',
     profilePhoto: '',
-    phoneNumber: 0
+    phoneNumber: ''
 }

@@ -1,12 +1,12 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {defaultSession} from "./defaultState";
-import {UserType} from "./types";
+import {User} from "../../../types/user";
 
 const sessionSlice = createSlice({
     name: 'sessionState',
     initialState: defaultSession,
     reducers: {
-        startSession: (state, action: PayloadAction<UserType>) => {
+        startSession: (state, action: PayloadAction<User>) => {
             localStorage.setItem('id', action.payload.id);
             state.fullName = action.payload.fullName;
             state.profilePhoto = action.payload.profilePhoto;
@@ -15,7 +15,7 @@ const sessionSlice = createSlice({
             state.id = action.payload.id;
             state.phoneNumber = action.payload.phoneNumber;
         },
-        continueSession: (state, action: PayloadAction<UserType>) => {
+        continueSession: (state, action: PayloadAction<User>) => {
             state.fullName = action.payload.fullName;
             state.profilePhoto = action.payload.profilePhoto;
             state.username = action.payload.username;

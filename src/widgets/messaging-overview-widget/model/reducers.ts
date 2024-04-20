@@ -2,7 +2,7 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {defaultConv} from "./defaultState";
 import {Chat, Message} from "./types";
 import {User} from "../../../types/user";
-import {StoryType} from "../../../types/auth";
+import {StoryType} from "../../../types/content";
 
 const messageSlice = createSlice({
     name: 'messageState',

@@ -9,7 +9,6 @@ import LText from "../../components/core/LText/LText";
 import Line from "../../components/core/Line/Line";
 import Credits from "../../components/core/Credits/Credits";
 import {register} from "./model/effects";
-import {showSidebar} from "../../redux/core/layout/reducers";
 import {getSession} from "../auth-login-widget/model/effects";
 import {sessionSelect} from "../../redux/core/session/selectors";
 import {changePage, registrationSuccess} from "../auth-login-widget/model/reducers";
@@ -18,7 +17,7 @@ import {authSelect} from "../auth-login-widget/model/selectors";
 const AuthRegistrationWidget: React.FC = () => {
     const errorMessage = useSelector(authSelect.authError);
     const isLogged = useSelector(authSelect.isLogged);
-    const userId = useSelector(sessionSelect.userId);
+    const id = useSelector(sessionSelect.id);
 
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -35,8 +34,8 @@ const AuthRegistrationWidget: React.FC = () => {
             navigate('/home');
         }
 
-        if(userId !== '') {
-            getSession({userId, dispatch});
+        if(id !== '') {
+            getSession({id, dispatch});
         }
     }, [dispatch, errorMessage, navigate]);
     

@@ -20,8 +20,6 @@ import {sessionSelect} from "../../../redux/core/session/selectors";
 import {getMessageShape} from "../../../utils/utils";
 import {dataRequested, getPersonChats} from "../../../widgets/messaging-overview-widget/model/effects";
 import {useNavigate} from "react-router-dom";
-import {setCurrentProfile} from "../../../widgets/profile-overview-widget/model/reducers";
-
 let socket: WebSocket;
 let stompClient: CompatClient;
 
@@ -112,22 +110,13 @@ const ChatOverview: React.FC = () => {
                 <div className='chat-overview'>
                     <div className='chat-overview-header'>
                         <div className='chat-overview-header-info'>
-                            <img src={currentConversation.profilePicture} className='chat-overview-header-picture' onClick={() => {
-                                dispatch(setCurrentProfile(currentConversation.userId));
-                                navigate('/profile');
-                            }}/>
-                            <BText text={currentConversation.fullName} onClick={() => {
-                                dispatch(setCurrentProfile(currentConversation.userId));
-                                navigate('/profile');
-                            }}/>
+                            <img src={currentConversation.profilePhoto} className='chat-overview-header-picture'/>
+                            <BText text={currentConversation.fullName}/>
                         </div>
                         <div className='chat-overview-header-actions'>
                             <img src={Phone} className='chat-overview-icon'/>
                             <img src={Video} className='chat-overview-icon'/>
-                            <img src={Info} className='chat-overview-icon' onClick={() => {
-                                dispatch(setCurrentProfile(currentConversation.userId));
-                                navigate('/profile');
-                            }}/>
+                            <img src={Info} className='chat-overview-icon'/>
                         </div>
                     </div>
                     <div className='chat-overview-messages-container'>

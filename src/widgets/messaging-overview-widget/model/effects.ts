@@ -9,7 +9,7 @@ import {
     SearchPayload
 } from "./types";
 import {User} from "../../../types/user";
-import {Content} from "../../../types/content";
+import {Content, StoryResponse} from "../../../types/content";
 
 export const dataRequested = async ({ id, jwtToken, dispatch}: EffectsPayload) => {
     const response = await request({
@@ -43,7 +43,7 @@ export const dataRequested = async ({ id, jwtToken, dispatch}: EffectsPayload) =
     const conversations = await Promise.all(convs);
     dispatch(conversationsSuccess(conversations));
 
-    await request({
+    const res = await request({
         url: BASE_URL,
         method: 'GET',
         params: {
@@ -55,11 +55,38 @@ export const dataRequested = async ({ id, jwtToken, dispatch}: EffectsPayload) =
             'X-FI-SY-SITE-ID': 'COM',
             'X-FI-SY-DEVICE': 'DESKTOP'
         }
-    }).then((response) => {
-        dispatch(storiesSuccess(response.data));
-    }).catch((error) => {
-        console.error(error);
     });
+
+    let storyResponses: StoryResponse[] = res.data;
+
+    const storyz = storyResponses.map(async story => {
+        const posterId = await getAccount({id: story.posterId.toString(), jwtToken});
+
+        let receivers: User[] = [];
+        let seen: User[] = [];
+
+        story.receivers.map(async receiverId => {
+            await getAccount({id: receiverId.toString(), jwtToken})
+                .then(receiverResponse => receivers.push(receiverResponse));
+        })
+
+        story.seen.map(async seenId => {
+            await getAccount({id: seenId.toString(), jwtToken})
+                .then(seenResponse => seen.push(seenResponse));
+        })
+
+        return {
+            id: story.id,
+            posterId,
+            receivers,
+            seen,
+            url: story.url,
+            timestamp: story.timestamp
+        }
+    });
+
+    const stories = await Promise.all(storyz);
+    dispatch(storiesSuccess(stories));
 }
 
 export const getPersonChats = async ({ id, jwtToken, dispatch, receiverId}: ChatEffectsPayload) => {
