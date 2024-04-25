@@ -14,12 +14,17 @@
 .messaging-story-icon {
     width: 50px;
     height: 50px;
-    background-color: #e0e0e0;
+    background-color: var(--second-gray);
     border-radius: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+}
+
+.messaging-story-icon-arrow {
+    width: 24px;
+    height: 24px;
 }
 
 .messaging-story-main {
@@ -45,7 +50,7 @@
     align-items: center;
     flex-direction: row;
     justify-content: flex-start;
-    gap:5px;
+    gap:10px;
 }
 
 .messaging-story-title{

@@ -8,18 +8,18 @@ import Video from '../../../assets/icons/video.svg';
 import Info from '../../../assets/icons/info.svg';
 import Chat from '../../../assets/icons/chat.svg';
 import Image from '../../../assets/icons/image.svg';
+import Back from '../../../assets/icons/arrow-left.svg';
 import Heart from '../../../assets/icons/heart.svg';
 import Send from '../../../assets/icons/send.svg';
 import Microphone from '../../../assets/icons/microphone.svg';
 
-import BText from "../../core/BText/BText";
-import LText from "../../core/LText/LText";
 import Button from "../../core/Button/Button";
 import MessageBubble from "../MessageBubble/MessageBubble";
 import {sessionSelect} from "../../../redux/core/session/selectors";
 import {getMessageShape} from "../../../utils/utils";
 import {dataRequested, getPersonChats} from "../../../widgets/messaging-overview-widget/model/effects";
 import {useNavigate} from "react-router-dom";
+import {closeConversation} from "../../../widgets/messaging-overview-widget/model/reducers";
 let socket: WebSocket;
 let stompClient: CompatClient;
 
@@ -32,7 +32,7 @@ const ChatOverview: React.FC = () => {
     const id = useSelector(sessionSelect.id);
     const [message, setMessage] = useState<string>('');
     const [connected, setConnected] = useState<boolean>(false);
-    const convSelected = currentConversation.userId === '';
+    const convSelected = currentConversation.id === '';
 
    const updateMessages = () => {
        getPersonChats(
@@ -40,7 +40,7 @@ const ChatOverview: React.FC = () => {
                id,
                jwtToken,
                dispatch,
-               receiverId: currentConversation.userId});
+               receiverId: currentConversation.id});
        dataRequested({id, jwtToken, dispatch});
    }
 
@@ -75,7 +75,7 @@ const ChatOverview: React.FC = () => {
         if (socket && socket.readyState === WebSocket.OPEN) {
             stompClient.send("/app/sendMessage", {}, JSON.stringify({
                 senderId: parseInt(id),
-                receiverId: parseInt(currentConversation.userId),
+                receiverId: parseInt(currentConversation.id),
                 content: message,
                 timestamp: new Date().toISOString()
             }));
@@ -100,8 +100,8 @@ const ChatOverview: React.FC = () => {
                         <div className='chat-overview-opening-icon-back'>
                             <img src={Chat} className='chat-overview-opening-icon'/>
                         </div>
-                        <BText text='Your messages'/>
-                        <LText text='Send private photos and messages to a friend or group'/>
+                        <p className='chat-overview-opening-title'>Your messages</p>
+                        <p className='chat-overview-opening-text'>Send private photos and messages to a friend or group</p>
                         <Button content='Send message'/>
                     </div>
                 </div>
@@ -110,18 +110,29 @@ const ChatOverview: React.FC = () => {
                 <div className='chat-overview'>
                     <div className='chat-overview-header'>
                         <div className='chat-overview-header-info'>
+                            <div className='chat-overview-header-icon' onClick={() => dispatch(closeConversation())}>
+                                <img src={Back} className='chat-overview-header-icon-picture'/>
+                            </div>
                             <img src={currentConversation.profilePhoto} className='chat-overview-header-picture'/>
-                            <BText text={currentConversation.fullName}/>
+                            <p className='chat-overview-opening-title'>{currentConversation.fullName}</p>
                         </div>
                         <div className='chat-overview-header-actions'>
-                            <img src={Phone} className='chat-overview-icon'/>
-                            <img src={Video} className='chat-overview-icon'/>
-                            <img src={Info} className='chat-overview-icon'/>
+                            <div className='chat-overview-header-icon'>
+                                <img src={Phone} className='chat-overview-header-icon-picture'/>
+                            </div>
+                            <div className='chat-overview-header-icon'>
+                                <img src={Video} className='chat-overview-header-icon-picture'/>
+                            </div>
+                            <div className='chat-overview-header-icon'>
+                                <img src={Info} className='chat-overview-header-icon-picture'/>
+                            </div>
                         </div>
                     </div>
                     <div className='chat-overview-messages-container'>
                         {messages.map((msj, index) =>
                             <MessageBubble
+                                isSeen={msj.isSeen}
+                                isSnap={msj.type === 'snap'}
                                 content={msj.content}
                                 isMine={msj.senderId === id}
                                 firstCorner={getMessageShape({messages, index})[0]}
@@ -132,7 +143,7 @@ const ChatOverview: React.FC = () => {
                         <div className='chat-overview-form'>
                             <input
                                 className='chat-overview-chat'
-                                placeholder='Message...'
+                                placeholder='Send a message...'
                                 value={message}
                                 onChange={onMessageChange}/>
                             {message.length === 0 && (

@@ -1,5 +1,6 @@
 import {LayoutState} from "./types";
 
 export const defaultLayout : LayoutState = {
-    isDark: false
+    isDark: localStorage.getItem('theme') === 'dark',
+    isModalOpen: false
 }

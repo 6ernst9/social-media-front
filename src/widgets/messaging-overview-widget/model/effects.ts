@@ -6,10 +6,10 @@ import {
     ChatEffectsPayload,
     EffectsPayload,
     GetAccountPayload,
-    SearchPayload
+    SearchPayload, SeeStoryPayload
 } from "./types";
 import {User} from "../../../types/user";
-import {Content, StoryResponse} from "../../../types/content";
+import {Content, StoryResponse, StoryType} from "../../../types/content";
 
 export const dataRequested = async ({ id, jwtToken, dispatch}: EffectsPayload) => {
     const response = await request({
@@ -43,6 +43,10 @@ export const dataRequested = async ({ id, jwtToken, dispatch}: EffectsPayload) =
     const conversations = await Promise.all(convs);
     dispatch(conversationsSuccess(conversations));
 
+    await getStories({id, jwtToken, dispatch});
+}
+
+export const getStories = async({id, jwtToken, dispatch}: EffectsPayload) => {
     const res = await request({
         url: BASE_URL,
         method: 'GET',
@@ -65,15 +69,12 @@ export const dataRequested = async ({ id, jwtToken, dispatch}: EffectsPayload) =
         let receivers: User[] = [];
         let seen: User[] = [];
 
-        story.receivers.map(async receiverId => {
-            await getAccount({id: receiverId.toString(), jwtToken})
-                .then(receiverResponse => receivers.push(receiverResponse));
+        const seens = story.seen.map(async seenId => {
+            return await getAccount({id: seenId.toString(), jwtToken})
+                .then(seenResponse => seenResponse);
         })
 
-        story.seen.map(async seenId => {
-            await getAccount({id: seenId.toString(), jwtToken})
-                .then(seenResponse => seen.push(seenResponse));
-        })
+        seen = await Promise.all(seens);
 
         return {
             id: story.id,
@@ -160,6 +161,22 @@ export const getPersonChats = async ({ id, jwtToken, dispatch, receiverId}: Chat
 //         console.error(error);
 //     })
 // }
+
+export const seeStory = async({id, storyId, jwtToken, dispatch}: SeeStoryPayload) => {
+    return await request({
+        url: BASE_URL,
+        method: 'POST',
+        params: {
+            path: encodeURIComponent('content.open-story/' + id + "/" + storyId)
+        },
+        headers: {
+            'Authorization' : "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaGSh23zOl21k4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ",
+            'X-FI-SY-IP' : '127.0.0',
+            'X-FI-SY-SITE-ID': 'COM',
+            'X-FI-SY-DEVICE': 'DESKTOP'
+        }
+    }).then((response) => getStories({id, jwtToken, dispatch}));
+}
 
 export const getAccount = async({id, jwtToken}: GetAccountPayload): Promise<User> => {
     return await request({

@@ -10,7 +10,7 @@ const Line: React.FC<LineProps> = ({padding}) => {
         <div style={{
             width: '100%',
             height: 1,
-            backgroundColor: LIGHT_GREY,
+            backgroundColor: 'var(--line-color)',
             paddingLeft: padding,
             paddingRight: padding
         }}/>

@@ -31,13 +31,13 @@ const AuthLoginWidget: React.FC = () => {
             dispatch(loginSuccess());
             navigate('/home');
         }
-
+    }, [dispatch, errorMessage, isLogged, id]);
+    
+    useEffect(() => {
         if(id !== '') {
             getSession({id, dispatch});
         }
-    }, [dispatch, errorMessage, isLogged, token]);
-    
-    useEffect(() => {
+
         dispatch(changePage());
     }, [dispatch])
 

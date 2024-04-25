@@ -24,6 +24,8 @@ const sessionSlice = createSlice({
             state.phoneNumber = action.payload.phoneNumber;
         },
         endSession: (state) => {
+            localStorage.removeItem('id');
+            localStorage.removeItem('token');
             state = defaultSession
         }
     }

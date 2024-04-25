@@ -17,6 +17,10 @@ const messageSlice = createSlice({
         changeConversation: (state, action: PayloadAction<User>) => {
             state.currentConversation = action.payload;
         },
+        closeConversation: (state) => {
+            state.currentConversation = defaultConv.currentConversation;
+            state.chats = defaultConv.chats;
+        },
         searchTerm: (state, action: PayloadAction<User[]>) => {
             state.searchResults = action.payload;
         },
@@ -26,5 +30,5 @@ const messageSlice = createSlice({
     }
 });
 
-export const { conversationsSuccess, personChatsSuccess, changeConversation, storiesSuccess, searchTerm } = messageSlice.actions;
+export const { conversationsSuccess, personChatsSuccess, changeConversation, closeConversation, storiesSuccess, searchTerm } = messageSlice.actions;
 export default messageSlice.reducer;

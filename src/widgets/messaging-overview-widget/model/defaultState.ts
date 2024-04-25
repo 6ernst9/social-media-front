@@ -2,11 +2,12 @@ import {MessageState} from "./types";
 
 export const defaultConv: MessageState = {
     currentConversation: {
-        userId: "",
+        id: "",
         fullName: "",
         profilePhoto: "",
+        phoneNumber: "",
         username: "",
-        password: "",
+        email: "",
     },
     chats: [],
     conversations: [],

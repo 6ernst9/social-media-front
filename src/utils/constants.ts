@@ -1,12 +1,12 @@
 export const routes: string[] = ['Home', 'Search', 'Publish', 'Notifications', 'Profile'];
 export const title: string = 'yolo';
-export const PRIMARY_DARK= '#fffc00';
+export const PRIMARY_DARK= '#fce205';
 export const PRIMARY_LIGHT = '#00b4d8';
 export const BACKGROUND_LIGHT = '#ffffff';
 export const BACKGROUND_DARK = '#000000';
-export const LIGHT_GREY = '#e8e8e8';
-export const MEDIUM_GREY = '#a9a9a9';
-export const DARK_GREY = '#616161';
+export const LIGHT_GREY = '#e0e0e0';
+export const MEDIUM_GREY = '#d9d9d9';
+export const DARK_GREY = '#555555';
 export const MEDIUM_BLUE = '#0197f6';
 export const FONT_BOLD = 'CentraNo2-Bold.ttf';
 export const FONT_LIGHT = 'CentraNo2-Book.ttf';

@@ -7,7 +7,7 @@ interface TextProps {
 
 const LText: React.FC<TextProps> = ({text, color}) =>{
     return(
-        <p style={{ fontSize: 16, color: color}}>{text}</p>
+        <p style={{ fontSize: 16, color: color ? color : 'var(--text-color-primary)'}}>{text}</p>
     )
 }
 

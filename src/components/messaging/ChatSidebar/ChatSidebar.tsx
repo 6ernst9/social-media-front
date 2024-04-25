@@ -1,35 +1,48 @@
 import React from "react";
 import Logo from '../../../assets/icons/logo-header.svg';
 import Edit from '../../../assets/icons/edit.svg';
-import Add from '../../../assets/icons/user-plus.svg';
+import {ReactComponent as Add} from '../../../assets/icons/user-plus.svg';
 import {Message} from "../../../widgets/messaging-overview-widget/model/types";
 import MessageCard from "../MessageCard/MessageCard";
-import {useDispatch} from "react-redux";
-import {changeConversation} from "../../../widgets/messaging-overview-widget/model/reducers";
+import {useDispatch, useSelector} from "react-redux";
+import {changeConversation, closeConversation} from "../../../widgets/messaging-overview-widget/model/reducers";
 import {getPersonChats} from "../../../widgets/messaging-overview-widget/model/effects";
 import SearchBar from "../SearchBar/SearchBar";
 import StorySlider from "../StorySlider/StorySlider";
 import {StoryType} from "../../../types/content";
+import {messageSelect} from "../../../widgets/messaging-overview-widget/model/selectors";
+import {layoutSelect} from "../../../redux/core/layout/selectors";
+import {closeModal, openModal} from "../../../redux/core/layout/reducers";
 
 interface ChatListProps {
     profilePhoto: string;
     jwtToken: string;
-    userId: string;
+    id: string;
     conversations: Message[];
     stories: StoryType[];
 }
 
-const ChatSidebar: React.FC<ChatListProps> = ({profilePhoto, jwtToken, userId, stories, conversations}) => {
+const ChatSidebar: React.FC<ChatListProps> = ({profilePhoto, jwtToken, id, stories, conversations}) => {
     const dispatch = useDispatch();
+    const isModalOpen = useSelector(layoutSelect.isModalOpen);
+    const currentConversation = useSelector(messageSelect.currentConversation);
+
+    const toggleModal = () => {
+        if(isModalOpen) {
+            dispatch(closeModal());
+        } else {
+            dispatch(openModal());
+        }
+    }
 
     return (
         <div className='chat-list-widget'>
             <div className='chat-list-header'>
-                <img src={profilePhoto} className='chat-list-header-profile'/>
+                <img src={profilePhoto} className='chat-list-header-profile' onClick={toggleModal}/>
                 <img src={Logo} className='chat-list-header-logo'/>
                 <div className='chat-list-header-icons'>
                     <div className='chat-list-header-icon-back'>
-                        <img src={Add} className='chat-list-header-icon'/>
+                        <Add/>
                     </div>
                     <div className='chat-list-header-icon-back header-icon-message'>
                         <img src={Edit} className='chat-list-header-icon header-message-icon'/>
@@ -41,22 +54,26 @@ const ChatSidebar: React.FC<ChatListProps> = ({profilePhoto, jwtToken, userId, s
             {conversations.map((conv, index) =>
                 <MessageCard
                     key={index}
-                    photo={conv.senderId.userId === userId ? conv.receiverId.profilePhoto : conv.senderId.profilePhoto}
-                    fullName={ conv.senderId.userId === userId
+                    photo={conv.senderId.id === id ? conv.receiverId.profilePhoto : conv.senderId.profilePhoto}
+                    fullName={ conv.senderId.id === id
                         ? conv.receiverId.fullName
                         : conv.senderId.fullName}
                     message={conv.content}
                     date={conv.timestamp}
                     isSeen={conv.isSeen}
                     onClick={() => {
-                        dispatch(changeConversation(conv.senderId.userId === userId ? conv.receiverId : conv.senderId));
+                        if(currentConversation === (conv.senderId.id === id ? conv.receiverId : conv.senderId)) {
+                            dispatch(closeConversation());
+                        } else {
+                            dispatch(changeConversation(conv.senderId.id === id ? conv.receiverId : conv.senderId));
 
-                        getPersonChats(
-                            {
-                                id: userId,
-                                jwtToken,
-                                dispatch,
-                                receiverId: conv.senderId.userId === userId ? conv.receiverId.userId : conv.senderId.userId})
+                            getPersonChats(
+                                {
+                                    id: id,
+                                    jwtToken,
+                                    dispatch,
+                                    receiverId: conv.senderId.id === id ? conv.receiverId.id : conv.senderId.id})
+                        }
                     }}/>
             )}
         </div>

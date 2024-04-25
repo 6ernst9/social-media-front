@@ -40,7 +40,7 @@ body {
 
 .auth-container {
     width: 30%;
-    background-color: white;
+    background-color: var(--background-color);
     padding: 30px;
     border-radius: 12px;
     display: flex;
@@ -61,20 +61,21 @@ body {
     margin-top: 10px;
     margin-bottom: 10px;
     font-weight: bold;
-    color: black;
+    color: var(--text-color-primary);
 }
 
 .auth-form {
     padding: 15px;
     border-radius: 7px;
     font-size: 16px;
-    background-color: #e0e0e0;
-    border: 1px solid #e0e0e0;
+    background-color: var(--second-gray);
+    border: 1px solid var(--second-gray);
+    color: var(--text-color-primary);
     outline: none;
 }
 
 .auth-form::placeholder{
-    color: #555555;
+    color: var(--fourth-gray);
 }
 
 .auth-form:focus, .auth-form:hover {
@@ -84,6 +85,7 @@ body {
 .auth-under {
     display: flex;
     flex-direction: row;
+    align-items: center;
     gap: 5px;
 }
 
@@ -95,7 +97,7 @@ body {
 
 @media (max-width: 600px) {
     body {
-        background-color: white;
+        background-color: var(--background-color);
     }
     .auth-container {
         width: 100%;

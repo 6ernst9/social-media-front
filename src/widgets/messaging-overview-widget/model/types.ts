@@ -52,6 +52,13 @@ export type GetAccountPayload = {
     jwtToken: string;
 }
 
+export type SeeStoryPayload = {
+    id: string;
+    storyId: string;
+    jwtToken: string;
+    dispatch: Dispatch;
+}
+
 export type SearchPayload = {
     term: string;
     dispatch: Dispatch;

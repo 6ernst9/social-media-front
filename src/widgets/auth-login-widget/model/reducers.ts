@@ -25,9 +25,9 @@ const loginSlice = createSlice({
             state.error = action.payload;
         },
         logout: (state) => {
-            localStorage.removeItem('userId');
-            state.logged = false;
-            state.error = null;
+            localStorage.removeItem('id');
+            localStorage.removeItem('token');
+            state = defaultAuth;
         }
     }
 });

@@ -2,7 +2,8 @@ import React from "react";
 import {StoryType} from "../../../types/content";
 import "./styles.css";
 import LText from "../LText/LText";
-import {PRIMARY_LIGHT} from "../../../utils/constants";
+import {useSelector} from "react-redux";
+import {sessionSelect} from "../../../redux/core/session/selectors";
 
 interface StoryProps {
     story: StoryType;
@@ -10,14 +11,24 @@ interface StoryProps {
 }
 
 const Story: React.FC<StoryProps> = ({  story, onClick  }) => {
+    const id = useSelector(sessionSelect.id);
+
+    const checkIfSeen = () => {
+        story.seen.forEach((user) => {
+            if(user.id === id) {
+                return true;
+            }
+        })
+        return false;
+    };
+
     return (
         <div className="outer-story">
-            <div className="inner-story"
-                 style={{ border: '3px solid ' + PRIMARY_LIGHT}}
+            <div className={checkIfSeen() ? "inner-story-seen" : "inner-story"}
                  onClick={onClick}>
                 <img src={story.posterId.profilePhoto}/>
             </div>
-            <LText text={story.posterId.username} />
+            <p>{story.posterId.username}</p>
         </div>
     )
 }

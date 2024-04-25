@@ -8,6 +8,7 @@ import {messageSelect} from "./model/selectors";
 import {useNavigate} from "react-router-dom";
 import {authSelect} from "../auth-login-widget/model/selectors";
 import './styles.css';
+import SettingsModal from "../../components/core/SettingsModal/SettingsModal";
 
 const MessagingOverviewWidget: React.FC = () => {
     const profilePhoto = useSelector(sessionSelect.profilePhoto);
@@ -32,10 +33,11 @@ const MessagingOverviewWidget: React.FC = () => {
             <ChatSidebar
                 stories={stories}
                 jwtToken={jwtToken}
-                userId={id}
+                id={id}
                 profilePhoto={profilePhoto}
                 conversations={conversations}/>
             <ChatOverview/>
+            <SettingsModal/>
         </div>
     );
 };
