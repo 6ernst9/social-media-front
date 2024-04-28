@@ -1,6 +1,7 @@
 body {
   padding: 0;
   margin: 0;
+  z-index: 0;
 }
 
 /* Default light theme */
@@ -14,7 +15,7 @@ body {
   --third-gray: #d9d9d9;
   --line-color: #d9d9d9;
   --fourth-gray: #555555;
-  --form-color: rgba(224, 224, 224, 0.75);
+  --form-color: rgba(224, 224, 224, 0.2);
 }
 
 .dark-theme {

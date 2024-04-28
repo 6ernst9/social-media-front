@@ -17,7 +17,7 @@ import Logo from "../../assets/icons/logo.png";
 const AuthLoginWidget: React.FC = () => {
     const errorMessage = useSelector(authSelect.authError);
     const isLogged = useSelector(authSelect.isLogged);
-    const token = useSelector(sessionSelect.jwtToken);
+    const session = localStorage.getItem('session');
     const id = useSelector(sessionSelect.id);
 
     const [username, setUsername] = useState<string>('');
@@ -28,7 +28,7 @@ const AuthLoginWidget: React.FC = () => {
 
     useEffect(() => {
         if (isLogged || errorMessage === 'NO-ERROR') {
-            dispatch(loginSuccess());
+            dispatch(loginSuccess(session || ''));
             navigate('/home');
         }
     }, [dispatch, errorMessage, isLogged, id]);
@@ -60,12 +60,22 @@ const AuthLoginWidget: React.FC = () => {
                             className="auth-form"
                             placeholder="Phone number, username or email"
                             type='email'
-                            onChange={handleEmailChange}/>
+                            onChange={handleEmailChange}
+                            onKeyPress={event => {
+                                if (event.key === 'Enter') {
+                                    handleSubmit();
+                                }
+                            }}/>
                      <input
                             className="auth-form"
                             placeholder="Password"
                             type='password'
-                            onChange={handlePassChange}/>
+                            onChange={handlePassChange}
+                            onKeyPress={event => {
+                                if (event.key === 'Enter') {
+                                    handleSubmit();
+                                }
+                            }}/>
                 </div>
 
                 <Link to='resetpass' className='link-btn'>

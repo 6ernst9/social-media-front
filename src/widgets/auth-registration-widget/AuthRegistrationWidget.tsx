@@ -17,6 +17,7 @@ import {authSelect} from "../auth-login-widget/model/selectors";
 const AuthRegistrationWidget: React.FC = () => {
     const errorMessage = useSelector(authSelect.authError);
     const isLogged = useSelector(authSelect.isLogged);
+    const session = localStorage.getItem('session');
     const id = useSelector(sessionSelect.id);
 
     const [username, setUsername] = useState<string>('');
@@ -30,7 +31,7 @@ const AuthRegistrationWidget: React.FC = () => {
 
     useEffect(() => {
         if (isLogged || errorMessage === 'NO-ERROR') {
-            dispatch(registrationSuccess());
+            dispatch(registrationSuccess(session || ''));
             navigate('/home');
         }
 
@@ -67,27 +68,54 @@ const AuthRegistrationWidget: React.FC = () => {
                         className="auth-form"
                         placeholder="Full name"
                         type='text'
-                        onChange={handleFullNameChange}/>
+                        onChange={handleFullNameChange}
+                        onKeyPress={event => {
+                            if (event.key === 'Enter') {
+                                handleSubmit();
+                            }
+                        }}/>
                     <input
                         className="auth-form"
                         placeholder="Email"
                         type='email'
-                        onChange={handleEmailChange}/>
+                        onChange={handleEmailChange}
+                        onKeyPress={event => {
+                            if (event.key === 'Enter') {
+                                handleSubmit();
+                            }
+                        }}/>
                     <input
                         className="auth-form"
                         placeholder="Phone number"
                         type='text'
-                        onChange={handlePhoneNumberChange}/>
+                        onChange={handlePhoneNumberChange}
+                        onKeyPress={event => {
+                            if (event.key === 'Enter') {
+                                handleSubmit();
+                            }
+                        }}/>
                     <input
                         className="auth-form"
                         placeholder="Username"
                         type='text'
-                        onChange={handleUsernameChange}/>
+                        onChange={handleUsernameChange}
+                        onKeyPress={event => {
+                        if (event.key === 'Enter') {
+                            handleSubmit();
+                        }
+                    }}/>
                     <input
                         className="auth-form"
                         placeholder="Password"
                         type='password'
-                        onChange={handlePasswordChange}/>
+                        onChange={handlePasswordChange}
+                        onKeyPress={event => {
+                            if (event.key === 'Enter') {
+                                handleSubmit();
+                            }
+                        }}
+                    />
+
                 </div>
                 <Button content='Sign up' onClick={handleSubmit}/>
                 {errorMessage && errorMessage !== 'NO-ERROR' && <LText text={errorMessage} color={'#ff0000'}/>}

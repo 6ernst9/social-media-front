@@ -6,12 +6,20 @@ import {
     ChatEffectsPayload,
     EffectsPayload,
     GetAccountPayload,
-    SearchPayload, SeeStoryPayload
+    SearchPayload, SeeSnapPayload, SeeStoryPayload
 } from "./types";
 import {User} from "../../../types/user";
-import {Content, StoryResponse, StoryType} from "../../../types/content";
+import {Content, StoryResponse} from "../../../types/content";
 
 export const dataRequested = async ({ id, jwtToken, dispatch}: EffectsPayload) => {
+    if(id == null || id === ''){
+        return;
+    }
+    await getConversations({id, jwtToken, dispatch});
+    await getStories({id, jwtToken, dispatch});
+}
+
+export const getConversations = async({id, jwtToken, dispatch}: EffectsPayload) => {
     const response = await request({
         url: BASE_URL,
         method: 'GET',
@@ -42,8 +50,6 @@ export const dataRequested = async ({ id, jwtToken, dispatch}: EffectsPayload) =
 
     const conversations = await Promise.all(convs);
     dispatch(conversationsSuccess(conversations));
-
-    await getStories({id, jwtToken, dispatch});
 }
 
 export const getStories = async({id, jwtToken, dispatch}: EffectsPayload) => {
@@ -144,6 +150,8 @@ export const getPersonChats = async ({ id, jwtToken, dispatch, receiverId}: Chat
         chat = [...chat, snapMessage]
     })
 
+    chat.sort((a, b) => a.timestamp.localeCompare(b.timestamp));
+
     dispatch(personChatsSuccess(chat));
 }
 
@@ -176,6 +184,22 @@ export const seeStory = async({id, storyId, jwtToken, dispatch}: SeeStoryPayload
             'X-FI-SY-DEVICE': 'DESKTOP'
         }
     }).then((response) => getStories({id, jwtToken, dispatch}));
+}
+
+export const openSnap = async({id, snapId, jwtToken, dispatch}: SeeSnapPayload) => {
+    return await request({
+        url: BASE_URL,
+        method: 'POST',
+        params: {
+            path: encodeURIComponent('content.open-snap/' + id + "/" + snapId)
+        },
+        headers: {
+            'Authorization' : "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaGSh23zOl21k4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ",
+            'X-FI-SY-IP' : '127.0.0',
+            'X-FI-SY-SITE-ID': 'COM',
+            'X-FI-SY-DEVICE': 'DESKTOP'
+        }
+    }).then((response) => {});
 }
 
 export const getAccount = async({id, jwtToken}: GetAccountPayload): Promise<User> => {

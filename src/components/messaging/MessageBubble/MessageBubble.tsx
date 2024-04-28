@@ -1,24 +1,25 @@
-import React from "react";
-import Camera from '../../../assets/icons/camera.svg';
+import React, {useState} from "react";
+import {ReactComponent as Camera} from '../../../assets/icons/camera.svg';
 import '../../../widgets/messaging-overview-widget/styles.css';
+import {Chat} from "../../../widgets/messaging-overview-widget/model/types";
 
 interface MessageBubbleProps {
-    isSnap: boolean
-    content: string;
-    isMine: boolean;
-    isSeen: boolean;
+    isMine: boolean
+    msg: Chat
     firstCorner: boolean;
     secondCorner: boolean;
+    openSnap: () => void;
 }
 
 const MessageBubble: React.FC<MessageBubbleProps> = ({
-    content,
-    isSnap,
-    isSeen,
+    msg,
     isMine,
     firstCorner,
-    secondCorner}) => {
+    secondCorner,
+    openSnap}) => {
+
     let cornersStyle = '';
+
     if(firstCorner && secondCorner)
         cornersStyle = 'both-corners';
     else if(firstCorner && isMine)
@@ -29,22 +30,24 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
         cornersStyle = 'forth-corner';
     else if(secondCorner && !isMine)
         cornersStyle = 'first-corner';
+
     const positionStyle = isMine ? 'my-message' : 'your-message';
-    if(isSnap) {
+
+    if(msg.type === 'snap') {
         return (
-            <div className='snap-message'>
+            <div className='snap-message' onClick={openSnap}>
                 <div className='snap-message-bubble-header'>
                     <div className='snap-message-bubble'/>
-                    <p className='snap-message-bubble-text'>{isSeen ? 'Opened' : 'Click to open'}</p>
+                    <p className='snap-message-bubble-text'>{msg.isSeen ? 'Opened' : 'Click to open'}</p>
                 </div>
                 <div className='snap-message-bubble-icon'>
-                    <img src={Camera} className='snap-message-bubble-icon-camera'/>
+                    <Camera/>
                 </div>
             </div>
         )
     } else {
         return (<div className={'message-bubble ' + cornersStyle + ' ' + positionStyle}>
-            <p className={isMine? 'message-bubble-text-mine' : 'message-bubble-text'}>{content}</p>
+            <p className={isMine? 'message-bubble-text-mine' : 'message-bubble-text'}>{msg.content}</p>
         </div>)
     }
 }

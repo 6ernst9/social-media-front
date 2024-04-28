@@ -1,6 +1,5 @@
 body {
     overflow-x: hidden;
-    background-color: #fce205;
 }
 
 .auth-login-back {
@@ -15,6 +14,7 @@ body {
 }
 
 .auth-registration-back {
+    background-color: #fce205;
     width: 100vw;
     height: 100vh;
     padding-top: 50px;

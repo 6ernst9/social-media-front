@@ -19,6 +19,16 @@ export interface StoryType {
     seen: User[];
 }
 
+export interface SnapType {
+    id: string;
+    posterId: User;
+    url: string;
+    timestamp: string;
+    receivers: User[];
+    seen: User[];
+    reload: number;
+}
+
 export interface StoryResponse {
     id: string;
     posterId: number;

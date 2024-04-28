@@ -7,5 +7,5 @@ export const sessionSelect = ({
     username: (state: RootState) => state.session.username,
     fullName: (state: RootState) => state.session.fullName,
     phoneNumber: (state: RootState) => state.session.phoneNumber,
-    profilePhoto: (state: RootState) => state.session.profilePhoto,
+    profilePhoto: (state: RootState) => state.session.profilePhoto
 });

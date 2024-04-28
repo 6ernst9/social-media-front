@@ -59,6 +59,13 @@ export type SeeStoryPayload = {
     dispatch: Dispatch;
 }
 
+export type SeeSnapPayload = {
+    id: string;
+    snapId: string;
+    jwtToken: string;
+    dispatch: Dispatch;
+}
+
 export type SearchPayload = {
     term: string;
     dispatch: Dispatch;

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import Search from '../../../assets/icons/search.svg';
+import {ReactComponent as Search} from '../../../assets/icons/search.svg';
 import {useDispatch} from "react-redux";
 import {searchByTerm} from "../../../widgets/messaging-overview-widget/model/effects";
 
@@ -12,12 +12,12 @@ const SearchBar: React.FC = () => {
     }
     
     useEffect(() => {
-        searchByTerm({term: search, dispatch});
+        //searchByTerm({term: search, dispatch});
     }, [dispatch, search]);
 
     return (
         <div className="search-bar">
-            <img src={Search} className='search-bar-icon'/>
+            <Search/>
             <input
                 className='search-bar-form'
                 placeholder='Search'

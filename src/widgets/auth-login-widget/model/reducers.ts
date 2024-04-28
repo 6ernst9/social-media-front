@@ -5,7 +5,8 @@ const loginSlice = createSlice({
     name: 'authState',
     initialState: defaultAuth,
     reducers: {
-        loginSuccess: (state) => {
+        loginSuccess: (state, action: PayloadAction<string>) => {
+            localStorage.setItem('session', action.payload);
            state.logged = true;
            state.error = 'NO-ERROR';
         },
@@ -16,7 +17,8 @@ const loginSlice = createSlice({
         changePage: (state) => {
             state.error = null;
         },
-        registrationSuccess: (state) => {
+        registrationSuccess: (state,action: PayloadAction<string>) => {
+            localStorage.setItem('session', action.payload);
             state.logged = true;
             state.error = 'NO-ERROR';
         },
@@ -27,6 +29,7 @@ const loginSlice = createSlice({
         logout: (state) => {
             localStorage.removeItem('id');
             localStorage.removeItem('token');
+            localStorage.removeItem('session');
             state = defaultAuth;
         }
     }

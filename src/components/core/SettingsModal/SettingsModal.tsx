@@ -6,6 +6,7 @@ import './styles.css';
 import {logout} from "../../../widgets/auth-login-widget/model/reducers";
 import {useNavigate} from "react-router-dom";
 import {endSession} from "../../../redux/core/session/reducers";
+import {logOut} from "../../../widgets/auth-login-widget/model/effects";
 
 const SettingsModal: React.FC = () => {
     const isOpen = useSelector(layoutSelect.isModalOpen);
@@ -39,8 +40,8 @@ const SettingsModal: React.FC = () => {
                 <div className='settings-modal-section'>
                     <p className='settings-modal-section-text'>Terms and conditions</p>
                 </div>
-                <div className='settings-modal-section' onClick={() => {
-                    dispatch(endSession());
+                <div className='settings-modal-section' onClick={async () => {
+                    await logOut({id: localStorage.getItem('session') || '', dispatch});
                     dispatch(logout());
                     window.location.reload();
                 }}>

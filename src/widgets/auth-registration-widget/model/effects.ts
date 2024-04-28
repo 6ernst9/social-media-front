@@ -13,8 +13,7 @@ export const register = async ({email, username, password, fullName, phoneNumber
             body: {email, fullName, phoneNumber, username, password}
         }
     }).then((response) => {
-        console.debug(response.data)
-        dispatch(registrationSuccess());
+        dispatch(registrationSuccess(response.data));
         getAccount({username, dispatch});
     }).catch((error) => {
         dispatch(registrationFailure(error.message));

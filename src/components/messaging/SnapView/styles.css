@@ -1,7 +1,7 @@
-.messaging-story{
+.messaging-snap{
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     position: fixed;
     top: 0;
     left: 0;
@@ -12,7 +12,7 @@
     backdrop-filter: blur(5px);
 }
 
-.messaging-story-icon {
+.messaging-snap-icon {
     width: 50px;
     height: 50px;
     background-color: var(--second-gray);
@@ -23,13 +23,13 @@
     cursor: pointer;
 }
 
-.messaging-story-icon svg {
+.messaging-snap-icon svg {
     color: var(--text-color-primary);
     width: 24px;
     height: 24px;
 }
 
-.messaging-story-main {
+.messaging-snap-main {
     max-width: calc(100vh * 9 / 16);
     width: auto;
     display: flex;
@@ -37,7 +37,7 @@
     justify-content: center;
 }
 
-.messaging-story-main-header{
+.messaging-snap-main-header{
     height: 70px;
     width: 100%;
     display: flex;
@@ -46,7 +46,7 @@
     justify-content: space-between;
 }
 
-.messaging-story-main-header-user{
+.messaging-snap-main-header-user{
     display: flex;
     align-items: center;
     flex-direction: row;
@@ -54,32 +54,20 @@
     gap:10px;
 }
 
-.messaging-story-title{
+.messaging-snap-title{
     font-size: 18px;
     color: white;
 }
 
-.messaging-story-main-header-user-profile{
+.messaging-snap-main-header-user-profile{
     width: 50px;
     height: 50px;
     border-radius: 50px;
 }
 
-.messaging-story-photo {
+.messaging-snap-photo {
     aspect-ratio: 9/16;
     width: 100%;
     max-height: calc(100vh - 70px);
     border-radius: 10px;
-}
-
-.messaging-story-timeout-bar {
-    height: 2px;
-    background-color: #fff;
-    width: 0;
-    animation: fillBar 5s linear forwards;
-}
-
-@keyframes fillBar {
-    from { width: 0; }
-    to { width: 100%; }
 }

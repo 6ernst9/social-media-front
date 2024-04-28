@@ -54,11 +54,11 @@ const ChatSidebar: React.FC<ChatListProps> = ({profilePhoto, jwtToken, id, stori
             {conversations.map((conv, index) =>
                 <MessageCard
                     key={index}
+                    isMine={conv.senderId.id === id}
                     photo={conv.senderId.id === id ? conv.receiverId.profilePhoto : conv.senderId.profilePhoto}
                     fullName={ conv.senderId.id === id
                         ? conv.receiverId.fullName
                         : conv.senderId.fullName}
-                    message={conv.content}
                     date={conv.timestamp}
                     isSeen={conv.isSeen}
                     onClick={() => {

@@ -34,7 +34,7 @@
 
 .settings-modal-section-text{
     font-weight: bold;
-    margin: 10px;
+    margin: 10px 20px 10px 20px;
     font-size: 16px;
     color: var(--text-color-primary)
 }
@@ -51,7 +51,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-right: 10px;
+    margin: 0 20px 0 20px;
 }
 
 .log-out-text{

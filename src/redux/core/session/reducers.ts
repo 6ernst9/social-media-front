@@ -26,6 +26,7 @@ const sessionSlice = createSlice({
         endSession: (state) => {
             localStorage.removeItem('id');
             localStorage.removeItem('token');
+            localStorage.removeItem('session');
             state = defaultSession
         }
     }

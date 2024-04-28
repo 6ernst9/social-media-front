@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
 import {StoryType} from "../../../types/content";
-import Left from "./../../../assets/icons/arrow-left.svg";
-import Right from "./../../../assets/icons/arrow-right.svg";
-import Dots from "./../../../assets/icons/dots-vertical.svg";
+import {ReactComponent as Left} from "./../../../assets/icons/arrow-left.svg";
+import {ReactComponent as Right} from "./../../../assets/icons/arrow-right.svg";
+import {ReactComponent as Dots} from "./../../../assets/icons/dots-vertical.svg";
 import './styles.css';
 import {seeStory} from "../../../widgets/messaging-overview-widget/model/effects";
 import {useDispatch, useSelector} from "react-redux";
@@ -28,7 +28,7 @@ const StoryView: React.FC<StoryViewProps> = ({stories, initialIndex, onStoryEnd}
         return () => {
             clearTimeout(timer);
         }
-    }, [storyIndex, stories]);
+    }, [storyIndex]);
 
     const goToNextStory = () => {
         if (storyIndex < stories.length - 1) {
@@ -64,7 +64,7 @@ const StoryView: React.FC<StoryViewProps> = ({stories, initialIndex, onStoryEnd}
     return (
         <div className='messaging-story'>
             <div className='messaging-story-icon' onClick={goToPreviousStory}>
-                <img src={Left} className='messaging-story-icon-arrow'/>
+                <Left/>
             </div>
             <div className='messaging-story-main'>
                 <div className='messaging-story-main-header'>
@@ -73,13 +73,14 @@ const StoryView: React.FC<StoryViewProps> = ({stories, initialIndex, onStoryEnd}
                         <p className='messaging-story-title'>{stories[storyIndex].posterId.username}</p>
                     </div>  
                     <div className='messaging-story-icon'>
-                        <img src={Dots} className='messaging-story-icon-arrow'/>
+                        <Dots/>
                     </div>
                 </div>
+                <div className="messaging-story-timeout-bar" key={storyIndex} />
                 <img src={stories[storyIndex].url} className='messaging-story-photo'/>
             </div>
             <div className='messaging-story-icon' onClick={goToNextStory}>
-                <img src={Right} className='messaging-story-icon-arrow'/>
+                <Right/>
             </div>
         </div>
     )

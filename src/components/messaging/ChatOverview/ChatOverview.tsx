@@ -1,169 +1,91 @@
-import React, {useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import React, {useCallback, useRef, useState} from "react";
+import {useSelector} from "react-redux";
 import {messageSelect} from "../../../widgets/messaging-overview-widget/model/selectors";
-import {CompatClient, Stomp} from '@stomp/stompjs';
+import {ReactComponent as Close} from "./../../../assets/icons/x.svg";
 
-import Phone from '../../../assets/icons/phone.svg';
-import Video from '../../../assets/icons/video.svg';
-import Info from '../../../assets/icons/info.svg';
-import Chat from '../../../assets/icons/chat.svg';
-import Image from '../../../assets/icons/image.svg';
-import Back from '../../../assets/icons/arrow-left.svg';
-import Heart from '../../../assets/icons/heart.svg';
-import Send from '../../../assets/icons/send.svg';
-import Microphone from '../../../assets/icons/microphone.svg';
+import {ReactComponent as Camera} from '../../../assets/icons/camera.svg';
+import {ReactComponent as Back} from '../../../assets/icons/arrow-left.svg';
+import {ReactComponent as Send} from '../../../assets/icons/sendFill.svg';
 
-import Button from "../../core/Button/Button";
-import MessageBubble from "../MessageBubble/MessageBubble";
-import {sessionSelect} from "../../../redux/core/session/selectors";
-import {getMessageShape} from "../../../utils/utils";
-import {dataRequested, getPersonChats} from "../../../widgets/messaging-overview-widget/model/effects";
-import {useNavigate} from "react-router-dom";
-import {closeConversation} from "../../../widgets/messaging-overview-widget/model/reducers";
-let socket: WebSocket;
-let stompClient: CompatClient;
+import ChatContainer from "../ChatContainer/ChatContainer";
+import Webcam from "react-webcam";
 
 const ChatOverview: React.FC = () => {
     const currentConversation = useSelector(messageSelect.currentConversation);
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const jwtToken = useSelector(sessionSelect.jwtToken);
-    const messages = useSelector(messageSelect.currentChat);
-    const id = useSelector(sessionSelect.id);
-    const [message, setMessage] = useState<string>('');
-    const [connected, setConnected] = useState<boolean>(false);
     const convSelected = currentConversation.id === '';
+    const [isCameraSelected, setIsCameraSelected] = useState(false);
 
-   const updateMessages = () => {
-       getPersonChats(
-           {
-               id,
-               jwtToken,
-               dispatch,
-               receiverId: currentConversation.id});
-       dataRequested({id, jwtToken, dispatch});
-   }
+    const webcamRef = useRef(null);
+    const [image, setImage] = useState<string | null>(null);
 
-    const connect = () => {
-        socket = new WebSocket('ws://localhost:8083/chat/websocket');
-        stompClient = Stomp.over(socket);
-        // @ts-ignore
-        stompClient.connect({}, frame => {
-            setConnected(true);
-
-            stompClient.subscribe('/user/queue/reply', message => {
-                updateMessages();
-            });
-            stompClient.subscribe('/user/queue/readStatus', message => {
-                updateMessages();
-            });
-            stompClient.subscribe('/user/queue/contentUpdate', update => {
-                updateMessages();
-            });
-            stompClient.subscribe('/user/queue/deleteMessage', update => {});
-        });
+    const openCamera = () => {
+        setIsCameraSelected(true);
     }
 
-    const disconnect = () => {
-        if(connected && socket){
-            socket.close();
-            setConnected(false);
+    const capturePhoto = useCallback(() => {
+        if(webcamRef != null && webcamRef.current != null){
+            // @ts-ignore
+            const imageSrc = webcamRef.current.getScreenshot();
+            setImage(imageSrc);
         }
-    }
+    }, [webcamRef]);
 
-    const sendMessage = () => {
-        if (socket && socket.readyState === WebSocket.OPEN) {
-            stompClient.send("/app/sendMessage", {}, JSON.stringify({
-                senderId: parseInt(id),
-                receiverId: parseInt(currentConversation.id),
-                content: message,
-                timestamp: new Date().toISOString()
-            }));
-            setMessage('');
-            updateMessages();
-        }
+    const videoConstraints = {
+        width: { min: 360 },
+        height: { min: 640 },
+        aspectRatio: 9/16
     };
 
-    const onMessageChange = (event: React.FormEvent<HTMLInputElement>) => setMessage(event.currentTarget.value);
-
-    useEffect(() => {
-        //connect();
-        return () => {
-            if(stompClient) disconnect();
+    const clickButton = () => {
+        if(image == null) {
+            setIsCameraSelected(false);
+        } else {
+            setImage(null);
         }
-    }, [])
-    return (
-        <div>
-            {convSelected && (
-                <div className='chat-overview-opening'>
-                    <div className='chat-overview-opening-container'>
-                        <div className='chat-overview-opening-icon-back'>
-                            <img src={Chat} className='chat-overview-opening-icon'/>
-                        </div>
-                        <p className='chat-overview-opening-title'>Your messages</p>
-                        <p className='chat-overview-opening-text'>Send private photos and messages to a friend or group</p>
-                        <Button content='Send message'/>
-                    </div>
-                </div>
-            )}
-            {!convSelected && (
-                <div className='chat-overview'>
-                    <div className='chat-overview-header'>
-                        <div className='chat-overview-header-info'>
-                            <div className='chat-overview-header-icon' onClick={() => dispatch(closeConversation())}>
-                                <img src={Back} className='chat-overview-header-icon-picture'/>
-                            </div>
-                            <img src={currentConversation.profilePhoto} className='chat-overview-header-picture'/>
-                            <p className='chat-overview-opening-title'>{currentConversation.fullName}</p>
-                        </div>
-                        <div className='chat-overview-header-actions'>
-                            <div className='chat-overview-header-icon'>
-                                <img src={Phone} className='chat-overview-header-icon-picture'/>
-                            </div>
-                            <div className='chat-overview-header-icon'>
-                                <img src={Video} className='chat-overview-header-icon-picture'/>
-                            </div>
-                            <div className='chat-overview-header-icon'>
-                                <img src={Info} className='chat-overview-header-icon-picture'/>
-                            </div>
-                        </div>
-                    </div>
-                    <div className='chat-overview-messages-container'>
-                        {messages.map((msj, index) =>
-                            <MessageBubble
-                                isSeen={msj.isSeen}
-                                isSnap={msj.type === 'snap'}
-                                content={msj.content}
-                                isMine={msj.senderId === id}
-                                firstCorner={getMessageShape({messages, index})[0]}
-                                secondCorner={getMessageShape({messages, index})[1]}/>
+    }
+
+    if(convSelected) {
+        return (
+            <div className='chat-overview-opening'>
+                {isCameraSelected && (
+                    <div className='chat-overview-opening-container-filming'>
+                        {image == null && (
+                            <Webcam
+                                className='chat-overview-opening-camera-video'
+                                ref={webcamRef}
+                                videoConstraints={videoConstraints}
+                                screenshotFormat="image/jpeg"
+                                mirrored={true}/>
                         )}
-                    </div>
-                    <div className='chat-overview-bottom'>
-                        <div className='chat-overview-form'>
-                            <input
-                                className='chat-overview-chat'
-                                placeholder='Send a message...'
-                                value={message}
-                                onChange={onMessageChange}/>
-                            {message.length === 0 && (
-                                <div className='chat-overview-bottom-icons'>
-                                    <img src={Microphone} className='chat-overview-icon'/>
-                                    <img src={Image} className='chat-overview-icon'/>
-                                    <img src={Heart} className='chat-overview-icon'/>
-                                </div>
-                            )}
-                            {message.length > 0 && (
-                                <div className='chat-overview-bottom-icons'>
-                                    <img src={Send} className='chat-overview-icon' onClick={() => sendMessage()}/>
-                                </div>
-                            )}
+                        {image!=null && (
+                            <img src={image} className='chat-overview-opening-camera-video'/>
+                        )}
+
+                        {image == null && <div onClick={capturePhoto} className="chat-overview-opening-camera-button"/>}
+                        {image!=null && (
+                            <div className='chat-overview-opening-send-icon-back'>
+                                <Send/>
+                            </div>
+                        )}
+
+                        <div className='chat-overview-opening-camera-icon-back' onClick={clickButton}>
+                            {image == null && <Close/>}
+                            {image != null && <Back/>}
                         </div>
                     </div>
-                </div>
-            )}
-        </div>
-    );
+                )}
+                {!isCameraSelected && (
+                    <div className='chat-overview-opening-container'>
+                        <div className='chat-overview-opening-icon-back' onClick={openCamera}>
+                            <Camera/>
+                        </div>
+                        <p className='chat-overview-opening-text'>Click the Camera to send snaps</p>
+                    </div>
+                )}
+
+            </div>
+        );
+    } else return <ChatContainer/>
 }
 
 export default ChatOverview;

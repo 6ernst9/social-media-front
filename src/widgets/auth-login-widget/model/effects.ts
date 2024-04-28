@@ -1,8 +1,8 @@
 import {BASE_URL} from "../../../utils/constants";
-import {loginFailure, loginSuccess} from "./reducers";
+import {loginFailure, loginSuccess, logout} from "./reducers";
 import {getSessionState, LoginProps} from "./types";
 import {request} from "../../../components/core/Request/request";
-import {continueSession, startSession} from "../../../redux/core/session/reducers";
+import {continueSession, endSession, startSession} from "../../../redux/core/session/reducers";
 import {getAccountByUsername} from "../../auth-registration-widget/model/types";
 
 export const login = async ({username, password, dispatch}: LoginProps) => {
@@ -19,11 +19,29 @@ export const login = async ({username, password, dispatch}: LoginProps) => {
             'X-FI-SY-DEVICE': 'DESKTOP'
         }
     }).then((response) => {
-        console.debug(response.data);
-        dispatch(loginSuccess());
+        dispatch(loginSuccess(response.data));
         getAccount({username, dispatch})
     }).catch((error) => {
         dispatch(loginFailure(error.message));
+    })
+}
+
+export const logOut = async ({id, dispatch}: getSessionState) => {
+    await request({
+        url: BASE_URL,
+        method: 'POST',
+        params: {
+            path: encodeURIComponent('account.logout/' + id),
+        },
+        headers: {
+            'X-FI-SY-IP' : '127.0.0',
+            'X-FI-SY-SITE-ID': 'COM',
+            'X-FI-SY-DEVICE': 'DESKTOP'
+        }
+    }).then((response) => {
+        console.debug(response.data);
+        dispatch(endSession());
+        dispatch(logout());
     })
 }
 
@@ -62,7 +80,7 @@ export const getSession = async({id ,dispatch} : getSessionState) => {
         }
     }).then((response) => {
         dispatch(continueSession(response.data));
-        dispatch(loginSuccess());
+        dispatch(loginSuccess(localStorage.getItem('session') || ''));
     }).catch((error) => {
         console.error(error);
     })

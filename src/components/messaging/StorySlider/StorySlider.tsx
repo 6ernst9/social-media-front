@@ -23,11 +23,10 @@ const StorySlider: React.FC<StorySliderProps> = ({ stories }) => {
     return (
         <div style={{
             width: '100%',
+            maxWidth: '400px',
             display: 'flex',
             flexDirection: 'row',
-            left: 0,
-            gap: 10,
-            padding: 10}}>
+            left: 0}}>
             {stories.map((story, i) => {
                 return (
                     <Story story={story} key={story.id} onClick={() => openStory(i)}/>
