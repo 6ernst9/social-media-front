@@ -70,3 +70,24 @@ export type SearchPayload = {
     term: string;
     dispatch: Dispatch;
 }
+
+export type UserStreak = {
+    id: string,
+    fullName:string;
+    email: string;
+    username: string,
+    phoneNumber: string,
+    profilePhoto: string,
+    streak: number
+}
+
+export type ConnectionPayload = {
+    id1: string,
+    id2: string,
+    jwtToken: string
+}
+
+export type Connection = {
+    id: string,
+    sinceConnected: string;
+}

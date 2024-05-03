@@ -9,11 +9,13 @@ import {ReactComponent as Send} from '../../../assets/icons/sendFill.svg';
 
 import ChatContainer from "../ChatContainer/ChatContainer";
 import Webcam from "react-webcam";
+import SendSnap from "../SendSnap/SendSnap";
 
 const ChatOverview: React.FC = () => {
     const currentConversation = useSelector(messageSelect.currentConversation);
     const convSelected = currentConversation.id === '';
     const [isCameraSelected, setIsCameraSelected] = useState(false);
+    const [sending, setSending] = useState(false);
 
     const webcamRef = useRef(null);
     const [image, setImage] = useState<string | null>(null);
@@ -47,7 +49,8 @@ const ChatOverview: React.FC = () => {
     if(convSelected) {
         return (
             <div className='chat-overview-opening'>
-                {isCameraSelected && (
+                {sending && <SendSnap back={() => setSending(false)}/>}
+                {!sending && isCameraSelected && (
                     <div className='chat-overview-opening-container-filming'>
                         {image == null && (
                             <Webcam
@@ -63,7 +66,7 @@ const ChatOverview: React.FC = () => {
 
                         {image == null && <div onClick={capturePhoto} className="chat-overview-opening-camera-button"/>}
                         {image!=null && (
-                            <div className='chat-overview-opening-send-icon-back'>
+                            <div className='chat-overview-opening-send-icon-back' onClick={() => setSending(true)}>
                                 <Send/>
                             </div>
                         )}
@@ -74,7 +77,7 @@ const ChatOverview: React.FC = () => {
                         </div>
                     </div>
                 )}
-                {!isCameraSelected && (
+                {!sending && !isCameraSelected && (
                     <div className='chat-overview-opening-container'>
                         <div className='chat-overview-opening-icon-back' onClick={openCamera}>
                             <Camera/>

@@ -3,12 +3,15 @@ import {BASE_URL} from "../../../utils/constants";
 import {conversationsSuccess, personChatsSuccess, searchTerm, storiesSuccess} from "./reducers";
 import {
     Chat,
-    ChatEffectsPayload,
+    ChatEffectsPayload, Connection, ConnectionPayload,
     EffectsPayload,
     GetAccountPayload,
-    SearchPayload, SeeSnapPayload, SeeStoryPayload
+    SearchPayload,
+    SeeSnapPayload,
+    SeeStoryPayload
 } from "./types";
 import {User} from "../../../types/user";
+import {UserStreak} from './types';
 import {Content, StoryResponse} from "../../../types/content";
 
 export const dataRequested = async ({ id, jwtToken, dispatch}: EffectsPayload) => {
@@ -230,4 +233,54 @@ export const searchByTerm = async({term, dispatch}: SearchPayload) => {
     }).catch((error) => {
         console.error(error);
     })
+}
+
+export const getFriendsWithStreak = async({id, jwtToken}: GetAccountPayload): Promise<UserStreak[]> => {
+    const response = await request({
+        url: BASE_URL,
+        method: 'GET',
+        params: {
+            path: encodeURIComponent('connection.get-friends/' + id)
+        },
+        headers: {
+            'Authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaGSh23zOl21k4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ",
+            'X-FI-SY-IP': '127.0.0',
+            'X-FI-SY-SITE-ID': 'COM',
+            'X-FI-SY-DEVICE': 'DESKTOP'
+        }
+    });
+    const friends: Connection[] = response.data;
+
+    const bros = friends.map(async friend => {
+        const account =  await getAccount({id: friend.id, jwtToken});
+        const streak = await getStreak({id1: id, id2: friend.id, jwtToken});
+
+        return {
+            id: account.id,
+            fullName:account.fullName,
+            email: account.email,
+            username: account.username,
+            phoneNumber: account.phoneNumber,
+            profilePhoto: account.profilePhoto,
+            streak
+        }
+    });
+
+    return await Promise.all(bros);
+}
+
+export const getStreak = async({id1, id2, jwtToken}: ConnectionPayload): Promise<number> =>{
+    return await request({
+        url: BASE_URL,
+        method: 'GET',
+        params: {
+            path: encodeURIComponent('connection.get-snapstreak/' + id1 + '/' + id2)
+        },
+        headers: {
+            'Authorization' : "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaGSh23zOl21k4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ",
+            'X-FI-SY-IP' : '127.0.0',
+            'X-FI-SY-SITE-ID': 'COM',
+            'X-FI-SY-DEVICE': 'DESKTOP'
+        }
+    }).then((response) => response.data);
 }
