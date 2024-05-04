@@ -1,11 +1,12 @@
 import React, {useState} from "react";
 import './styles.css';
+import {ReactComponent as Check} from "../../../assets/icons/check.svg";
 
 interface SendSnapCardProps {
     id: string,
     profilePhoto: string,
     fullName: string,
-    streak: number,
+    streak: number | null,
     onSelect: (id: string) => void;
     onDeselect: (id: string) => void;
 }
@@ -30,8 +31,10 @@ const SendSnapCard: React.FC<SendSnapCardProps> = ({id, profilePhoto, streak, on
                 <p className={'chat-overview-send-snap-card-name' + (selected ? '-selected' : '')}>{fullName}</p>
             </div>
             <div className='chat-overview-send-snap-card-tail'>
-                <p className={'chat-overview-send-snap-streak' + (selected ? '-selected' : '')}>{streak}</p>
-                <div className={'chat-overview-send-snap-card-selector' + (selected ? '-selected' : '')} onClick={select}/>
+                {streak!= null && <p className={'chat-overview-send-snap-streak' + (selected ? '-selected' : '')}>{streak}</p>}
+                <div className={'chat-overview-send-snap-card-selector' + (selected ? '-selected' : '')} onClick={select}>
+                    <Check/>
+                </div>
             </div>
         </div>
     )

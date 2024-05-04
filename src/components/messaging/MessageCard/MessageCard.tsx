@@ -9,6 +9,7 @@ interface MessageCardProps {
     date: string;
     isMine: boolean;
     isSeen: boolean;
+    type: string;
     onClick: () => void;
 }
 
@@ -18,19 +19,36 @@ const MessageCard: React.FC<MessageCardProps> =
          date,
         isSeen,
         isMine,
+        type,
          onClick}) => {
     let message;
+    let bubbleClassname;
+    const isSnap = type === 'snap';
+
     if(isMine && !isSeen) {
-        message = 'Sent';
+        message = 'Delivered';
     }
     if(isMine && isSeen) {
         message = 'Opened';
     }
     if(!isMine && !isSeen) {
-        message = 'New Chat';
+        message = isSnap ? 'New Snap' : 'New Chat';
     }
     if(!isMine && isSeen) {
         message = 'Received';
+    }
+
+    if(isSnap && !isSeen) {
+        bubbleClassname = 'message-card-bubble-snap';
+    }
+    if(isSnap && isSeen) {
+        bubbleClassname = 'message-card-bubble-snap-seen';
+    }
+    if(!isSnap && !isSeen) {
+        bubbleClassname = 'message-card-bubble-message';
+    }
+    if(!isSnap && isSeen) {
+        bubbleClassname = 'message-card-bubble-message-seen';
     }
 
     return (
@@ -40,19 +58,21 @@ const MessageCard: React.FC<MessageCardProps> =
                 <div className='message-card-text'>
                     <p className='message-card-title'>{fullName}</p>
                     {(isSeen || isMine) && (
-                        <div className='message-card-bottom'>
+                        <div className={isSnap ? 'message-card-bottom-snap' : 'message-card-bottom'}>
                             {isMine && isSeen && <Send/>}
                             {isMine && !isSeen && <SendFill/>}
                             <p className='message-card-message'>{message + ' • ' + getTime(date)}</p>
                         </div>
                     )}
                     {!isSeen && !isMine && (
-                        <p className='message-card-message message-seen'>{message + ' • ' + getTime(date)}</p>
+                        <div className='message-card-bottom'>
+                            <p className={isSnap ? 'message-card-message-snap' : 'message-card-message-message'}>{message}</p>
+                            <p className='message-card-message'>{' • ' + getTime(date)}</p>
+                        </div>
                     )}
                 </div>
             </div>
-            {!isMine && <div className={isSeen ? 'message-card-bubble-seen' : 'message-card-bubble'}/>}
-
+            {!isMine && <div className={bubbleClassname}/>}
         </div>
     )
 };

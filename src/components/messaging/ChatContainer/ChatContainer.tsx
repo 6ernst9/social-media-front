@@ -31,11 +31,13 @@ const ChatContainer: React.FC = () => {
     const [message, setMessage] = useState<string>('');
     const [connected, setConnected] = useState<boolean>(false);
     const [seeSnap, setSeeSnap] = useState(false);
-    const [currentMessage, setCurrentMessage] = useState<Chat>();
+    const [currentMessage, setCurrentMessage] = useState<Chat>(messages[0]);
 
     const openSnap = (msg: Chat) => {
-        setCurrentMessage(msg);
-        setSeeSnap(true);
+        if(id !== msg.senderId && !msg.isSeen) {
+            setCurrentMessage(msg);
+            setSeeSnap(true);
+        }
     }
 
     const updateMessages = async () => {
@@ -100,10 +102,10 @@ const ChatContainer: React.FC = () => {
                     <p className='chat-overview-opening-title'>{currentConversation.fullName}</p>
                 </div>
                 <div className='chat-overview-header-actions'>
-                    <div className='chat-overview-header-icon'>
+                    <div className='chat-overview-header-call'>
+                        <p className='chat-overview-header-call-text'>Call</p>
                         <Phone/>
-                    </div>
-                    <div className='chat-overview-header-icon'>
+                        <p className='chat-overview-header-call-bar'>|</p>
                         <Video/>
                     </div>
                     <div className='chat-overview-header-icon'>

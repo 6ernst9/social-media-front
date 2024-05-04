@@ -9,14 +9,19 @@ import SendSnapCard from "../SendSnapCard/SendSnapCard";
 import './styles.css';
 
 interface SendSnapProps {
-    back: () => void
+    back: () => void,
+    send: (receivers: number[]) => void;
+    addStory: (receivers: number[]) => void;
 }
 
-const SendSnap: React.FC<SendSnapProps> = ({back}) => {
+const SendSnap: React.FC<SendSnapProps> = ({back, send, addStory}) => {
     const id = useSelector(sessionSelect.id);
+    const profilePhoto = useSelector(sessionSelect.profilePhoto);
     const jwtToken = useSelector(sessionSelect.jwtToken);
     const [friends, setFriends] = useState<UserStreak[]>([]);
     const [receivers, setReceivers] = useState<number[]>([]);
+
+    const [story, setStory] = useState(false);
 
     useEffect(() => {
         getFriendsWithStreak({id, jwtToken}).then((friends) => setFriends(friends));
@@ -33,25 +38,37 @@ const SendSnap: React.FC<SendSnapProps> = ({back}) => {
         setReceivers(users);
     }
 
-    const sendSnap = () => {
-        console.log(receivers);
-    }
-
     return (
         <div className='chat-overview-send-snap-container'>
             <div className='chat-overview-send-snap-container-header'>
                 <div className='chat-overview-send-snap-back' onClick={back}>
                     <Back/>
                 </div>
-                <div className='chat-overview-send-snap-send-back' onClick={sendSnap}>
+                <div className='chat-overview-send-snap-send-back' onClick={() => {
+                    if(receivers.length > 0 || story){
+                        if(story) {
+                            addStory(receivers);
+                        } else {
+                            send(receivers);
+                        }
+                    }
+                }}>
                     <p className='chat-overview-send-snap-send-title'>Send</p>
                     <Send/>
                 </div>
             </div>
 
-
+            <SendSnapCard
+                id={id}
+                profilePhoto={profilePhoto}
+                fullName='My Story'
+                streak={null}
+                onSelect={() => setStory(true)}
+                onDeselect={() => setStory(false)}
+            />
             {friends.map((friend) => {
                 return <SendSnapCard
+                    key={friend.id}
                     id={friend.id}
                     profilePhoto={friend.profilePhoto}
                     fullName={friend.fullName}

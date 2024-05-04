@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {ReactComponent as Close} from "./../../../assets/icons/x.svg";
 import './styles.css';
 import {openSnap} from "../../../widgets/messaging-overview-widget/model/effects";
@@ -8,20 +8,19 @@ import {Chat} from "../../../widgets/messaging-overview-widget/model/types";
 import {messageSelect} from "../../../widgets/messaging-overview-widget/model/selectors";
 
 interface SnapViewProps {
-    msg: Chat | undefined;
+    msg: Chat;
     onSnapEnd: () => void;
 }
 
 const SnapView: React.FC<SnapViewProps> = ({msg, onSnapEnd})=> {
     const id = useSelector(sessionSelect.id);
+    const jwtToken = useSelector(sessionSelect.jwtToken);
     const dispatch = useDispatch();
     const currentConversation = useSelector(messageSelect.currentConversation);
 
-    const seenSnap = () => {
-        if(msg?.isSeen) {
-            openSnap({id, jwtToken: '', snapId: '', dispatch})
-        }
-    }
+    useEffect(() => {
+        openSnap({id, jwtToken: jwtToken, snap: msg, dispatch})
+    }, []);
 
     return (
         <div className='messaging-snap'>

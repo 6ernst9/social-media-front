@@ -7,6 +7,7 @@ import './styles.css';
 import {seeStory} from "../../../widgets/messaging-overview-widget/model/effects";
 import {useDispatch, useSelector} from "react-redux";
 import {sessionSelect} from "../../../redux/core/session/selectors";
+import story from "../../core/Story/Story";
 
 interface StoryViewProps {
     stories: StoryType[];
@@ -17,6 +18,7 @@ interface StoryViewProps {
 const StoryView: React.FC<StoryViewProps> = ({stories, initialIndex, onStoryEnd})=> {
     const [storyIndex, setStoryIndex] = useState(initialIndex);
     const id = useSelector(sessionSelect.id);
+    const jwtToken = useSelector(sessionSelect.jwtToken);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -46,18 +48,9 @@ const StoryView: React.FC<StoryViewProps> = ({stories, initialIndex, onStoryEnd}
         }
     };
 
-    const checkIfSeen = () => {
-        stories[storyIndex].seen.forEach((i) => {
-            if(i.id === id) {
-                return true;
-            }
-        })
-        return false;
-    }
-
     const seenStory = () => {
-        if(!checkIfSeen()) {
-            seeStory({id, jwtToken: '', storyId: stories[storyIndex].id, dispatch})
+        if(!stories[storyIndex].seen) {
+            seeStory({id, jwtToken: jwtToken, storyId: stories[storyIndex].id, dispatch})
         }
     }
 

@@ -21,19 +21,19 @@
     cursor: pointer;
 }
 
-.inner-story img {
+.inner-story img, .inner-story-seen img {
     width: 95%;
     height: 95%;
     border-radius: 60px;
 }
 
 .inner-story-seen {
-    width: 85px;
-    height: 85px;
+    width: 87px;
+    height: 87px;
     border-radius: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 3px solid #fce205;
+    border: 2px solid var(--third-gray);
     cursor: pointer;
 }

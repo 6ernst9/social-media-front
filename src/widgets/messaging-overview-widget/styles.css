@@ -60,12 +60,23 @@ body {
     color: var(--text-color-primary);
 }
 
-.chat-overview-opening-text{
-    font-size: 20px;
-    font-weight: bold;
+.snap-message-bubble-text-seen {
+    font-weight: normal;
+    font-size: 18px;
     color: var(--text-color-primary);
 }
 
+.chat-overview-opening-text{
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+}
+
+.chat-overview-opening-title{
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--text-color-primary);
+}
 
 .chat-list-header-icon-back{
     width: 50px;
@@ -122,7 +133,7 @@ body {
 }
 
 .search-bar svg {
-    color: var(--text-color-primary);
+    color: var(--fourth-gray);
     width: 24px;
     height: 24px;
 }
@@ -169,7 +180,7 @@ body {
     align-items: center;
     gap:10px;
 }
-.message-card-bottom {
+.message-card-bottom, .message-card-bottom-snap {
    display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -183,16 +194,32 @@ body {
     color: #00b4d8;
 }
 
+.message-card-bottom-snap svg {
+    width: 16px;
+    height: 16px;
+    color: red;
+}
+
 .message-card-message {
     font-size: 16px;
     color: var(--fourth-gray);
     margin: 0;
 }
 
-.message-seen {
+.message-card-message-message {
+    font-size: 16px;
+    margin: 0;
     font-weight: bold;
     color: #00b4d8;
 }
+
+.message-card-message-snap {
+    font-size: 16px;
+    margin: 0;
+    font-weight: bold;
+    color: red;
+}
+
 
 .chat-overview-opening {
     position: fixed;
@@ -204,21 +231,36 @@ body {
     align-items: center;
     background: url("C:\Users\rerns\Documents\cod\IS\SocialMediaFront\my-app\src\assets\img\wallpaper.jpg");
     background-size: calc(100vw - 401px) 100%;
-
+    z-index: -1;
 }
 
-.message-card-bubble {
+.message-card-bubble-message {
     width: 18px;
     height: 18px;
     background-color: #00b4d8;
     border-radius: 5px;
 }
 
-.message-card-bubble-seen {
+.message-card-bubble-message-seen {
     width: 18px;
     height: 18px;
     background-color: transparent;
     border: 1px solid #00b4d8;
+    border-radius: 5px;
+}
+
+.message-card-bubble-snap {
+    width: 18px;
+    height: 18px;
+    background-color: red;
+    border-radius: 5px;
+}
+
+.message-card-bubble-snap-seen {
+    width: 16px;
+    height: 16px;
+    background-color: transparent;
+    border: 2px solid red;
     border-radius: 5px;
 }
 
@@ -227,8 +269,8 @@ body {
     width: 360px;
     border-radius: 20px;
     border: 1px solid #989898;
-    background-color: var(--form-color);
-    backdrop-filter: blur(10px);
+    background-color: rgba(36, 36, 36, 0.75);
+    backdrop-filter: blur(15px);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -242,8 +284,8 @@ body {
     width: 360px;
     border-radius: 20px;
     border: 1px solid #989898;
-    background-color: var(--form-color);
-    backdrop-filter: blur(10px);
+    background-color: rgba(36, 36, 36, 0.75);
+    backdrop-filter: blur(15px);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -327,7 +369,7 @@ body {
 }
 
 .chat-overview-opening-icon-back svg{
-    color: var(--text-color-primary);
+    color: white;
     width: 150px;
     height: 150px;
 }
@@ -343,6 +385,7 @@ body {
     height: 100%;
     display: flex;
     flex-direction: column;
+    overflow-y: scroll;
     background-color: var(--background-color);
 }
 
@@ -381,7 +424,7 @@ body {
 
 .chat-overview-form {
     background-color: var(--form-color);
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(10px);
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -401,10 +444,34 @@ body {
     cursor: pointer;
 }
 
-.chat-overview-header-icon svg {
+.chat-overview-header-icon svg, .chat-overview-header-call svg{
     color: var(--text-color-primary);
     width: 24px;
     height: 24px;
+}
+
+.chat-overview-header-call{
+    padding: 0 20px;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items:center;
+    background-color: var(--second-gray);
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.chat-overview-header-call-text {
+    font-weight: bold;
+    color: var(--text-color-primary);
+    font-size: 16px;
+}
+
+.chat-overview-header-call-bar {
+    font-weight: lighter;
+    color: var(--text-color-primary);
+    font-size: 20px;
 }
 
 .chat-overview-bottom-icons {
@@ -488,6 +555,12 @@ body {
     cursor: pointer;
 }
 
+.snap-message-bubble-header svg {
+    width: 20px;
+    height: 20px;
+    color: red;
+}
+
 .snap-message-bubble {
     width: 18px;
     height: 18px;
@@ -495,10 +568,18 @@ body {
     border-radius: 5px;
 }
 
+.snap-message-bubble-seen {
+    width: 16px;
+    height: 16px;
+    background: none;
+    border-radius: 5px;
+    border: 2px solid red;
+}
+
 .my-message {
     align-self: flex-end;
     background-color: #fce205;
-    border-radius: 20px 5px 5px 20px;
+    border-radius: 20px 10px 10px 20px;
 }
 
 .messages-background {
@@ -525,7 +606,7 @@ body {
 
 .your-message {
     align-self: flex-start;
-    border-radius: 5px 20px 20px 5px;
+    border-radius: 10px 20px 20px 10px;
     background-color: var(--second-gray);
 }
 
@@ -534,19 +615,19 @@ body {
 }
 
 .first-corner {
-    border-radius: 5px 20px 20px 20px;
+    border-radius: 10px 20px 20px 20px;
 }
 
 .second-corner {
-    border-radius: 20px 5px 20px 20px;
+    border-radius: 20px 10px 20px 20px;
 }
 
 .third-corner {
-    border-radius: 20px 20px 5px 20px;
+    border-radius: 20px 20px 10px 20px;
 }
 
 .forth-corner {
-    border-radius: 20px 20px 20px 5px;
+    border-radius: 20px 20px 20px 10px;
 }
 
 

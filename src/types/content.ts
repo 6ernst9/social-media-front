@@ -15,8 +15,7 @@ export interface StoryType {
     posterId: User;
     url: string;
     timestamp: string;
-    receivers: User[];
-    seen: User[];
+    seen: boolean;
 }
 
 export interface SnapType {

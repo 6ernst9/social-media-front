@@ -1,5 +1,5 @@
 import React, {useCallback, useRef, useState} from "react";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {messageSelect} from "../../../widgets/messaging-overview-widget/model/selectors";
 import {ReactComponent as Close} from "./../../../assets/icons/x.svg";
 
@@ -11,11 +11,28 @@ import ChatContainer from "../ChatContainer/ChatContainer";
 import Webcam from "react-webcam";
 import SendSnap from "../SendSnap/SendSnap";
 
+import {storage} from '../../core/Firebase/firebase';
+import {
+    getDownloadURL,
+    ref as storageRef,
+    uploadBytes
+} from "firebase/storage";
+import {
+    addStory,
+    getConversations,
+    getStories,
+    sendSnap
+} from "../../../widgets/messaging-overview-widget/model/effects";
+import {sessionSelect} from "../../../redux/core/session/selectors";
+
 const ChatOverview: React.FC = () => {
     const currentConversation = useSelector(messageSelect.currentConversation);
     const convSelected = currentConversation.id === '';
     const [isCameraSelected, setIsCameraSelected] = useState(false);
     const [sending, setSending] = useState(false);
+    const id = useSelector(sessionSelect.id);
+    const jwtToken = useSelector(sessionSelect.jwtToken);
+    const dispatch = useDispatch();
 
     const webcamRef = useRef(null);
     const [image, setImage] = useState<string | null>(null);
@@ -46,10 +63,48 @@ const ChatOverview: React.FC = () => {
         }
     }
 
+    const handleImageUpload = async(): Promise<string> => {
+        const uuid = crypto.randomUUID();
+        const imageRef = storageRef(storage, `/snaps/${uuid}`);
+
+        // @ts-ignore
+        const img = await fetch(image);
+
+        return img.blob().then((img) => uploadBytes(imageRef, img)
+            .then((snapshot) =>
+                getDownloadURL(snapshot.ref)
+                    .then((url) => url)));
+    }
+
+    const sendSnapMethod = async(receivers: number[]) => {
+        const url = await handleImageUpload();
+
+        await sendSnap({id, url, receivers}).then(async () => {
+            setSending(false);
+            setImage(null);
+            setIsCameraSelected(false);
+            await getConversations({id, jwtToken, dispatch})
+        });
+    }
+
+    const addStoryMethod = async(receivers: number[]) => {
+        const url = await handleImageUpload();
+
+        await sendSnap({id, url, receivers}).then(async () => {
+            await addStory({id, url}).then(async() => {
+                setSending(false);
+                setImage(null);
+                setIsCameraSelected(false);
+                await getConversations({id, jwtToken, dispatch});
+                await getStories({id, jwtToken, dispatch});
+            })
+        });
+    }
+
     if(convSelected) {
         return (
             <div className='chat-overview-opening'>
-                {sending && <SendSnap back={() => setSending(false)}/>}
+                {sending && <SendSnap back={() => setSending(false)} send={sendSnapMethod} addStory={addStoryMethod}/>}
                 {!sending && isCameraSelected && (
                     <div className='chat-overview-opening-container-filming'>
                         {image == null && (

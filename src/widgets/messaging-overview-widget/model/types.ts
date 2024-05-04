@@ -3,14 +3,17 @@ import {Dispatch} from "redux";
 import {StoryType} from "../../../types/content";
 
 export type Message = {
+    id: string;
     senderId: User;
     receiverId: User;
     content: string;
     timestamp: string;
     isSeen: boolean;
+    type: string;
 }
 
 export type Chat = {
+    id: string;
     senderId: string;
     receiverId: string;
     content: string;
@@ -61,7 +64,7 @@ export type SeeStoryPayload = {
 
 export type SeeSnapPayload = {
     id: string;
-    snapId: string;
+    snap: Chat;
     jwtToken: string;
     dispatch: Dispatch;
 }
@@ -90,4 +93,15 @@ export type ConnectionPayload = {
 export type Connection = {
     id: string,
     sinceConnected: string;
+}
+
+export type SendSnapPayload = {
+    id: string,
+    url: string,
+    receivers: number[]
+}
+
+export type AddStoryPayload = {
+    id: string,
+    url: string
 }

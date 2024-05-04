@@ -2,13 +2,14 @@ import {request} from "../../../components/core/Request/request";
 import {BASE_URL} from "../../../utils/constants";
 import {conversationsSuccess, personChatsSuccess, searchTerm, storiesSuccess} from "./reducers";
 import {
+    AddStoryPayload,
     Chat,
     ChatEffectsPayload, Connection, ConnectionPayload,
     EffectsPayload,
     GetAccountPayload,
     SearchPayload,
     SeeSnapPayload,
-    SeeStoryPayload
+    SeeStoryPayload, SendSnapPayload
 } from "./types";
 import {User} from "../../../types/user";
 import {UserStreak} from './types';
@@ -38,15 +39,55 @@ export const getConversations = async({id, jwtToken, dispatch}: EffectsPayload) 
     });
     const messages: Chat[] = response.data;
 
+    const snapz = await request({
+        url: BASE_URL,
+        method: 'GET',
+        params: {
+            path: encodeURIComponent('content.get-snaps/' + id)
+        },
+        headers: {
+            'Authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaGSh23zOl21k4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ",
+            'X-FI-SY-IP': '127.0.0',
+            'X-FI-SY-SITE-ID': 'COM',
+            'X-FI-SY-DEVICE': 'DESKTOP'
+        }
+    });
+    const snaps: Content[] = snapz.data;
+
     const convs = messages.map(async msg => {
         const sender = await getAccount({id: msg.senderId, jwtToken});
         const receiver = await getAccount({id: msg.receiverId, jwtToken});
 
+        let lastSnap: Content;
+        snaps.sort((a, b) => a.timestamp.localeCompare(b.timestamp));
+
+        snaps.forEach((snap) => {
+            if((msg.senderId === snap.posterId && snap.receivers.includes(parseInt(msg.receiverId)))
+            || (msg.receiverId === snap.posterId && snap.receivers.includes(parseInt(msg.senderId)))){
+                lastSnap = snap;
+            }
+        })
+
+        // @ts-ignore
+        if(lastSnap != null && lastSnap.timestamp.localeCompare(msg.timestamp) > 0) {
+            return {
+                id: lastSnap.id,
+                senderId: msg.senderId === lastSnap.posterId ? sender : receiver,
+                receiverId: msg.senderId === lastSnap.posterId ? receiver : sender,
+                content: lastSnap.url,
+                timestamp: lastSnap.timestamp,
+                type: 'snap',
+                isSeen: msg.senderId === lastSnap.posterId ? lastSnap.seen.includes(parseInt(msg.receiverId)) : lastSnap.seen.includes(parseInt(msg.senderId))
+            }
+        }
+
         return {
+            id: msg.id,
             senderId: sender,
             receiverId: receiver,
             content: msg.content,
             timestamp: msg.timestamp,
+            type: 'message',
             isSeen: msg.isSeen
         }
     });
@@ -75,21 +116,10 @@ export const getStories = async({id, jwtToken, dispatch}: EffectsPayload) => {
     const storyz = storyResponses.map(async story => {
         const posterId = await getAccount({id: story.posterId.toString(), jwtToken});
 
-        let receivers: User[] = [];
-        let seen: User[] = [];
-
-        const seens = story.seen.map(async seenId => {
-            return await getAccount({id: seenId.toString(), jwtToken})
-                .then(seenResponse => seenResponse);
-        })
-
-        seen = await Promise.all(seens);
-
         return {
             id: story.id,
             posterId,
-            receivers,
-            seen,
+            seen: story.seen.includes(parseInt(id)),
             url: story.url,
             timestamp: story.timestamp
         }
@@ -131,23 +161,17 @@ export const getPersonChats = async ({ id, jwtToken, dispatch, receiverId}: Chat
     });
     const snaps: Content[] = res.data;
     snaps.map((snap) => {
-        let seen: boolean = false;
         const posterId = snap.posterId;
         const receiver = snap.posterId === id ? receiverId : id;
 
-        snap.seen.map((id) => {
-            if(id.toString() === receiver) {
-                seen = true;
-            }
-        });
-
         const snapMessage: Chat = {
+            id: snap.id,
             senderId: posterId,
             receiverId: receiver,
             content: snap.url,
             timestamp: snap.timestamp,
             type: snap.type,
-            isSeen: seen
+            isSeen: snap.seen.includes(parseInt(receiver))
         };
 
         chat = [...chat, snapMessage]
@@ -189,12 +213,12 @@ export const seeStory = async({id, storyId, jwtToken, dispatch}: SeeStoryPayload
     }).then((response) => getStories({id, jwtToken, dispatch}));
 }
 
-export const openSnap = async({id, snapId, jwtToken, dispatch}: SeeSnapPayload) => {
+export const openSnap = async({id, snap, jwtToken, dispatch}: SeeSnapPayload) => {
     return await request({
         url: BASE_URL,
-        method: 'POST',
+        method: 'GET',
         params: {
-            path: encodeURIComponent('content.open-snap/' + id + "/" + snapId)
+            path: encodeURIComponent('content.open-snap/' + id + "/" + snap.id)
         },
         headers: {
             'Authorization' : "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaGSh23zOl21k4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ",
@@ -202,7 +226,11 @@ export const openSnap = async({id, snapId, jwtToken, dispatch}: SeeSnapPayload) 
             'X-FI-SY-SITE-ID': 'COM',
             'X-FI-SY-DEVICE': 'DESKTOP'
         }
-    }).then((response) => {});
+    }).then(async (response) => {
+        console.debug(response);
+        await getPersonChats({id, jwtToken, dispatch, receiverId: snap.senderId});
+        await getConversations({id, jwtToken, dispatch});
+    });
 }
 
 export const getAccount = async({id, jwtToken}: GetAccountPayload): Promise<User> => {
@@ -283,4 +311,61 @@ export const getStreak = async({id1, id2, jwtToken}: ConnectionPayload): Promise
             'X-FI-SY-DEVICE': 'DESKTOP'
         }
     }).then((response) => response.data);
+}
+
+export const sendSnap = async({id, url, receivers}:SendSnapPayload) => {
+    return await request({
+        url: BASE_URL,
+        method: 'POST',
+        params: {
+            path: encodeURIComponent('content.send-snap')
+        },
+        data: {
+          posterId: id, url, receivers, type: 'snap'
+        },
+        headers: {
+            'Authorization' : "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaGSh23zOl21k4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ",
+            'X-FI-SY-IP' : '127.0.0',
+            'X-FI-SY-SITE-ID': 'COM',
+            'X-FI-SY-DEVICE': 'DESKTOP'
+        }
+    }).then((response) => console.debug(response.data))
+        .catch((err) => console.error(err));
+}
+
+export const addStory = async({id, url}: AddStoryPayload) => {
+    const response = await request({
+        url: BASE_URL,
+        method: 'GET',
+        params: {
+            path: encodeURIComponent('connection.get-friends/' + id)
+        },
+        headers: {
+            'Authorization': "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaGSh23zOl21k4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ",
+            'X-FI-SY-IP': '127.0.0',
+            'X-FI-SY-SITE-ID': 'COM',
+            'X-FI-SY-DEVICE': 'DESKTOP'
+        }
+    });
+    const friends: Connection[] = response.data;
+
+    const receivers: string[] = friends.map((id) => id.id);
+
+    return await request({
+        url: BASE_URL,
+        method: 'POST',
+        params: {
+            path: encodeURIComponent('content.add-story')
+        },
+        data: {
+            posterId: id, url, receivers, type: 'story'
+        },
+        headers: {
+            'Authorization' : "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaGSh23zOl21k4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ",
+            'X-FI-SY-IP' : '127.0.0',
+            'X-FI-SY-SITE-ID': 'COM',
+            'X-FI-SY-DEVICE': 'DESKTOP'
+        }
+    }).then((response) => console.debug(response.data))
+        .catch((err) => console.error(err));
 }
