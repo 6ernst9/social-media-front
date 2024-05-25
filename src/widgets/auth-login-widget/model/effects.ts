@@ -22,7 +22,7 @@ export const login = async ({username, password, dispatch}: LoginProps) => {
         dispatch(loginSuccess(response.data));
         getAccount({username, dispatch})
     }).catch((error) => {
-        dispatch(loginFailure(error.message));
+        dispatch(loginFailure(error.response.data.message));
     })
 }
 

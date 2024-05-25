@@ -33,6 +33,40 @@ const ChatContainer: React.FC = () => {
     const [seeSnap, setSeeSnap] = useState(false);
     const [currentMessage, setCurrentMessage] = useState<Chat>(messages[0]);
 
+    const convertToXML = (data: Chat[]): string => {
+        let xml = '<?xml version="1.0" encoding="UTF-8"?>\n<Chats>\n';
+
+        data.forEach((item) => {
+            xml += '  <Chat>\n';
+            xml += `    <id>${item.id}</id>\n`;
+            xml += `    <senderId>${item.senderId}</senderId>\n`;
+            xml += `    <receiverId>${item.receiverId}</receiverId>\n`;
+            xml += `    <timestamp>${item.timestamp}</timestamp>\n`;
+            xml += `    <content>${item.content}</content>\n`;
+            xml += '  </Chat>\n';
+        });
+
+        xml += '</Objects>';
+        return xml;
+    };
+
+    const downloadXML = (xml: string) => {
+        const blob = new Blob([xml], { type: 'application/xml' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'messages.xml';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    };
+
+    const handleDownload = () => {
+        const xml = convertToXML(messages);
+        downloadXML(xml);
+    };
+
     const openSnap = (msg: Chat) => {
         if(id !== msg.senderId && !msg.isSeen) {
             setCurrentMessage(msg);
@@ -108,7 +142,7 @@ const ChatContainer: React.FC = () => {
                         <p className='chat-overview-header-call-bar'>|</p>
                         <Video/>
                     </div>
-                    <div className='chat-overview-header-icon'>
+                    <div className='chat-overview-header-icon' onClick={handleDownload}>
                         <Info/>
                     </div>
                 </div>

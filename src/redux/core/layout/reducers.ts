@@ -18,9 +18,15 @@ const layoutSlice = createSlice({
         },
         closeModal: (state) => {
             state.isModalOpen = false;
+        },
+        openProfile: (state) => {
+            state.isProfileOpen = true;
+        },
+        closeProfile: (state) => {
+            state.isProfileOpen = false;
         }
     }
 });
 
-export const { toggleDark, toggleLight, openModal, closeModal } = layoutSlice.actions;
+export const { toggleDark, toggleLight, openModal, closeModal, openProfile, closeProfile } = layoutSlice.actions;
 export default layoutSlice.reducer;

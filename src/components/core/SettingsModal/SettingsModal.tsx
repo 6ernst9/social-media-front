@@ -4,16 +4,12 @@ import {layoutSelect} from "../../../redux/core/layout/selectors";
 import {toggleDark, toggleLight} from "../../../redux/core/layout/reducers";
 import './styles.css';
 import {logout} from "../../../widgets/auth-login-widget/model/reducers";
-import {useNavigate} from "react-router-dom";
-import {endSession} from "../../../redux/core/session/reducers";
 import {logOut} from "../../../widgets/auth-login-widget/model/effects";
 
 const SettingsModal: React.FC = () => {
     const isOpen = useSelector(layoutSelect.isModalOpen);
     const isDark = useSelector(layoutSelect.isDark);
     const dispatch = useDispatch();
-    const navigate = useNavigate();
-
     const changeTheme = () => {
         if(isDark) {
             dispatch(toggleLight());

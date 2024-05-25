@@ -4,7 +4,6 @@ import {Link, useNavigate} from "react-router-dom";
 import BText from "../../components/core/BText/BText";
 import {BACKGROUND_DARK, PRIMARY_LIGHT} from "../../utils/constants";
 import Button from "../../components/core/Button/Button";
-import Logo from "./../../assets/icons/logo.png";
 import LText from "../../components/core/LText/LText";
 import Line from "../../components/core/Line/Line";
 import Credits from "../../components/core/Credits/Credits";
@@ -13,6 +12,7 @@ import {getSession} from "../auth-login-widget/model/effects";
 import {sessionSelect} from "../../redux/core/session/selectors";
 import {changePage, registrationSuccess} from "../auth-login-widget/model/reducers";
 import {authSelect} from "../auth-login-widget/model/selectors";
+import {ReactComponent as Logo} from "../../assets/icons/logo.svg";
 
 const AuthRegistrationWidget: React.FC = () => {
     const errorMessage = useSelector(authSelect.authError);
@@ -24,7 +24,7 @@ const AuthRegistrationWidget: React.FC = () => {
     const [password, setPassword] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [fullName, setFullName] = useState<string>('');
-    const [phoneNumber, setPhoneNumber] = useState<number>(0);
+    const [phoneNumber, setPhoneNumber] = useState<string>('');
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -48,8 +48,9 @@ const AuthRegistrationWidget: React.FC = () => {
     const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => setPassword(event.target.value);
     const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => setUsername(event.target.value);
     const handleFullNameChange = (event: React.ChangeEvent<HTMLInputElement>) => setFullName(event.target.value);
-    const handlePhoneNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => setPhoneNumber(event.target.valueAsNumber);
+    const handlePhoneNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => setPhoneNumber(event.target.value);
     const handleSubmit = async() => {
+        console.log(phoneNumber);
         await register({
             email, username, password, fullName, phoneNumber, dispatch
         });
@@ -59,7 +60,7 @@ const AuthRegistrationWidget: React.FC = () => {
         <div className="auth-registration-back">
             <div className="auth-container">
                 <div className="auth-container-header">
-                    <img src={Logo} className="auth-logo"/>
+                    <Logo/>
                     <p className="auth-title">Sign up to Socially</p>
                 </div>
 

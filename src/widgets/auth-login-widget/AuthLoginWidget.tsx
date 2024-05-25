@@ -12,7 +12,7 @@ import Credits from "../../components/core/Credits/Credits";
 import Button from "../../components/core/Button/Button";
 import {sessionSelect} from "../../redux/core/session/selectors";
 import {changePage, loginSuccess} from "./model/reducers";
-import Logo from "../../assets/icons/logo.png";
+import {ReactComponent as Logo} from "../../assets/icons/logo.svg";
 
 const AuthLoginWidget: React.FC = () => {
     const errorMessage = useSelector(authSelect.authError);
@@ -52,7 +52,7 @@ const AuthLoginWidget: React.FC = () => {
         <div className="auth-login-back">
             <div className="auth-container">
                 <div className="auth-container-header">
-                    <img src={Logo} className="auth-logo"/>
+                    <Logo/>
                     <p className="auth-title">Log in to Socially</p>
                 </div>
                 <div className="auth-forms">
@@ -82,7 +82,7 @@ const AuthLoginWidget: React.FC = () => {
                     <BText text="Forgot password?" color={PRIMARY_LIGHT}/>
                 </Link>
                 <Button content='Log in' onClick={handleSubmit}/>
-                {errorMessage && errorMessage !== 'NO-ERROR' && <LText text={"Incorrect password"} color={'#ff0000'}/>}
+                {errorMessage && errorMessage !== 'NO-ERROR' && <LText text={errorMessage} color={'#ff0000'}/>}
                 <Line/>
                 <div className="auth-under">
                     <LText text="Don't have an account?"/>

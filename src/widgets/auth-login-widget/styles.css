@@ -33,9 +33,10 @@ body {
     justify-content: center;
 }
 
-.auth-logo{
+.auth-container-header svg{
     width: 65px;
     height: 65px;
+    color: var(--text-color-primary);
 }
 
 .auth-container {

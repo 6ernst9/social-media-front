@@ -5,7 +5,7 @@ export type RegisterProps = {
     fullName: string;
     username: string;
     password: string;
-    phoneNumber: number;
+    phoneNumber: string;
     dispatch: Dispatch;
 }
 

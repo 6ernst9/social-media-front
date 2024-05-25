@@ -1,5 +1,4 @@
 import React from "react";
-import Logo from '../../../assets/icons/logo-header.svg';
 import Edit from '../../../assets/icons/edit.svg';
 import {ReactComponent as Add} from '../../../assets/icons/user-plus.svg';
 import {Message} from "../../../widgets/messaging-overview-widget/model/types";
@@ -13,6 +12,7 @@ import {StoryType} from "../../../types/content";
 import {messageSelect} from "../../../widgets/messaging-overview-widget/model/selectors";
 import {layoutSelect} from "../../../redux/core/layout/selectors";
 import {closeModal, openModal} from "../../../redux/core/layout/reducers";
+import {ReactComponent as Logo} from "../../../assets/icons/logo.svg";
 
 interface ChatListProps {
     profilePhoto: string;
@@ -39,7 +39,7 @@ const ChatSidebar: React.FC<ChatListProps> = ({profilePhoto, jwtToken, id, stori
         <div className='chat-list-widget'>
             <div className='chat-list-header'>
                 <img src={profilePhoto} className='chat-list-header-profile' onClick={toggleModal}/>
-                <img src={Logo} className='chat-list-header-logo'/>
+                <Logo/>
                 <div className='chat-list-header-icons'>
                     <div className='chat-list-header-icon-back'>
                         <Add/>

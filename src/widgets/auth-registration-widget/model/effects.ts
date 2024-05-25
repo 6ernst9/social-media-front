@@ -8,15 +8,20 @@ export const register = async ({email, username, password, fullName, phoneNumber
     await request({
         url: BASE_URL,
         method: 'POST',
-        data: {
-            path: 'account.register',
-            body: {email, fullName, phoneNumber, username, password}
+        params: {
+            path: 'account.register'
+        },
+        data: {email, fullName, phoneNumber, username, password},
+        headers: {
+            'X-FI-SY-IP' : '127.0.0',
+            'X-FI-SY-SITE-ID': 'COM',
+            'X-FI-SY-DEVICE': 'DESKTOP'
         }
     }).then((response) => {
         dispatch(registrationSuccess(response.data));
         getAccount({username, dispatch});
     }).catch((error) => {
-        dispatch(registrationFailure(error.message));
+        dispatch(registrationFailure(error.response.data.message));
     })
 }
 
